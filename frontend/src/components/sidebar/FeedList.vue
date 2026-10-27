@@ -636,7 +636,7 @@ function handleFilterDragEnd() {
       <!-- Drawer Header -->
       <div class="reader-library-header flex items-center justify-between flex-shrink-0">
         <div class="reader-library-identity">
-          <h3>CSS Factory</h3>
+          <h3>Knowledge Hub</h3>
           <p>
             {{ drawerTitle }} <span>{{ store.feeds?.length || 0 }}</span>
           </p>

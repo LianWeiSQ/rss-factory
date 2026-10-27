@@ -1,20 +1,22 @@
-; CSSFactory NSIS Installer Script
-; This script creates a Windows installer for CSSFactory
+; KnowledgeHub NSIS Installer Script
+; This script creates a Windows installer for KnowledgeHub
 ;
-; IMPORTANT: This script creates a Windows installer for CSSFactory
+; IMPORTANT: This script creates a Windows installer for KnowledgeHub
 ;
 ; To build:
 ;   makensis build/windows/installer.nsi
 ;
 ; All paths in this script are relative to the script directory.
 
-!define APP_NAME "CSS Factory"
+!define APP_NAME "Knowledge Hub"
+; Persistent installer identity: retain CSS Factory upgrade keys and install directory.
+!define APP_ID "CSS Factory"
 !define APP_VERSION "1.3.41"
 !define APP_VERSION_NUMERIC "1.3.41.0"  ; NSIS requires X.X.X.X format
 !define APP_PUBLISHER "LianWeiSQ"
 !define APP_URL "https://github.com/LianWeiSQ/rss-factory"
 !define APP_DESCRIPTION "A Modern, Cross-Platform Desktop RSS Reader"
-!define APP_EXE "CSSFactory.exe"
+!define APP_EXE "KnowledgeHub.exe"
 
 ; Include Modern UI
 !include "MUI2.nsh"
@@ -22,9 +24,9 @@
 ; General Settings
 Name "${APP_NAME} ${APP_VERSION}"
 ; Output path relative to script directory
-OutFile "..\bin\CSSFactory-${APP_VERSION}-windows-amd64-installer.exe"
-InstallDir "$PROGRAMFILES64\${APP_NAME}"
-InstallDirRegKey HKLM "Software\${APP_NAME}" "Install_Dir"
+OutFile "..\bin\KnowledgeHub-${APP_VERSION}-windows-amd64-installer.exe"
+InstallDir "$PROGRAMFILES64\${APP_ID}"
+InstallDirRegKey HKLM "Software\${APP_ID}" "Install_Dir"
 RequestExecutionLevel admin
 
 ; MUI Settings
@@ -70,8 +72,15 @@ VIAddVersionKey "LegalCopyright" "Copyright (C) Ch3nyang and contributors"
 Section "MainSection" SEC01
     SetOutPath "$INSTDIR"
 
-    ; Copy the executable
+    ; Install the new executable before cleaning legacy launcher paths.
     File "..\bin\${APP_EXE}"
+
+    ; Keep the persistent installation identity, but retire the previous binary/shortcuts.
+    Delete "$INSTDIR\CSSFactory.exe"
+    Delete "$SMPROGRAMS\${APP_ID}\${APP_ID}.lnk"
+    Delete "$SMPROGRAMS\${APP_ID}\Uninstall.lnk"
+    RMDir "$SMPROGRAMS\${APP_ID}"
+    Delete "$DESKTOP\${APP_ID}.lnk"
 
     ; Create shortcuts
     CreateDirectory "$SMPROGRAMS\${APP_NAME}"
@@ -80,15 +89,15 @@ Section "MainSection" SEC01
     CreateShortcut "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}"
 
     ; Write registry keys
-    WriteRegStr HKLM "Software\${APP_NAME}" "Install_Dir" "$INSTDIR"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}" "DisplayName" "${APP_NAME}"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}" "DisplayVersion" "${APP_VERSION}"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}" "Publisher" "${APP_PUBLISHER}"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}" "URLInfoAbout" "${APP_URL}"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}" "DisplayIcon" "$INSTDIR\${APP_EXE}"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}" "UninstallString" "$INSTDIR\Uninstall.exe"
-    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}" "NoModify" 1
-    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}" "NoRepair" 1
+    WriteRegStr HKLM "Software\${APP_ID}" "Install_Dir" "$INSTDIR"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_ID}" "DisplayName" "${APP_NAME}"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_ID}" "DisplayVersion" "${APP_VERSION}"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_ID}" "Publisher" "${APP_PUBLISHER}"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_ID}" "URLInfoAbout" "${APP_URL}"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_ID}" "DisplayIcon" "$INSTDIR\${APP_EXE}"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_ID}" "UninstallString" "$INSTDIR\Uninstall.exe"
+    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_ID}" "NoModify" 1
+    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_ID}" "NoRepair" 1
 
     ; Create uninstaller
     WriteUninstaller "$INSTDIR\Uninstall.exe"
@@ -110,8 +119,8 @@ Section "Uninstall"
     RMDir "$INSTDIR"
 
     ; Remove registry keys
-    DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}"
-    DeleteRegKey HKLM "Software\${APP_NAME}"
+    DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_ID}"
+    DeleteRegKey HKLM "Software\${APP_ID}"
 
     ; Note: User data directory is NOT removed to preserve user data
     ; Data location: %APPDATA%\MrRSS

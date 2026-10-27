@@ -3,7 +3,7 @@
 set -e
 
 # Build configuration
-APP_NAME="CSSFactory"
+APP_NAME="KnowledgeHub"
 BUNDLE_ID="io.github.lianweisq.cssfactory"
 VERSION="1.3.41"
 BUILD_NUMBER="1.3.41"

@@ -7,8 +7,8 @@
     <div class="container">
       <div class="footer-main">
         <div class="footer-brand">
-          <img src="../../assets/logo.svg" alt="CSS Factory Logo" width="45" height="45" />
-          <h3 class="brand-name">CSS Factory</h3>
+          <img src="../../assets/logo.svg" alt="Knowledge Hub Logo" width="45" height="45" />
+          <h3 class="brand-name">Knowledge Hub</h3>
           <p class="brand-tagline">Read Smarter with AI</p>
         </div>
 
@@ -88,7 +88,7 @@
 
       <div class="footer-bottom">
         <div class="footer-copyright">
-          <p>CSS Factory — based on MrRSS by Ch3nyang and contributors.</p>
+          <p>Knowledge Hub — based on MrRSS by Ch3nyang and contributors.</p>
           <p>&copy; 2026 MrRSS. All rights reserved.</p>
           <p class="copyright-note">Open source and available under GPL-3.0 License.</p>
         </div>

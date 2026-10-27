@@ -125,8 +125,8 @@ function handleNavClick(item: NavItem) {
   >
     <button
       class="reader-brand-mark"
-      title="CSS Factory"
-      aria-label="CSS Factory"
+      title="Knowledge Hub"
+      aria-label="Knowledge Hub"
       @click="handleNavClick(navItems[0])"
     >
       <PhRss :size="21" weight="bold" />

@@ -1,43 +1,43 @@
-# CSS Factory Skills
+# Knowledge Hub Skills
 
 [English](SKILLS.md) | 简体中文
 
-CSS Factory 提供 Codex skill 包，方便用户让 AI agent 通过本地 REST API 检查和操作自己的 CSS Factory 数据。
+Knowledge Hub 提供 Codex skill 包，方便用户让 AI agent 通过本地 REST API 检查和操作自己的 Knowledge Hub 数据。
 
 ## 包含内容
 
-Release 资产 `CSSFactory-<version>-skills.zip` 包含：
+Release 资产 `KnowledgeHub-<version>-skills.zip` 包含：
 
-- `css-factory-assistant/SKILL.md` - agent 工作流和安全规则。
-- `css-factory-assistant/references/api.md` - 从 `docs/SERVER_MODE/swagger.json` 生成的 API 参考。
-- `css-factory-assistant/scripts/generate_api_reference.py` - 用于维护 API 参考的生成脚本。
-- `css-factory-assistant/agents/openai.yaml` - Codex UI 元数据。
+- `knowledge-hub-assistant/SKILL.md` - agent 工作流和安全规则。
+- `knowledge-hub-assistant/references/api.md` - 从 `docs/SERVER_MODE/swagger.json` 生成的 API 参考。
+- `knowledge-hub-assistant/scripts/generate_api_reference.py` - 用于维护 API 参考的生成脚本。
+- `knowledge-hub-assistant/agents/openai.yaml` - Codex UI 元数据。
 
 ## 安装
 
-1. 从 GitHub release 页面下载 `CSSFactory-<version>-skills.zip`。
+1. 从 GitHub release 页面下载 `KnowledgeHub-<version>-skills.zip`。
 2. 解压。
-3. 将解压后的 `css-factory-assistant` 文件夹复制到 Codex skills 目录：
+3. 将解压后的 `knowledge-hub-assistant` 文件夹复制到 Codex skills 目录：
 
 Windows:
 
 ```powershell
-Copy-Item -Recurse .\css-factory-assistant "$env:USERPROFILE\.codex\skills\"
+Copy-Item -Recurse .\knowledge-hub-assistant "$env:USERPROFILE\.codex\skills\"
 ```
 
 macOS 或 Linux:
 
 ```bash
-cp -R ./css-factory-assistant ~/.codex/skills/
+cp -R ./knowledge-hub-assistant ~/.codex/skills/
 ```
 
 4. 重启 Codex，让它重新发现新的 skill。
 
 ## 使用
 
-启动 CSS Factory 桌面版。当前桌面版会在应用运行期间通过本机回环接口提供
+启动 Knowledge Hub 桌面版。当前桌面版会在应用运行期间通过本机回环接口提供
 `http://localhost:1234/api`。该 API 不会暴露给局域网中的其他计算机。如果端口
-`1234` 已被占用，CSS Factory 会继续运行，但本地 API 将不可用；释放端口并重启应用后
+`1234` 已被占用，Knowledge Hub 会继续运行，但本地 API 将不可用；释放端口并重启应用后
 即可恢复。
 
 也可以使用无界面的 server 模式：
@@ -49,7 +49,7 @@ docker run -p 127.0.0.1:1234:1234 ghcr.io/lianweisq/rss-factory:latest-amd64
 然后在 Codex 中输入：
 
 ```text
-Use $css-factory-assistant to inspect my unread CSS Factory articles and summarize the most important items.
+Use $knowledge-hub-assistant to inspect my unread Knowledge Hub articles and summarize the most important items.
 ```
 
 该 skill 默认访问 `http://localhost:1234/api`。如果你的实例使用其他主机或端口，请在提示词中说明。
@@ -61,14 +61,14 @@ Use $css-factory-assistant to inspect my unread CSS Factory articles and summari
 - 优先使用只读 API；
 - 在删除、批量状态修改、缓存清理、设置修改前征求确认；
 - 在回复中隐藏凭据和 API key；
-- 除非用户明确要求离线检查，否则使用 CSS Factory API，而不是直接读取 SQLite 数据库。
+- 除非用户明确要求离线检查，否则使用 Knowledge Hub API，而不是直接读取 SQLite 数据库。
 
 ## 维护
 
 当 API 路由变更时，重新生成参考文档：
 
 ```bash
-python skills/css-factory-assistant/scripts/generate_api_reference.py docs/SERVER_MODE/swagger.json skills/css-factory-assistant/references/api.md
+python skills/knowledge-hub-assistant/scripts/generate_api_reference.py docs/SERVER_MODE/swagger.json skills/knowledge-hub-assistant/references/api.md
 ```
 
-CI 会检查生成结果是否同步。release workflow 会将 skill 打包为 `CSSFactory-<version>-skills.zip` 并上传为 release asset。
+CI 会检查生成结果是否同步。release workflow 会将 skill 打包为 `KnowledgeHub-<version>-skills.zip` 并上传为 release asset。

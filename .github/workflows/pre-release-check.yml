@@ -127,13 +127,13 @@ jobs:
           wails3 build
 
           # Verify the build
-          if [ ! -f "build/bin/CSSFactory" ]; then
+          if [ ! -f "build/bin/KnowledgeHub" ]; then
             echo "Error: Binary not found"
             exit 1
           fi
 
           # Check architecture
-          file build/bin/CSSFactory
+          file build/bin/KnowledgeHub
           echo "Binary built successfully for ${{ matrix.arch }}"
 
       - name: Build application (Windows)
@@ -146,7 +146,7 @@ jobs:
           wails3 build
 
           # Verify the build
-          if (-not (Test-Path "build/bin/CSSFactory.exe")) {
+          if (-not (Test-Path "build/bin/KnowledgeHub.exe")) {
             Write-Error "Binary not created"
             exit 1
           }
@@ -199,7 +199,7 @@ jobs:
           if (Test-Path $installerPath) {
             $content = Get-Content $installerPath -Raw
             $content = $content -replace '!define APP_VERSION ".*"', "!define APP_VERSION `"$version`""
-            $content = $content -replace 'OutFile ".*"', "OutFile `"..\bin\CSSFactory-$version-windows-$arch-installer.exe`""
+            $content = $content -replace 'OutFile ".*"', "OutFile `"..\bin\KnowledgeHub-$version-windows-$arch-installer.exe`""
             Set-Content $installerPath $content
 
             # Build NSIS installer
@@ -228,7 +228,7 @@ jobs:
 
           # Debug: Verify binary architecture
           echo "Binary architecture check:"
-          file build/bin/CSSFactory || true
+          file build/bin/KnowledgeHub || true
 
           chmod +x build/linux/create-appimage.sh
           ARCH=${{ matrix.arch }} ./build/linux/create-appimage.sh || echo "AppImage creation failed, will use tar.gz"
@@ -240,8 +240,8 @@ jobs:
           codesign --deep --force --verify --verbose \
             --sign - \
             --entitlements build/darwin/entitlements.plist \
-            build/bin/CSSFactory.app
-          codesign --verify --deep --strict --verbose=2 build/bin/CSSFactory.app
+            build/bin/KnowledgeHub.app
+          codesign --verify --deep --strict --verbose=2 build/bin/KnowledgeHub.app
           chmod +x build/darwin/create-dmg.sh
           ./build/darwin/create-dmg.sh
 
@@ -249,13 +249,13 @@ jobs:
         if: matrix.platform == 'linux'
         run: |
           cd build/bin
-          if [ -f "CSSFactory" ]; then
+          if [ -f "KnowledgeHub" ]; then
             # Get version from package.json
             VERSION=$(jq -r '.version' ../../frontend/package.json)
-            tar -czf CSSFactory-${VERSION}-linux-${{ matrix.arch }}.tar.gz CSSFactory
+            tar -czf KnowledgeHub-${VERSION}-linux-${{ matrix.arch }}.tar.gz KnowledgeHub
             echo "Created tar.gz package"
           else
-            echo "Error: CSSFactory binary not found"
+            echo "Error: KnowledgeHub binary not found"
             exit 1
           fi
 

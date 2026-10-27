@@ -4,11 +4,11 @@
         <key>CFBundlePackageType</key>
             <string>APPL</string>
         <key>CFBundleDisplayName</key>
-            <string>CSS Factory</string>
+            <string>Knowledge Hub</string>
         <key>CFBundleName</key>
-            <string>CSSFactory</string>
+            <string>Knowledge Hub</string>
         <key>CFBundleExecutable</key>
-            <string>CSSFactory</string>
+            <string>KnowledgeHub</string>
         <key>CFBundleIdentifier</key>
             <string>io.github.lianweisq.cssfactory</string>
         <key>CFBundleVersion</key>

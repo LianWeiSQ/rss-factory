@@ -87,7 +87,7 @@ jobs:
             ghcr.io/${{ needs.extract-metadata.outputs.owner_lowercase }}/rss-factory:${{ needs.extract-metadata.outputs.version }}-amd64
             ${{ needs.extract-metadata.outputs.is_prerelease == 'false' && format('ghcr.io/{0}/rss-factory:latest-amd64', needs.extract-metadata.outputs.owner_lowercase) || '' }}
           labels: |
-            org.opencontainers.image.title=CSS Factory
+            org.opencontainers.image.title=Knowledge Hub
             org.opencontainers.image.description=A modern, privacy-focused RSS reader
             org.opencontainers.image.version=${{ needs.extract-metadata.outputs.version }}
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
@@ -134,7 +134,7 @@ jobs:
             ghcr.io/${{ needs.extract-metadata.outputs.owner_lowercase }}/rss-factory:${{ needs.extract-metadata.outputs.version }}-arm64
             ${{ needs.extract-metadata.outputs.is_prerelease == 'false' && format('ghcr.io/{0}/rss-factory:latest-arm64', needs.extract-metadata.outputs.owner_lowercase) || '' }}
           labels: |
-            org.opencontainers.image.title=CSS Factory
+            org.opencontainers.image.title=Knowledge Hub
             org.opencontainers.image.description=A modern, privacy-focused RSS reader
             org.opencontainers.image.version=${{ needs.extract-metadata.outputs.version }}
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}

@@ -89,15 +89,22 @@ i18n_usage_report.md
 __pycache__/
 .VSCodeCounter
 
-# CSS Factory build outputs and private configuration
-CSSFactory
-CSSFactory.exe
-css-factory-server
-css-factory-server.exe
+# Knowledge Hub build outputs and private configuration
+KnowledgeHub
+KnowledgeHub.exe
+knowledge-hub-server
+knowledge-hub-server.exe
 .env.*
 !.env.example
 *.pem
 *.key
 
 # Generated Linux desktop entry
+/build/linux/KnowledgeHub.desktop
+
+# Legacy CSS Factory artifacts remain private after the display-name change.
+CSSFactory
+CSSFactory.exe
+css-factory-server
+css-factory-server.exe
 /build/linux/CSSFactory.desktop

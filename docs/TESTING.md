@@ -1,6 +1,6 @@
 # Testing Guide
 
-This document covers testing strategies and patterns for CSS Factory.
+This document covers testing strategies and patterns for Knowledge Hub.
 
 ## Backend Testing (Go)
 

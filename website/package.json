@@ -1,7 +1,7 @@
 {
-  "name": "css-factory-website",
+  "name": "knowledge-hub-website",
   "version": "1.3.38",
-  "description": "CSS Factory — a local-first RSS reader based on MrRSS",
+  "description": "Knowledge Hub — a local-first RSS reader based on MrRSS",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -15,7 +15,7 @@ export function useRuleBackup(rules: Ref<BackupRule[]>, onSaved: (value: string)
     );
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'css-factory-rules.json';
+    link.download = 'knowledge-hub-rules.json';
     document.body.appendChild(link);
     link.click();
     link.remove();

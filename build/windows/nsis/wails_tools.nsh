@@ -5,13 +5,13 @@
 !include "FileFunc.nsh"
 
 !ifndef INFO_PROJECTNAME
-    !define INFO_PROJECTNAME "CSSFactory"
+    !define INFO_PROJECTNAME "KnowledgeHub"
 !endif
 !ifndef INFO_COMPANYNAME
     !define INFO_COMPANYNAME "LianWeiSQ"
 !endif
 !ifndef INFO_PRODUCTNAME
-    !define INFO_PRODUCTNAME "CSS Factory"
+    !define INFO_PRODUCTNAME "Knowledge Hub"
 !endif
 !ifndef INFO_PRODUCTVERSION
     !define INFO_PRODUCTVERSION "1.3.41"
@@ -23,7 +23,8 @@
     !define PRODUCT_EXECUTABLE "${INFO_PROJECTNAME}.exe"
 !endif
 !ifndef UNINST_KEY_NAME
-    !define UNINST_KEY_NAME "${INFO_COMPANYNAME}${INFO_PRODUCTNAME}"
+    ; Retain the original uninstall identity across display-name changes.
+    !define UNINST_KEY_NAME "LianWeiSQCSS Factory"
 !endif
 !define UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${UNINST_KEY_NAME}"
 
@@ -34,7 +35,7 @@
 RequestExecutionLevel "${REQUEST_EXECUTION_LEVEL}"
 
 !ifndef ARG_WAILS_AMD64_BINARY
-    !define ARG_WAILS_AMD64_BINARY "CSSFactory.exe"
+    !define ARG_WAILS_AMD64_BINARY "KnowledgeHub.exe"
 !endif
 
 !ifdef ARG_WAILS_AMD64_BINARY

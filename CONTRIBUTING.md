@@ -1,6 +1,6 @@
-# Contributing to CSS Factory
+# Contributing to Knowledge Hub
 
-Thank you for your interest in contributing to CSS Factory! We welcome contributions from everyone.
+Thank you for your interest in contributing to Knowledge Hub! We welcome contributions from everyone.
 
 ## Table of Contents
 
@@ -268,4 +268,4 @@ By contributing, you agree that your contributions will be licensed under the GP
 
 ---
 
-Thank you for contributing to CSS Factory! 🎉
+Thank you for contributing to Knowledge Hub! 🎉

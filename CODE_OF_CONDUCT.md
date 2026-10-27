@@ -60,7 +60,7 @@ representative at an online or offline event.
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported to the community leaders responsible for enforcement at
-[the CSS Factory maintainers](https://github.com/LianWeiSQ/rss-factory/issues).
+[the Knowledge Hub maintainers](https://github.com/LianWeiSQ/rss-factory/issues).
 Do not post private personal information in a public report; request a private contact when needed.
 
 All complaints will be reviewed and investigated promptly and fairly.

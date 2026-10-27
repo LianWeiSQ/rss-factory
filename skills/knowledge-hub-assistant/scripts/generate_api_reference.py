@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the CSS Factory skill API reference from the server-mode Swagger file."""
+"""Generate the Knowledge Hub skill API reference from the server-mode Swagger file."""
 
 from __future__ import annotations
 
@@ -51,12 +51,12 @@ def generate(swagger: dict[str, Any]) -> str:
     paths = swagger.get("paths", {})
 
     lines = [
-        "# CSS Factory API Reference",
+        "# Knowledge Hub API Reference",
         "",
         "Generated from `docs/SERVER_MODE/swagger.json`. Regenerate with:",
         "",
         "```bash",
-        "python skills/css-factory-assistant/scripts/generate_api_reference.py docs/SERVER_MODE/swagger.json skills/css-factory-assistant/references/api.md",
+        "python skills/knowledge-hub-assistant/scripts/generate_api_reference.py docs/SERVER_MODE/swagger.json skills/knowledge-hub-assistant/references/api.md",
         "```",
         "",
         f"- API version: `{info.get('version', 'unknown')}`",

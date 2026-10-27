@@ -30,7 +30,7 @@ const onBtnLeave = (event) => {
             <span class="title-line gradient-text">Reading Smarter</span>
           </h2>
           <p class="download-description">
-            Build CSS Factory from source, or check this repository for published packages.
+            Build Knowledge Hub from source, or check this repository for published packages.
             Read your subscriptions locally and enable AI only when you choose.
           </p>
 

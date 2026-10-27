@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "CSS Factory is a modern, cross-platform desktop RSS reader with auto-translation, smart feed discovery, and AI-powered summarization.",
-        "title": "CSS Factory API",
+        "description": "Knowledge Hub is a modern, cross-platform desktop RSS reader with auto-translation, smart feed discovery, and AI-powered summarization.",
+        "title": "Knowledge Hub API",
         "contact": {
             "name": "API Support",
             "url": "https://github.com/LianWeiSQ/rss-factory"

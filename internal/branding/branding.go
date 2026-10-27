@@ -3,7 +3,8 @@
 package branding
 
 const (
-	Name              = "CSS Factory"
+	Name              = "Knowledge Hub"
+	BinaryName        = "KnowledgeHub"
 	RepositoryURL     = "https://github.com/LianWeiSQ/rss-factory"
 	ReleasesAPIURL    = "https://api.github.com/repos/LianWeiSQ/rss-factory/releases"
 	DownloadURLPrefix = RepositoryURL + "/releases/download/"

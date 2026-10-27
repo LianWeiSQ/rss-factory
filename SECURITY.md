@@ -1,6 +1,6 @@
 # Security policy
 
-CSS Factory is a customized distribution of MrRSS. Security fixes are maintained on the current branch; this repository does not promise a separate commercial support service or fixed response SLA.
+Knowledge Hub is a customized distribution of MrRSS. Security fixes are maintained on the current branch; this repository does not promise a separate commercial support service or fixed response SLA.
 
 ## Report a concern
 

@@ -1,10 +1,10 @@
 # AI Configuration Guide
 
-CSS Factory supports AI-powered features including translation, summarization, and chat. This guide explains how to configure different AI services.
+Knowledge Hub supports AI-powered features including translation, summarization, and chat. This guide explains how to configure different AI services.
 
 ## Supported AI Services
 
-CSS Factory works with any OpenAI-compatible API service and Ollama for local models.
+Knowledge Hub works with any OpenAI-compatible API service and Ollama for local models.
 
 ## Configuration Steps
 

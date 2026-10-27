@@ -107,18 +107,18 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Verify CSS Factory skill metadata
+      - name: Verify Knowledge Hub skill metadata
         run: |
-          test -f skills/css-factory-assistant/SKILL.md
-          test -f skills/css-factory-assistant/agents/openai.yaml
-          grep -q '^name: css-factory-assistant$' skills/css-factory-assistant/SKILL.md
-          grep -q '^description: ' skills/css-factory-assistant/SKILL.md
-          grep -q 'Use $css-factory-assistant' skills/css-factory-assistant/agents/openai.yaml
+          test -f skills/knowledge-hub-assistant/SKILL.md
+          test -f skills/knowledge-hub-assistant/agents/openai.yaml
+          grep -q '^name: knowledge-hub-assistant$' skills/knowledge-hub-assistant/SKILL.md
+          grep -q '^description: ' skills/knowledge-hub-assistant/SKILL.md
+          grep -q 'Use $knowledge-hub-assistant' skills/knowledge-hub-assistant/agents/openai.yaml
 
       - name: Verify generated skill API reference
         run: |
-          python skills/css-factory-assistant/scripts/generate_api_reference.py docs/SERVER_MODE/swagger.json skills/css-factory-assistant/references/api.md
-          git diff --exit-code skills/css-factory-assistant/references/api.md
+          python skills/knowledge-hub-assistant/scripts/generate_api_reference.py docs/SERVER_MODE/swagger.json skills/knowledge-hub-assistant/references/api.md
+          git diff --exit-code skills/knowledge-hub-assistant/references/api.md
 
   build-check:
     name: Build Check
@@ -166,4 +166,4 @@ jobs:
       - name: Verify server package compiles
         env:
           CGO_ENABLED: 1
-        run: go build -tags server -o "${{ runner.temp }}/css-factory-server" .
+        run: go build -tags server -o "${{ runner.temp }}/knowledge-hub-server" .

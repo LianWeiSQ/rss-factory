@@ -1,6 +1,6 @@
-# CSS Factory XPath 模式
+# Knowledge Hub XPath 模式
 
-CSS Factory 支持 XPath 模式，可以从不提供标准 RSS/Atom 订阅源的网站中提取类似 RSS 的内容。该模式允许您定义 XPath 表达式，直接从 HTML 或 XML 页面中抓取文章数据。
+Knowledge Hub 支持 XPath 模式，可以从不提供标准 RSS/Atom 订阅源的网站中提取类似 RSS 的内容。该模式允许您定义 XPath 表达式，直接从 HTML 或 XML 页面中抓取文章数据。
 
 ## 工作原理
 
@@ -23,10 +23,10 @@ HTML 抓取使用表单中的代理配置；样式、图片和字体使用 WebVi
 XPath 读取下载的 HTML/XML，不执行网页 JavaScript。如果文章列表由 API 动态填充，
 可使用自定义脚本访问该 API。例如中国政府网“最新政策”的原始 HTML 中
 `//ul[@id="list-1-ajax-id"]` 是空的。将
-[`gov_policy_feed.py`](../scripts/examples/gov_policy_feed.py) 放入 CSS Factory 数据目录的
+[`gov_policy_feed.py`](../scripts/examples/gov_policy_feed.py) 放入 Knowledge Hub 数据目录的
 `scripts` 文件夹，然后通过[自定义脚本模式](CUSTOM_SCRIPT_MODE.zh.md)添加订阅。
 脚本仅需 Python 标准库，提供标题、链接和日期；阅读正文可开启全文抓取。
-脚本网络请求使用解释器的网络/代理环境，不自动继承 CSS Factory 代理设置。
+脚本网络请求使用解释器的网络/代理环境，不自动继承 Knowledge Hub 代理设置。
 
 时间 XPath 应指向日期元素，例如 `.//span[@class="date"]`，而不是文章链接。
 日期 `2026-09-17` 对应的 Go 时间格式应填写 `2006-01-02`。
@@ -34,7 +34,7 @@ XPath 读取下载的 HTML/XML，不执行网页 JavaScript。如果文章列表
 1. 添加新订阅源时，选择 "XPath" 作为订阅源类型
 2. 根据您的数据源选择 "HTML + XPath" 或 "XML + XPath"
 3. 提供源 URL 并为不同的文章元素配置 XPath 表达式
-4. CSS Factory 将解析页面并使用您的 XPath 表达式提取文章
+4. Knowledge Hub 将解析页面并使用您的 XPath 表达式提取文章
 
 ## XPath 类型
 

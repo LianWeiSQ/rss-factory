@@ -145,9 +145,9 @@ func sendIMAPIDCommand(c *client.Client) {
 
 	// Send client identification
 	clientID := id.ID{
-		id.FieldName:    "CSS Factory",
+		id.FieldName:    "Knowledge Hub",
 		id.FieldVersion: version.Version,
-		id.FieldVendor:  "CSS Factory",
+		id.FieldVendor:  "Knowledge Hub",
 		id.FieldOS:      runtime.GOOS,
 	}
 

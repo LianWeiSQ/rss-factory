@@ -68,9 +68,9 @@ tasks:
           <key>CFBundleIdentifier</key>
           <string>io.github.lianweisq.cssfactory</string>
           <key>CFBundleDisplayName</key>
-          <string>CSS Factory</string>
+          <string>Knowledge Hub</string>
           <key>CFBundleName</key>
-          <string>{{.APP_NAME}}</string>
+          <string>Knowledge Hub</string>
           <key>CFBundlePackageType</key>
           <string>APPL</string>
           <key>CFBundleShortVersionString</key>
@@ -86,13 +86,13 @@ tasks:
           <key>NSHumanReadableCopyright</key>
           <string>Copyright © 2026</string>
           <key>NSAppleEventsUsageDescription</key>
-          <string>CSS Factory needs permission to open articles in your default web browser and execute custom feed scripts.</string>
+          <string>Knowledge Hub needs permission to open articles in your default web browser and execute custom feed scripts.</string>
           <key>NSNetworkUsageDescription</key>
-          <string>CSS Factory requires network access to fetch RSS feeds and update content.</string>
+          <string>Knowledge Hub requires network access to fetch RSS feeds and update content.</string>
           <key>NSDocumentsFolderUsageDescription</key>
-          <string>CSS Factory needs access to Documents folder to import and export OPML feed lists.</string>
+          <string>Knowledge Hub needs access to Documents folder to import and export OPML feed lists.</string>
           <key>NSDownloadsFolderUsageDescription</key>
-          <string>CSS Factory needs access to Downloads folder to import feed lists and save exported content.</string>
+          <string>Knowledge Hub needs access to Downloads folder to import feed lists and save exported content.</string>
           <key>NSAppTransportSecurity</key>
           <dict>
             <key>NSAllowsArbitraryLoads</key>
@@ -201,10 +201,10 @@ tasks:
     deps:
       - task: common:build:frontend
     cmds:
-      - docker build -f Dockerfile.server -t css-factory-server:latest .
-      - docker create --name css-factory-server-temp css-factory-server:latest
-      - docker cp css-factory-server-temp:/app/css-factory-server {{.BIN_DIR}}/css-factory-server
-      - docker rm css-factory-server-temp
+      - docker build -f Dockerfile.server -t knowledge-hub-server:latest .
+      - docker create --name knowledge-hub-server-temp knowledge-hub-server:latest
+      - docker cp knowledge-hub-server-temp:/app/knowledge-hub-server {{.BIN_DIR}}/knowledge-hub-server
+      - docker rm knowledge-hub-server-temp
     preconditions:
       - sh: docker info > /dev/null 2>&1
         msg: "Docker is required for building the server version"
@@ -214,4 +214,4 @@ tasks:
     deps:
       - task: build:server
     cmds:
-      - '{{.BIN_DIR}}/css-factory-server'
+      - '{{.BIN_DIR}}/knowledge-hub-server'

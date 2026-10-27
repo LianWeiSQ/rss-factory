@@ -65,7 +65,7 @@ func TestHandleDownloadUpdate_RejectsUpstreamDistribution(t *testing.T) {
 	HandleDownloadUpdate(&core.Handler{}, rr, req)
 
 	if rr.Code != http.StatusBadRequest || !strings.Contains(rr.Body.String(), "invalid download URL") {
-		t.Fatalf("upstream distribution must not overwrite CSS Factory: %d %s", rr.Code, rr.Body.String())
+		t.Fatalf("upstream distribution must not overwrite Knowledge Hub: %d %s", rr.Code, rr.Body.String())
 	}
 }
 func TestHandleDownloadUpdateProgress(t *testing.T) {

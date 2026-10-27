@@ -16,6 +16,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/LianWeiSQ/rss-factory/internal/branding"
 	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
 	"github.com/LianWeiSQ/rss-factory/internal/handlers/response"
 	"github.com/LianWeiSQ/rss-factory/internal/utils/fileutil"
@@ -218,30 +219,9 @@ func installPortableUpdate(archivePath string, platform string) error {
 		return fmt.Errorf("unsupported platform: %s", platform)
 	}
 
-	// Find the new executable in the extracted files
-	var newExePath string
-	err = filepath.Walk(extractDir, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-		// Look for the executable file (MrRSS.exe on Windows, MrRSS on Unix)
-		if !info.IsDir() {
-			baseName := filepath.Base(path)
-			if platform == "windows" && strings.EqualFold(baseName, exeName) {
-				newExePath = path
-				return filepath.SkipDir
-			} else if platform != "windows" && baseName == exeName {
-				newExePath = path
-				return filepath.SkipDir
-			}
-		}
-		return nil
-	})
+	newExePath, err := findPortableUpdateExecutable(extractDir, platform, exeName)
 	if err != nil {
-		return fmt.Errorf("failed to search for executable: %w", err)
-	}
-	if newExePath == "" {
-		return fmt.Errorf("executable not found in archive")
+		return err
 	}
 
 	log.Printf("Found new executable: %s", newExePath)
@@ -280,6 +260,50 @@ func installPortableUpdate(archivePath string, platform string) error {
 
 	log.Printf("Portable update installed successfully")
 	return nil
+}
+
+// Prefer the distribution's current binary name so an existing CSSFactory
+// installation can consume KnowledgeHub packages without renaming its live file.
+// Retain exact current-name matching for older compatible portable archives.
+func findPortableUpdateExecutable(extractDir, platform, currentName string) (string, error) {
+	canonicalName := branding.BinaryName
+	if platform == "windows" {
+		canonicalName += ".exe"
+	}
+	matches := func(name, expected string) bool {
+		if platform == "windows" {
+			return strings.EqualFold(name, expected)
+		}
+		return name == expected
+	}
+	var canonicalPath, currentPath string
+	err := filepath.Walk(extractDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.Mode().IsRegular() {
+			return nil
+		}
+		name := filepath.Base(path)
+		if matches(name, canonicalName) {
+			canonicalPath = path
+			return filepath.SkipAll
+		}
+		if currentPath == "" && matches(name, currentName) {
+			currentPath = path
+		}
+		return nil
+	})
+	if err != nil {
+		return "", fmt.Errorf("failed to search for executable: %w", err)
+	}
+	if canonicalPath != "" {
+		return canonicalPath, nil
+	}
+	if currentPath != "" {
+		return currentPath, nil
+	}
+	return "", fmt.Errorf("executable not found in archive")
 }
 
 // extractZip extracts a ZIP archive to the specified directory

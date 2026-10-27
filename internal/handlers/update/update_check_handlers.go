@@ -226,8 +226,8 @@ func HandleCheckUpdates(h *core.Handler, w http.ResponseWriter, r *http.Request)
 
 		// Match platform-specific installer/package with architecture
 		// Asset naming convention:
-		//   Installer: CSSFactory-{version}-{platform}-{arch}-installer.{ext}
-		//   Portable: CSSFactory-{version}-{platform}-{arch}-portable.{ext}
+		//   Installer: KnowledgeHub-{version}-{platform}-{arch}-installer.{ext}
+		//   Portable: KnowledgeHub-{version}-{platform}-{arch}-portable.{ext}
 		platformArch := platform + "-" + arch
 
 		if platform == "windows" {

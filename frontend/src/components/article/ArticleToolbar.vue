@@ -117,7 +117,7 @@ async function copyTitle(article: Article) {
     </button>
     <div v-if="!isModal" class="reader-toolbar-source hidden xl:flex">
       <PhBookOpenText :size="17" />
-      <span>{{ article.feed_title || 'CSS Factory' }}</span>
+      <span>{{ article.feed_title || 'Knowledge Hub' }}</span>
     </div>
     <div class="reader-toolbar-actions flex justify-end gap-1 ml-auto">
       <template v-for="action in visibleActions" :key="action.id">

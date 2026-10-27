@@ -34,3 +34,55 @@ func TestCopyFile(t *testing.T) {
 		t.Errorf("Content mismatch: got %s, want %s", content, testContent)
 	}
 }
+
+func TestPortableUpdateFindsRenamedDistributionBinary(t *testing.T) {
+	for _, tc := range []struct {
+		name, platform, currentName, want string
+		files                             []string
+	}{
+		{
+			name: "macOS renamed app bundle", platform: "darwin", currentName: "CSSFactory",
+			files: []string{"KnowledgeHub.app/Contents/MacOS/KnowledgeHub"},
+			want:  "KnowledgeHub.app/Contents/MacOS/KnowledgeHub",
+		},
+		{
+			name: "Windows renamed binary ignores case", platform: "windows", currentName: "CSSFactory.exe",
+			files: []string{"knowledgehub.exe"}, want: "knowledgehub.exe",
+		},
+		{
+			name: "canonical binary preferred over old binary", platform: "linux", currentName: "CSSFactory",
+			files: []string{"CSSFactory", "KnowledgeHub"}, want: "KnowledgeHub",
+		},
+		{
+			name: "older compatible archive", platform: "linux", currentName: "CSSFactory",
+			files: []string{"CSSFactory"}, want: "CSSFactory",
+		},
+		{
+			name: "unrelated executable rejected", platform: "linux", currentName: "CSSFactory",
+			files: []string{"helper", "KnowledgeHub.exe"},
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			dir := t.TempDir()
+			for _, name := range tc.files {
+				path := filepath.Join(dir, filepath.FromSlash(name))
+				if err := os.MkdirAll(filepath.Dir(path), 0700); err != nil {
+					t.Fatal(err)
+				}
+				if err := os.WriteFile(path, []byte("test executable"), 0700); err != nil {
+					t.Fatal(err)
+				}
+			}
+			got, err := findPortableUpdateExecutable(dir, tc.platform, tc.currentName)
+			if tc.want == "" {
+				if err == nil {
+					t.Fatalf("unexpected executable accepted: %s", got)
+				}
+				return
+			}
+			if err != nil || got != filepath.Join(dir, filepath.FromSlash(tc.want)) {
+				t.Fatalf("findPortableUpdateExecutable = %q, %v; want %q", got, err, tc.want)
+			}
+		})
+	}
+}

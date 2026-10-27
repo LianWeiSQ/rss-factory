@@ -62,7 +62,7 @@ func downloadUpdateAttempt(ctx context.Context, client *http.Client, downloadURL
 	if err != nil {
 		return 0, 0, false, err
 	}
-	req.Header.Set("User-Agent", "CSSFactory-Updater")
+	req.Header.Set("User-Agent", "KnowledgeHub-Updater")
 	req.Header.Set("Accept", "application/octet-stream")
 	if offset > 0 {
 		req.Header.Set("Range", fmt.Sprintf("bytes=%d-", offset))

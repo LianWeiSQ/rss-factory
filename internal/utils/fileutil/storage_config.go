@@ -119,7 +119,7 @@ func InitializeDesktopStorage(option string) (io.Closer, error) {
 	}
 	if err := lockStorageFile(lock); err != nil {
 		lock.Close()
-		return nil, fmt.Errorf("CSS Factory is already running; fully quit it before changing storage")
+		return nil, fmt.Errorf("Knowledge Hub is already running; fully quit it before changing storage")
 	}
 	defer lock.Close()
 	fail := func(err error) (io.Closer, error) { return nil, err }

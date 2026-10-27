@@ -1,9 +1,9 @@
-# CSS Factory API Reference
+# Knowledge Hub API Reference
 
 Generated from `docs/SERVER_MODE/swagger.json`. Regenerate with:
 
 ```bash
-python skills/css-factory-assistant/scripts/generate_api_reference.py docs/SERVER_MODE/swagger.json skills/css-factory-assistant/references/api.md
+python skills/knowledge-hub-assistant/scripts/generate_api_reference.py docs/SERVER_MODE/swagger.json skills/knowledge-hub-assistant/references/api.md
 ```
 
 - API version: `1.3.41`

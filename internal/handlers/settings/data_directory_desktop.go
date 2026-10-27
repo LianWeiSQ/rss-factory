@@ -24,7 +24,7 @@ func HandleSelectDataDirectory(h *core.Handler, w http.ResponseWriter, r *http.R
 		w.WriteHeader(http.StatusNotImplemented)
 		return
 	}
-	path, err := app.Dialog.OpenFileWithOptions(&application.OpenFileDialogOptions{Title: "CSS Factory", CanChooseDirectories: true, CanChooseFiles: false}).PromptForSingleSelection()
+	path, err := app.Dialog.OpenFileWithOptions(&application.OpenFileDialogOptions{Title: "Knowledge Hub", CanChooseDirectories: true, CanChooseFiles: false}).PromptForSingleSelection()
 	if err != nil {
 		response.Error(w, err, http.StatusInternalServerError)
 		return

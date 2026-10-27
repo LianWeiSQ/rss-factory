@@ -4,11 +4,11 @@
         <key>CFBundlePackageType</key>
             <string>APPL</string>
         <key>CFBundleDisplayName</key>
-            <string>CSS Factory</string>
+            <string>Knowledge Hub</string>
         <key>CFBundleName</key>
-            <string>CSSFactory</string>
+            <string>Knowledge Hub</string>
         <key>CFBundleExecutable</key>
-            <string>CSSFactory</string>
+            <string>KnowledgeHub</string>
         <key>CFBundleIdentifier</key>
             <string>io.github.lianweisq.cssfactory</string>
         <key>CFBundleVersion</key>
@@ -34,18 +34,18 @@
 
         <!-- Apple Events Usage - Required for opening browser -->
         <key>NSAppleEventsUsageDescription</key>
-        <string>CSS Factory needs permission to open articles in your default web browser and execute custom feed scripts.</string>
+        <string>Knowledge Hub needs permission to open articles in your default web browser and execute custom feed scripts.</string>
 
         <!-- Network Access - Required for fetching RSS feeds -->
         <key>NSNetworkUsageDescription</key>
-        <string>CSS Factory requires network access to fetch RSS feeds and update content.</string>
+        <string>Knowledge Hub requires network access to fetch RSS feeds and update content.</string>
 
         <!-- File Access - Required for OPML imports/exports -->
         <key>NSDocumentsFolderUsageDescription</key>
-        <string>CSS Factory needs access to Documents folder to import and export OPML feed lists.</string>
+        <string>Knowledge Hub needs access to Documents folder to import and export OPML feed lists.</string>
 
         <key>NSDownloadsFolderUsageDescription</key>
-        <string>CSS Factory needs access to Downloads folder to import feed lists and save exported content.</string>
+        <string>Knowledge Hub needs access to Downloads folder to import feed lists and save exported content.</string>
 
         <!-- ============================================================ -->
         <!-- App Sandbox Configuration                                     -->

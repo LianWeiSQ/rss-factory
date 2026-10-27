@@ -16,7 +16,7 @@ Use the application color variables for both light and dark themes; keep article
 
 ## Overview
 
-CSS Factory allows you to customize the appearance of the application and article content by uploading your own CSS file. This feature enables you to:
+Knowledge Hub allows you to customize the appearance of the application and article content by uploading your own CSS file. This feature enables you to:
 
 - Adjust typography (fonts, sizes, line heights)
 - Change colors and spacing

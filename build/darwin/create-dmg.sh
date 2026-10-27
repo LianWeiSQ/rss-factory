@@ -1,8 +1,8 @@
 #!/bin/bash
-# Script to create a macOS DMG installer for CSSFactory
+# Script to create a macOS DMG installer for KnowledgeHub
 #
 # Application Information:
-# Name: CSSFactory
+# Name: KnowledgeHub
 # Description: A Modern, Cross-Platform Desktop RSS Reader
 # Publisher: LianWeiSQ
 # URL: https://github.com/LianWeiSQ/rss-factory
@@ -10,8 +10,8 @@
 
 set -e
 
-APP_NAME="CSSFactory"
-APP_DISPLAY_NAME="CSS Factory"
+APP_NAME="KnowledgeHub"
+APP_DISPLAY_NAME="Knowledge Hub"
 # Get version from frontend/package.json if available, otherwise use default
 VERSION=$(grep -o '"version"[[:space:]]*:[[:space:]]*"[^"]*"' frontend/package.json 2>/dev/null | head -1 | sed 's/.*"\([^"]*\)".*/\1/' || echo "1.3.41")
 APP_PUBLISHER="LianWeiSQ"

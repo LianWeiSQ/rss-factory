@@ -1,6 +1,6 @@
-# CSS Factory landing page source
+# Knowledge Hub landing page source
 
-This directory contains a Vue/Vite landing page for the CSS Factory distribution. No production domain is configured or claimed. Upstream testimonials and the upstream CNAME were removed; original attribution remains in the footer.
+This directory contains a Vue/Vite landing page for the Knowledge Hub distribution. No production domain is configured or claimed. Upstream testimonials and the upstream CNAME were removed; original attribution remains in the footer.
 
 ```sh
 npm ci

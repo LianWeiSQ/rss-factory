@@ -164,9 +164,9 @@ func (e *EmailSource) sendIMAPID(c *client.Client) error {
 	}
 
 	clientID := id.ID{
-		id.FieldName:    "CSS Factory",
+		id.FieldName:    "Knowledge Hub",
 		id.FieldVersion: version.Version,
-		id.FieldVendor:  "CSS Factory",
+		id.FieldVendor:  "Knowledge Hub",
 		id.FieldOS:      runtime.GOOS,
 	}
 

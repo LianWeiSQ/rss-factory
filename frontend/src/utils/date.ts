@@ -1,5 +1,5 @@
 /**
- * Date formatting utilities for CSS Factory
+ * Date formatting utilities for Knowledge Hub
  */
 
 export interface DateFormatPreferences {

@@ -42,8 +42,8 @@ onUnmounted(() => {
     <div class="header-container">
       <!-- Logo -->
       <a href="#" class="header-logo">
-        <img src="../../assets/logo.svg" alt="CSS Factory Logo" width="36" height="36" />
-        <span class="logo-text">CSS Factory</span>
+        <img src="../../assets/logo.svg" alt="Knowledge Hub Logo" width="36" height="36" />
+        <span class="logo-text">Knowledge Hub</span>
       </a>
 
       <!-- Navigation -->

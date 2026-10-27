@@ -389,6 +389,7 @@ func main() {
 
 	// Create main window options
 	windowOptions := application.WebviewWindowOptions{
+		// Preserve the internal window identity across product renames.
 		Name:             "CSSFactory-main-window",
 		Title:            branding.Name,
 		Width:            windowWidth,

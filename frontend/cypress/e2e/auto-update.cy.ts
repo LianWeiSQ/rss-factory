@@ -6,8 +6,8 @@ describe('Auto Update Feature', () => {
     current_version: '1.3.12',
     latest_version: '1.3.13',
     download_url:
-      'https://github.com/LianWeiSQ/rss-factory/releases/download/v1.3.13/CSS Factory-1.3.13-windows-amd64-installer.exe',
-    asset_name: 'CSS Factory-1.3.13-windows-amd64-installer.exe',
+      'https://github.com/LianWeiSQ/rss-factory/releases/download/v1.3.13/Knowledge Hub-1.3.13-windows-amd64-installer.exe',
+    asset_name: 'Knowledge Hub-1.3.13-windows-amd64-installer.exe',
   };
 
   const mockNoUpdateInfo = {

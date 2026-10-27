@@ -76,6 +76,33 @@ func TestLinuxStartupFallsBackToExecutable(t *testing.T) {
 	}
 }
 
+func TestLinuxStartupRenameUpdatesExistingRegistration(t *testing.T) {
+	t.Setenv("APPIMAGE", "")
+	configDir := t.TempDir()
+	t.Setenv("XDG_CONFIG_HOME", configDir)
+	oldExecutable := filepath.Join(t.TempDir(), "CSSFactory")
+	newExecutable := filepath.Join(t.TempDir(), "KnowledgeHub")
+	for _, executable := range []string{oldExecutable, newExecutable} {
+		if err := enableStartupLinux(executable); err != nil {
+			t.Fatal(err)
+		}
+	}
+	entries, err := os.ReadDir(filepath.Join(configDir, "autostart"))
+	if err != nil || len(entries) != 1 || entries[0].Name() != "mrrss.desktop" {
+		t.Fatalf("startup registrations after rename: %v, %v", entries, err)
+	}
+	body, err := os.ReadFile(filepath.Join(configDir, "autostart", "mrrss.desktop"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	want, _ := desktopExec(newExecutable)
+	if !strings.Contains(string(body), "Name=Knowledge Hub\n") ||
+		!strings.Contains(string(body), "Exec="+want+" --start-minimized\n") ||
+		strings.Contains(string(body), oldExecutable) {
+		t.Fatalf("old startup path retained: %s", body)
+	}
+}
+
 func TestStartupDarwinArgumentsRequestsMinimizedLaunch(t *testing.T) {
 	executable := filepath.Join(t.TempDir(), "MrRSS")
 	args := startupDarwinArguments(executable)

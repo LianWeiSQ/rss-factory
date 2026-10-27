@@ -121,10 +121,11 @@ func enableStartupLinux(executable string) error {
 		return fmt.Errorf("failed to create autostart directory: %w", err)
 	}
 
+	// Reuse the legacy registration so product renames update one startup entry.
 	desktopFile := filepath.Join(autostartDir, "mrrss.desktop")
 	content := fmt.Sprintf(`[Desktop Entry]
 Type=Application
-Name=CSS Factory
+Name=Knowledge Hub
 Exec=%s
 Hidden=false
 NoDisplay=false

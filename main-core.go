@@ -30,9 +30,9 @@ import (
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
-// @title           CSS Factory API
+// @title           Knowledge Hub API
 // @version         1.3.41
-// @description     CSS Factory is a modern, cross-platform desktop RSS reader with auto-translation, smart feed discovery, and AI-powered summarization.
+// @description     Knowledge Hub is a modern, cross-platform desktop RSS reader with auto-translation, smart feed discovery, and AI-powered summarization.
 
 // @contact.name   API Support
 // @contact.url    https://github.com/LianWeiSQ/rss-factory

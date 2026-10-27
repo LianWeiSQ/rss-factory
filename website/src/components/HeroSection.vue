@@ -18,7 +18,7 @@
 
       <div class="hero-actions">
         <button class="btn-primary" @mouseenter="onBtnHover" @mouseleave="onBtnLeave">
-          <a class="btn-text" href="#download">Get CSS Factory For Free</a>
+          <a class="btn-text" href="#download">Get Knowledge Hub For Free</a>
           <PhArrowUpRight class="btn-icon" :size="20" weight="bold" />
         </button>
         <a href="#features" class="btn-secondary">Learn More</a>

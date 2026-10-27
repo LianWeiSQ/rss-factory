@@ -1,4 +1,4 @@
-# CSS Factory Architecture Documentation
+# Knowledge Hub Architecture Documentation
 
 ## Table of Contents
 
@@ -13,7 +13,7 @@
 
 ## Overview
 
-CSS Factory is built with a modern, modular architecture using:
+Knowledge Hub is built with a modern, modular architecture using:
 
 - **Backend**: Go 1.27+ with Wails v3 (beta) framework
 - **Frontend**: Vue 3.5+ Composition API with TypeScript
@@ -376,7 +376,7 @@ func (h *Handler) GetArticles(w http.ResponseWriter, r *http.Request) {
 
 ### AI-Powered Summarization
 
-CSS Factory supports two types of summarization:
+Knowledge Hub supports two types of summarization:
 
 #### Local Summarization (Offline)
 

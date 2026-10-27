@@ -3,8 +3,8 @@
 ## Desktop settings / 桌面设置
 
 Open **Settings → General → Data Management → Data directory**, browse to an
-**existing empty folder**, and choose **Change directory**. Fully quit CSS Factory,
-including its tray icon, then reopen it. Before opening SQLite, CSS Factory copies the
+**existing empty folder**, and choose **Change directory**. Fully quit Knowledge Hub,
+including its tray icon, then reopen it. Before opening SQLite, Knowledge Hub copies the
 whole directory into a staging folder and switches only after the copy succeeds.
 The original directory remains as a backup. Verify subscriptions, reading state,
 favorites, credentials and custom scripts before removing that backup yourself.
@@ -44,13 +44,13 @@ unwritable directory stops startup instead of silently opening another database.
 
 ```powershell
 # Windows shortcut target can use the same arguments.
-& 'C:\Program Files\CSSFactory\CSSFactory.exe' --data-dir 'D:\My Reader Data'
+& 'C:\Program Files\KnowledgeHub\KnowledgeHub.exe' --data-dir 'D:\My Reader Data'
 ```
 
 ```sh
-./CSSFactory.AppImage --data-dir "$HOME/Reader Data"
-open -a CSSFactory --args --data-dir "$HOME/Reader Data"
-./css-factory-server --host 127.0.0.1 --data-dir /srv/mrrss-data
+./KnowledgeHub.AppImage --data-dir "$HOME/Reader Data"
+open -a KnowledgeHub --args --data-dir "$HOME/Reader Data"
+./knowledge-hub-server --host 127.0.0.1 --data-dir /srv/mrrss-data
 ```
 
 Built-in start-on-login registration preserves the resolved custom directory.
@@ -62,13 +62,13 @@ Launch overrides do not migrate existing data automatically.
 
 ## Move existing data / 迁移现有数据
 
-1. Completely quit every CSS Factory process using the original directory.
+1. Completely quit every Knowledge Hub process using the original directory.
 2. Back up and copy the **entire** original data directory into the destination.
    Keep all files, including SQLite sidecar files and scripts.
 3. Start with `--data-dir` pointing to the copied directory and verify feeds,
    reading state, favorites and settings. Keep the backup until verified.
 
-先完全退出使用原目录的所有 CSS Factory 进程，备份并复制整个数据目录（含 SQLite 附属文件、
+先完全退出使用原目录的所有 Knowledge Hub 进程，备份并复制整个数据目录（含 SQLite 附属文件、
 脚本等），再通过新路径启动，检查订阅、阅读状态、收藏和设置。确认前保留原备份。
 空目录会创建独立资料库。
 

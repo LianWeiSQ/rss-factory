@@ -1,8 +1,8 @@
 #!/bin/bash
-# Script to create a Linux AppImage for CSSFactory
+# Script to create a Linux AppImage for KnowledgeHub
 #
 # Application Information:
-# Name: CSSFactory
+# Name: KnowledgeHub
 # Description: A Modern, Cross-Platform Desktop RSS Reader
 # Publisher: LianWeiSQ
 # URL: https://github.com/LianWeiSQ/rss-factory
@@ -11,8 +11,8 @@
 # Exit on error, but allow some commands to fail gracefully
 set -e
 
-APP_NAME="CSSFactory"
-APP_DISPLAY_NAME="CSS Factory"
+APP_NAME="KnowledgeHub"
+APP_DISPLAY_NAME="Knowledge Hub"
 # Get version from frontend/package.json if available, otherwise use default
 VERSION=$(grep -o '"version"[[:space:]]*:[[:space:]]*"[^"]*"' frontend/package.json 2>/dev/null | head -1 | sed 's/.*"\([^"]*\)".*/\1/' || echo "1.3.41")
 # Get architecture from environment variable or default to amd64
@@ -75,7 +75,7 @@ SELF=$(readlink -f "$0")
 HERE=${SELF%/*}
 export PATH="${HERE}/usr/bin:${PATH}"
 export LD_LIBRARY_PATH="${HERE}/usr/lib:${LD_LIBRARY_PATH}"
-exec "${HERE}/usr/bin/CSSFactory" "$@"
+exec "${HERE}/usr/bin/KnowledgeHub" "$@"
 EOF
 chmod +x "${APPDIR}/AppRun"
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Knowledge Hub Assistant"
+  short_description: "Control and analyze Knowledge Hub through its local API"
+  default_prompt: "Use $knowledge-hub-assistant to inspect my Knowledge Hub feeds and summarize recent unread articles."

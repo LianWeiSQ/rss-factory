@@ -1,11 +1,11 @@
 [Desktop Entry]
 Version=1.0
-Name=CSS Factory
+Name=Knowledge Hub
 Comment=A modern, standalone RSS reader
 # The Exec line includes %u to pass the URL to the application
-Exec=/usr/local/bin/CSSFactory %u
+Exec=/usr/local/bin/KnowledgeHub %u
 Terminal=false
 Type=Application
-Icon=CSSFactory
+Icon=KnowledgeHub
 Categories=Utility;
-StartupWMClass=CSSFactory
+StartupWMClass=KnowledgeHub

@@ -100,7 +100,7 @@ onBeforeUnmount(() => {
       class="reader-empty hidden md:flex flex-col items-center justify-center h-full text-text-secondary text-center px-8"
     >
       <div class="reader-empty-symbol"><PhBookOpenText :size="36" weight="duotone" /></div>
-      <span class="reader-empty-brand">CSS Factory</span>
+      <span class="reader-empty-brand">Knowledge Hub</span>
       <h2>{{ t('article.content.readingSpace') }}</h2>
       <p>{{ t('article.content.selectArticle') }}</p>
       <span class="reader-empty-note">{{ t('article.content.readingSpaceHint') }}</span>

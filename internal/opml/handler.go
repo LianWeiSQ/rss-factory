@@ -288,7 +288,7 @@ func Generate(feeds []models.Feed) ([]byte, error) {
 	doc := OPML{
 		Version: "1.0",
 		Head: Head{
-			Title: "CSS Factory Subscriptions",
+			Title: "Knowledge Hub Subscriptions",
 		},
 	}
 

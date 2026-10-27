@@ -1,4 +1,4 @@
-# Dockerfile for building CSSFactory server version
+# Dockerfile for building KnowledgeHub server version
 # This creates a minimal server binary without GUI dependencies
 
 # Build stage
@@ -23,7 +23,7 @@ COPY . .
 RUN cd frontend && npm ci && npm run build
 
 # Build the server version
-RUN CGO_ENABLED=1 GOOS=linux go build -tags server -trimpath -buildvcs=false -ldflags="-w -s" -o css-factory-server .
+RUN CGO_ENABLED=1 GOOS=linux go build -tags server -trimpath -buildvcs=false -ldflags="-w -s" -o knowledge-hub-server .
 
 # Runtime stage - minimal alpine image
 FROM alpine:latest
@@ -31,7 +31,7 @@ FROM alpine:latest
 # Install ca-certificates for HTTPS requests
 RUN apk --no-cache add ca-certificates
 
-# Create a non-root user
+# Keep the existing non-root user/UID and volume ownership across branding changes
 RUN adduser -D -s /bin/sh cssfactory
 
 # Create data directory with proper permissions
@@ -41,10 +41,10 @@ RUN mkdir -p /app/data && chown -R cssfactory:cssfactory /app/data
 WORKDIR /app
 
 # Copy the binary from builder stage
-COPY --from=builder /app/css-factory-server .
+COPY --from=builder /app/knowledge-hub-server .
 
 # Change ownership
-RUN chown cssfactory:cssfactory css-factory-server
+RUN chown cssfactory:cssfactory knowledge-hub-server
 
 # Switch to non-root user
 USER cssfactory
@@ -57,4 +57,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD wget --no-verbose --tries=1 --spider http://localhost:1234/api/version || exit 1
 
 # Run the server
-CMD ["./css-factory-server", "-host", "0.0.0.0", "-port", "1234"]
+CMD ["./knowledge-hub-server", "-host", "0.0.0.0", "-port", "1234"]

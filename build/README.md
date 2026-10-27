@@ -1,6 +1,6 @@
 # Wails v3 Build System Guide
 
-This document describes how to build and package CSS Factory using the Wails v3 build system with Task runner.
+This document describes how to build and package Knowledge Hub using the Wails v3 build system with Task runner.
 
 ## Prerequisites
 

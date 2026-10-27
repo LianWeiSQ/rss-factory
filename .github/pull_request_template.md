@@ -45,7 +45,7 @@ Fixes #(issue)
 ### Test Configuration
 
 - **OS**:
-- **CSSFactory Version**:
+- **KnowledgeHub Version**:
 - **Go Version**:
 - **Node Version**:
 

@@ -1,5 +1,5 @@
 /**
- * Clipboard utilities for CSS Factory
+ * Clipboard utilities for Knowledge Hub
  * Uses Wails v3 native Clipboard API
  */
 

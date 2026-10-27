@@ -3,6 +3,7 @@
 #
 # The lines below are called `modelines`. See `:help modeline`
 
+# Stable package identity retained so existing installations upgrade in place.
 name: "css-factory"
 arch: ${GOARCH}
 platform: "linux"
@@ -17,12 +18,12 @@ license: "GPL-3.0"
 release: "1"
 
 contents:
-  - src: "./bin/CSSFactory"
-    dst: "/usr/local/bin/CSSFactory"
+  - src: "./bin/KnowledgeHub"
+    dst: "/usr/local/bin/KnowledgeHub"
   - src: "./build/appicon.png"
-    dst: "/usr/share/icons/hicolor/128x128/apps/CSSFactory.png"
+    dst: "/usr/share/icons/hicolor/128x128/apps/KnowledgeHub.png"
   - src: "./build/linux/desktop"
-    dst: "/usr/share/applications/CSSFactory.desktop"
+    dst: "/usr/share/applications/KnowledgeHub.desktop"
 
 # Default dependencies for Ubuntu 24.04+ with GTK4/WebKitGTK 6.0
 depends:

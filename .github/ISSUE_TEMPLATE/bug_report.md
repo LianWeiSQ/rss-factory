@@ -32,7 +32,7 @@ If applicable, add screenshots to help explain your problem.
 ## Environment
 
 - **OS**: [e.g., Windows 11, macOS 14, Ubuntu 22.04]
-- **CSSFactory Version**: [e.g., 1.1.0]
+- **KnowledgeHub Version**: [e.g., 1.1.0]
 - **Installation Method**: [e.g., built from source, downloaded release]
 
 ## Additional Context

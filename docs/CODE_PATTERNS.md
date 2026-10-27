@@ -1,6 +1,6 @@
-# Code Patterns for CSS Factory
+# Code Patterns for Knowledge Hub
 
-This document provides common coding patterns and best practices for the CSS Factory project.
+This document provides common coding patterns and best practices for the Knowledge Hub project.
 
 ## Table of Contents
 
@@ -1080,7 +1080,7 @@ Use Tailwind responsive prefixes:
 
 ### Frontend API Calls
 
-CSS Factory uses direct HTTP fetch (not Wails bindings) for better control.
+Knowledge Hub uses direct HTTP fetch (not Wails bindings) for better control.
 
 #### GET Request
 
