@@ -3,13 +3,50 @@ import { isWeChatArticle, prepareReaderHTML } from './readerHtml';
 
 const articleUrl = 'https://mp.weixin.qq.com/s/example';
 
-function prepare(html: string, url = articleUrl, normalizeWeChat = true) {
+function prepare(
+  html: string,
+  url = articleUrl,
+  normalizeWeChat = true,
+  preserveSourceFormatting = false
+) {
   const root = document.createElement('div');
-  root.innerHTML = prepareReaderHTML(html, { articleUrl: url, normalizeWeChat });
+  root.innerHTML = prepareReaderHTML(html, {
+    articleUrl: url,
+    normalizeWeChat,
+    preserveSourceFormatting,
+  });
   return root;
 }
 
 describe('WeChat reader preparation', () => {
+  it('preserves authored chapter paragraphs, colors and alignment in source mode', () => {
+    const root = prepare(
+      '<p style="text-align:center"><strong style="font-size:40px">05.</strong></p>' +
+        '<p style="text-align:center"><strong>结语：长期价值</strong></p>' +
+        '<p style="color:#0f59a4;line-height:28px;text-align:justify">作者的<strong>强调内容</strong></p>',
+      articleUrl,
+      true,
+      true
+    );
+    expect(root.querySelector('h2')).toBeNull();
+    expect(root.querySelectorAll('p')).toHaveLength(3);
+    expect(root.querySelector('p')?.style.textAlign).toBe('center');
+    expect(root.querySelector('strong')?.style.fontSize).toBe('40px');
+    expect(root.querySelectorAll('p')[2].style.color).toBe('rgb(15, 89, 164)');
+    expect(root.querySelectorAll('p')[2].style.lineHeight).toBe('28px');
+  });
+
+  it('switches to clean formatting without mutating the source body', () => {
+    const html =
+      '<p style="color:#0f59a4;text-align:center">作者文字<a href="https://example.org">来源</a></p>';
+    const source = prepare(html, articleUrl, true, true);
+    const clean = prepare(html, articleUrl, true, false);
+    expect(source.querySelector('[style]')).not.toBeNull();
+    expect(clean.querySelector('[style]')).toBeNull();
+    expect(clean.textContent).toBe(source.textContent);
+    expect(clean.querySelector('a')?.href).toBe(source.querySelector('a')?.href);
+    expect(prepare(html, articleUrl, true, true).innerHTML).toBe(source.innerHTML);
+  });
   it('detects actual WeChat article hosts, not lookalike URLs', () => {
     expect(isWeChatArticle(articleUrl)).toBe(true);
     expect(isWeChatArticle('https://mp.weixin.qq.com.evil.example/s/example')).toBe(false);

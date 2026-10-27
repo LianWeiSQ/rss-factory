@@ -3,6 +3,45 @@ import { sanitizeArticleHTML } from './articleHtml';
 import { withLazyImages } from './lazyImages';
 
 describe('article HTML rendering boundary', () => {
+  it('preserves safe source typography while rejecting active CSS and layout', () => {
+    const root = document.createElement('div');
+    root.innerHTML = sanitizeArticleHTML(
+      '<p style="color:#0f59a4;text-align:center;font-size:40px;position:fixed;z-index:99;background-image:url(https://evil.test)">章节</p>' +
+        '<span style="display:none;opacity:0">正文</span>'
+    );
+    const paragraph = root.querySelector('p')!;
+    expect(paragraph.style.color).toBe('rgb(15, 89, 164)');
+    expect(paragraph.style.fontSize).toBe('40px');
+    expect(paragraph.style.textAlign).toBe('center');
+    expect(paragraph.style.position).toBe('');
+    expect(paragraph.style.backgroundImage).toBe('');
+    expect(root.querySelector('span')?.hasAttribute('style')).toBe(false);
+  });
+
+  it('converts legacy presentation attributes and can render without source formatting', () => {
+    const html = '<p align="center"><font color="#0f59a4" size="5">章节标题</font></p>';
+    const root = document.createElement('div');
+    root.innerHTML = sanitizeArticleHTML(html);
+    expect(root.querySelector('p')?.style.textAlign).toBe('center');
+    expect(root.querySelector('span')?.style.color).toBe('rgb(15, 89, 164)');
+    expect(root.querySelector('span')?.style.fontSize).toBe('24px');
+    expect(root.querySelector('font,[align],[color],[size]')).toBeNull();
+    const clean = sanitizeArticleHTML(html, { preservePresentationStyles: false });
+    expect(clean).not.toContain('style=');
+    expect(clean).toContain('章节标题');
+  });
+
+  it('does not treat legacy attributes as CSS declarations or enable application utility classes', () => {
+    const root = document.createElement('div');
+    root.innerHTML = sanitizeArticleHTML(
+      '<p align="center;width:0" class="fixed inset-0 hidden">正文</p>' +
+        '<font color="red;padding:64px">文字</font><code class="language-go fixed">code</code>'
+    );
+    expect(root.querySelector('p')?.hasAttribute('style')).toBe(false);
+    expect(root.querySelector('p')?.hasAttribute('class')).toBe(false);
+    expect(root.querySelector('span')?.hasAttribute('style')).toBe(false);
+    expect(root.querySelector('code')?.className).toBe('language-go');
+  });
   it.each([
     '<p>safe</p><p><noscript></p><img src=x onerror="alert(1)"></noscript></p>',
     '<noscript><p title="</noscript><img src=x onerror=alert(1)>">',
@@ -26,10 +65,11 @@ describe('article HTML rendering boundary', () => {
 
   it('preserves reader formatting, math, lazy images and sandboxed video embeds', () => {
     const html = sanitizeArticleHTML(
-      '<pre><code class="language-go">x</code></pre><math><mi>x</mi></math><img src="https://example.org/a.jpg" loading="lazy"><iframe src="https://www.youtube.com/embed/123" srcdoc="bad" sandbox="allow-top-navigation"></iframe>'
+      '<pre><code class="language-go">x</code></pre><math><mi>x</mi></math><span class="MathJax fixed">x^2</span><img src="https://example.org/a.jpg" loading="lazy"><iframe src="https://www.youtube.com/embed/123" srcdoc="bad" sandbox="allow-top-navigation"></iframe>'
     );
     expect(html).toContain('class="language-go"');
     expect(html).toContain('<math><mi>x</mi></math>');
+    expect(html).toContain('<span class="MathJax">x^2</span>');
     expect(html).toContain('loading="lazy"');
     expect(html).toContain('referrerpolicy="no-referrer"');
     expect(html).toContain('sandbox="allow-scripts allow-same-origin allow-presentation"');

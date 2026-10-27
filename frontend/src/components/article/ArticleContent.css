@@ -1402,11 +1402,11 @@
 }
 
 /* WeChat supplies mobile-oriented wrappers; normalized markup retains semantic content. */
-.wechat-reader:not(.custom-css-active) :is(p, li) {
+.wechat-reader:not(.custom-css-active):not(.source-formatting) :is(p, li) {
   line-height: max(1.85, var(--content-line-height, 1.85));
 }
 
-.wechat-reader:not(.custom-css-active) p {
+.wechat-reader:not(.custom-css-active):not(.source-formatting) p {
   margin-block: 0 1.2em;
   text-indent: 0;
   text-align: start;
@@ -1442,19 +1442,20 @@
   text-wrap: pretty;
 }
 
-.wechat-reader:not(.custom-css-active) :is(.reader-media-block, figure) {
+.wechat-reader:not(.custom-css-active):not(.source-formatting) :is(.reader-media-block, figure) {
   margin-block: 1.6em;
   text-align: center;
 }
 
-.wechat-reader:not(.custom-css-active) .reader-media-block img {
+.wechat-reader:not(.custom-css-active):not(.source-formatting) .reader-media-block img {
   display: block;
   margin: 0 auto;
   max-width: 100%;
   height: auto;
 }
 
-.wechat-reader:not(.custom-css-active) :is(.reader-image-caption, figcaption) {
+.wechat-reader:not(.custom-css-active):not(.source-formatting)
+  :is(.reader-image-caption, figcaption) {
   color: var(--text-secondary);
   text-align: center;
   font-size: 0.82em;
@@ -1463,14 +1464,111 @@
   max-width: 92%;
 }
 
-.wechat-reader:not(.custom-css-active) :is(.reader-image-caption, figcaption) strong {
+.wechat-reader:not(.custom-css-active):not(.source-formatting)
+  :is(.reader-image-caption, figcaption)
+  strong {
   color: inherit;
   font-weight: 450;
 }
 
-.wechat-reader:not(.custom-css-active) hr {
+.wechat-reader:not(.custom-css-active):not(.source-formatting) hr {
   margin: 2em auto;
   width: 48px;
   border: 0;
   border-top: 2px solid var(--border-color);
+}
+
+/* Author formatting lives on a paper surface, including inside a dark shell.
+   This keeps source black ink and explicit white backgrounds readable together.
+   Disabling source formatting restores the normal theme-aware reading surface. */
+.prose.source-formatting:not(.custom-css-active) {
+  --text-primary: #24292f;
+  --text-secondary: #66707c;
+  --bg-primary: #fff;
+  --bg-secondary: #f6f8fa;
+  --bg-tertiary: #eef1f4;
+  --border-color: #e1e5ea;
+  --code-bg-color: #f6f8fa;
+  --code-border-color: #e1e5ea;
+  --table-stripe-color: #f1f4f7;
+  --accent-color: #0f59a4;
+  color-scheme: light;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  padding: clamp(12px, 2vw, 24px);
+  border-radius: 8px;
+  box-sizing: border-box;
+  isolation: isolate;
+  contain: layout paint style;
+  letter-spacing: normal;
+  text-align: start;
+}
+
+.prose.source-formatting:not(.custom-css-active)
+  :is(section, div, p, span, figure, img, video, iframe) {
+  max-inline-size: 100% !important;
+  box-sizing: border-box;
+}
+
+.prose.source-formatting:not(.custom-css-active)
+  :is(p, li, h1, h2, h3, h4, h5, h6, strong, b, em, i, small, figcaption) {
+  color: inherit;
+}
+
+.prose.source-formatting:not(.custom-css-active) p {
+  margin-block: 0 1em;
+  line-height: inherit;
+  text-align: inherit;
+  text-indent: 0;
+}
+
+.prose.source-formatting:not(.custom-css-active) :is(strong, b) {
+  font-weight: 700;
+}
+
+.prose.source-formatting:not(.custom-css-active) img {
+  height: auto;
+  margin: 1em auto;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.prose.source-formatting:not(.custom-css-active) :is(table, pre) {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.dark-mode .source-formatting :is(pre.hljs, pre code.hljs) {
+  color: #24292e;
+  background: var(--code-bg-color);
+}
+.dark-mode .source-formatting :is(.hljs-comment, .hljs-quote) {
+  color: #6a737d;
+}
+.dark-mode .source-formatting :is(.hljs-keyword, .hljs-selector-tag, .hljs-addition) {
+  color: #d73a49;
+}
+.dark-mode
+  .source-formatting
+  :is(.hljs-number, .hljs-string, .hljs-meta .hljs-meta-string, .hljs-literal, .hljs-regexp) {
+  color: #032f62;
+}
+.dark-mode
+  .source-formatting
+  :is(.hljs-title, .hljs-section, .hljs-name, .hljs-selector-id, .hljs-selector-class) {
+  color: #6f42c1;
+}
+.dark-mode
+  .source-formatting
+  :is(
+    .hljs-attribute,
+    .hljs-attr,
+    .hljs-variable,
+    .hljs-template-variable,
+    .hljs-type,
+    .hljs-built_in,
+    .hljs-builtin-name,
+    .hljs-symbol
+  ) {
+  color: #005cc5;
 }

@@ -107,6 +107,7 @@ var AllSettings = []SettingDef{
 	{Key: "obsidian_enabled", Encrypted: false},
 	{Key: "obsidian_vault", Encrypted: false},
 	{Key: "obsidian_vault_path", Encrypted: false},
+	{Key: "preserve_source_formatting", Encrypted: false},
 	{Key: "proxy_enabled", Encrypted: false},
 	{Key: "proxy_host", Encrypted: false},
 	{Key: "proxy_password", Encrypted: true},

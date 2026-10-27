@@ -532,17 +532,67 @@ function simpleHash(str: string): string {
   return hash.toString(36);
 }
 
+let presentationRequestId = 0;
+
+async function onContentPresentationChanged() {
+  const requestId = ++presentationRequestId;
+  const articleId = props.article.id;
+  const content = displayContent.value;
+  const prose = articleScrollContainer.value?.querySelector('.prose-content');
+  const resumeManualArticle =
+    manualTranslation.value && lastTranslatedArticleId.value === articleId;
+  // Manual paragraph translation must remain limited to the paragraphs the user selected.
+  const manualParagraphs =
+    manualTranslation.value && !resumeManualArticle
+      ? Array.from(
+          prose?.querySelectorAll('.translation-source, .translation-source-content') || []
+        ).map((element) => element.textContent || '')
+      : [];
+
+  ++contentTranslationRequestId;
+  isTranslatingContent.value = false;
+  lastTranslatedArticleId.value = null;
+  lastTranslatedContentHash.value = '';
+  await nextTick();
+  const isCurrent = () =>
+    requestId === presentationRequestId &&
+    props.article.id === articleId &&
+    displayContent.value === content;
+  if (!isCurrent()) return;
+  enhanceRendering('.prose-content');
+  await reattachContentInteractions();
+  if (!isCurrent() || !translationEnabled.value) return;
+
+  if (!manualTranslation.value || resumeManualArticle) {
+    await translateContentParagraphs(content, false, undefined, resumeManualArticle);
+  } else {
+    const elements = Array.from(
+      articleScrollContainer.value?.querySelectorAll<HTMLElement>(
+        '.prose-content :is(p,li,h1,h2,h3,h4,h5,h6,td,th,figcaption,dt,dd)'
+      ) || []
+    );
+    for (const text of manualParagraphs) {
+      if (!isCurrent()) return;
+      const index = elements.findIndex((element) => element.textContent === text);
+      if (index < 0) continue;
+      const [paragraph] = elements.splice(index, 1);
+      await translateContentParagraphs(content, false, paragraph, true);
+    }
+  }
+}
+
 // Translate content paragraphs while preserving inline elements (formulas, code, images)
 async function translateContentParagraphs(
   content: string,
   force: boolean = false,
-  paragraph?: HTMLElement
+  paragraph?: HTMLElement,
+  resumeManual = false
 ): Promise<boolean> {
   if (!translationEnabled.value || !content) {
     return true;
   }
 
-  if (manualTranslation.value && !force) {
+  if (manualTranslation.value && !force && !resumeManual) {
     await nextTick();
     const prose = articleScrollContainer.value?.querySelector('.prose-content');
     if (prose) wrapOrphanedTextNodes(prose);
@@ -1183,6 +1233,7 @@ watch(fullArticleContent, async (content) => {
 
 // Clean up event listeners
 onBeforeUnmount(() => {
+  ++presentationRequestId;
   clearTranslatedSummary();
   titleTranslationRequestId += 1;
   isTranslatingTitle.value = false;
@@ -1305,6 +1356,7 @@ onBeforeUnmount(() => {
           :has-media-content="!!(article.audio_url || article.video_url)"
           :is-loading-content="isLoadingContent"
           @retry-load="handleRetryLoad"
+          @presentation-changed="onContentPresentationChanged"
         />
 
         <!-- Full-text fetch button -->

@@ -1,0 +1,254 @@
+[
+  {
+    "input": "",
+    "expected": ""
+  },
+  {
+    "input": "COLOR: #ABC; text-align: center;",
+    "expected": "color:#abc;text-align:center"
+  },
+  {
+    "input": "color:rgb(0, 112, 192); background: rgba(255, 255, 255, .8)",
+    "expected": "color:rgb(0,112,192);background-color:rgba(255,255,255,0.8)"
+  },
+  {
+    "input": "color:RED; background-color: transparent",
+    "expected": "color:red;background-color:transparent"
+  },
+  {
+    "input": "color:rebeccapurple; color:#12345678",
+    "expected": "color:#12345678"
+  },
+  {
+    "input": "color:rgb(256,0,0); color:rgba(0,0,0,1.1)",
+    "expected": ""
+  },
+  {
+    "input": "color:rgb(10%,20%,30%)",
+    "expected": ""
+  },
+  {
+    "input": "background:url(https://evil.test/a);color:blue",
+    "expected": "color:blue"
+  },
+  {
+    "input": "color:var(--secret);font-size:16px",
+    "expected": "font-size:16px"
+  },
+  {
+    "input": "color:expression(alert(1));font-weight:bold",
+    "expected": "font-weight:bold"
+  },
+  {
+    "input": "color:red!important;line-height:2",
+    "expected": "line-height:2"
+  },
+  {
+    "input": "color:red; position:fixed;top:0;z-index:9999;display:none;opacity:0;visibility:hidden",
+    "expected": "color:red"
+  },
+  {
+    "input": "color:red; background-image:url(https://evil.test);filter:blur(2px);transform:scale(9)",
+    "expected": "color:red"
+  },
+  {
+    "input": "color:red;/* hidden */background-color:blue",
+    "expected": ""
+  },
+  {
+    "input": "color:red;@import \"https://evil.test\"",
+    "expected": ""
+  },
+  {
+    "input": "c\\6flor:red",
+    "expected": ""
+  },
+  {
+    "input": "color:red\u0000",
+    "expected": ""
+  },
+  {
+    "input": "color:red\n;font-weight:700",
+    "expected": "color:red;font-weight:700"
+  },
+  {
+    "input": "color:red; color:blue; margin:0",
+    "expected": "color:blue;margin:0"
+  },
+  {
+    "input": "color:red; margin:0; color:blue",
+    "expected": "margin:0;color:blue"
+  },
+  {
+    "input": "color:red; color:invalid",
+    "expected": "color:red"
+  },
+  {
+    "input": "font-size:8px;font-weight:650;font-style:italic",
+    "expected": "font-size:8px;font-weight:650;font-style:italic"
+  },
+  {
+    "input": "font-size:.5em",
+    "expected": "font-size:0.5em"
+  },
+  {
+    "input": "font-size:3rem",
+    "expected": "font-size:3rem"
+  },
+  {
+    "input": "font-size:300%",
+    "expected": "font-size:300%"
+  },
+  {
+    "input": "font-size:7px;font-weight:9999;font-style:oblique 90deg",
+    "expected": ""
+  },
+  {
+    "input": "font-size:49px",
+    "expected": ""
+  },
+  {
+    "input": "font-size:301%",
+    "expected": ""
+  },
+  {
+    "input": "font-size:1e2px",
+    "expected": ""
+  },
+  {
+    "input": "line-height:normal;letter-spacing:normal",
+    "expected": "line-height:normal;letter-spacing:normal"
+  },
+  {
+    "input": "line-height:1.85;letter-spacing:.5px;text-indent:2em",
+    "expected": "line-height:1.85;letter-spacing:0.5px;text-indent:2em"
+  },
+  {
+    "input": "line-height:96px",
+    "expected": "line-height:96px"
+  },
+  {
+    "input": "line-height:300%",
+    "expected": "line-height:300%"
+  },
+  {
+    "input": "line-height:0.1;letter-spacing:-2px;text-indent:-1em",
+    "expected": ""
+  },
+  {
+    "input": "line-height:4;letter-spacing:9px;text-indent:100px",
+    "expected": ""
+  },
+  {
+    "input": "margin:0 auto 64px .5em;padding:1em 2em 3em 4em",
+    "expected": "margin:0 auto 64px 0.5em;padding:1em 2em 3em 4em"
+  },
+  {
+    "input": "margin-left:auto;padding-top:64px",
+    "expected": "margin-left:auto;padding-top:64px"
+  },
+  {
+    "input": "margin:-1px;padding:65px;padding-left:auto;margin:5em",
+    "expected": ""
+  },
+  {
+    "input": "margin:0 1px 2px 3px 4px",
+    "expected": ""
+  },
+  {
+    "input": "margin:calc(100% - 1px);padding:10%",
+    "expected": ""
+  },
+  {
+    "input": "text-align:justify;text-decoration:underline line-through;vertical-align:middle",
+    "expected": "text-align:justify;text-decoration:underline line-through;vertical-align:middle"
+  },
+  {
+    "input": "text-align:match-parent;text-decoration:blink;vertical-align:-100px",
+    "expected": ""
+  },
+  {
+    "input": "border:1px solid rgb(0, 112, 192)",
+    "expected": "border:1px solid rgb(0,112,192)"
+  },
+  {
+    "input": "border-left:#abc dashed .5px",
+    "expected": "border-left:#abc dashed 0.5px"
+  },
+  {
+    "input": "border:0;border-top:none",
+    "expected": "border:0;border-top:none"
+  },
+  {
+    "input": "border:5px solid red;border-bottom:1px groove red",
+    "expected": ""
+  },
+  {
+    "input": "border-width:0 1px 2px 4px;border-style:solid dashed;border-color:#abc rgba(0, 0, 0, .5)",
+    "expected": "border-width:0 1px 2px 4px;border-style:solid dashed;border-color:#abc rgba(0,0,0,0.5)"
+  },
+  {
+    "input": "border-radius:50% 1em 32px 0",
+    "expected": "border-radius:50% 1em 32px 0"
+  },
+  {
+    "input": "border-radius:100%;border-width:10px",
+    "expected": ""
+  },
+  {
+    "input": "border-radius:2px / 4px",
+    "expected": ""
+  },
+  {
+    "input": "background:red;background-color:blue",
+    "expected": "background-color:blue"
+  },
+  {
+    "input": "font-family:Arial;color:inherit",
+    "expected": ""
+  },
+  {
+    "input": "color:currentColor",
+    "expected": "color:currentcolor"
+  },
+  {
+    "input": "color:red;content:attr(data-secret);--custom:blue",
+    "expected": "color:red"
+  },
+  {
+    "input": "color:red;behavior:url(x);-moz-binding:url(x)",
+    "expected": "color:red"
+  },
+  {
+    "input": "color:<img src=x>",
+    "expected": ""
+  },
+  {
+    "input": "color:red} body {color:blue",
+    "expected": ""
+  },
+  {
+    "input": "padding:0.00px;line-height:02.50;font-size:016px",
+    "expected": "padding:0px;line-height:2.5;font-size:16px"
+  },
+  {
+    "input": "display:block;width:63px;height:auto",
+    "expected": "display:block;width:63px;height:auto"
+  },
+  {
+    "input": "display:inline-block;width:100%",
+    "expected": "display:inline-block;width:100%"
+  },
+  {
+    "input": "display:flex;width:721px;height:100px",
+    "expected": ""
+  },
+  {
+    "input": "display:none;width:101%",
+    "expected": ""
+  },
+  {
+    "input": "font-size:40px;color:#0f59a4;letter-spacing:.5px",
+    "expected": "font-size:40px;color:#0f59a4;letter-spacing:0.5px"
+  }
+]

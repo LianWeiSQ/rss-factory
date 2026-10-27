@@ -95,6 +95,7 @@ export interface SettingsData {
   obsidian_enabled: boolean;
   obsidian_vault: string;
   obsidian_vault_path: string;
+  preserve_source_formatting: boolean;
   proxy_enabled: boolean;
   proxy_host: string;
   proxy_password: string;

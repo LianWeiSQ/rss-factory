@@ -3,6 +3,7 @@ import { sanitizeArticleHTML } from './articleHtml';
 interface ReaderHTMLOptions {
   articleUrl?: string;
   normalizeWeChat?: boolean;
+  preserveSourceFormatting?: boolean;
 }
 
 const meaningfulMedia = 'img,picture,video,audio,iframe,table,pre,code,math,hr';
@@ -99,9 +100,11 @@ function normalizeSectionHeadings(root: DocumentFragment): void {
  */
 export function prepareReaderHTML(
   html: string | null | undefined,
-  { articleUrl, normalizeWeChat = true }: ReaderHTMLOptions = {}
+  { articleUrl, normalizeWeChat = true, preserveSourceFormatting = true }: ReaderHTMLOptions = {}
 ): string {
-  const safeHTML = sanitizeArticleHTML(html);
+  const safeHTML = sanitizeArticleHTML(html, {
+    preservePresentationStyles: preserveSourceFormatting,
+  });
   if (!safeHTML || !normalizeWeChat || !isWeChatArticle(articleUrl)) return safeHTML;
 
   const template = document.createElement('template');
@@ -111,7 +114,10 @@ export function prepareReaderHTML(
   // Exported mobile layouts often retain fixed widths and alignment attributes.
   root.querySelectorAll('p,div,section,span,strong,b,em,font').forEach((element) => {
     if (element.closest('pre,code,math')) return;
-    for (const attribute of ['align', 'width', 'height', 'face', 'size', 'color']) {
+    const attributes = preserveSourceFormatting
+      ? ['width', 'height']
+      : ['align', 'width', 'height', 'face', 'size', 'color'];
+    for (const attribute of attributes) {
       element.removeAttribute(attribute);
     }
   });
@@ -124,7 +130,9 @@ export function prepareReaderHTML(
       if (!element.closest('pre,code,math') && isEmpty(element)) element.remove();
     });
 
-  normalizeSectionHeadings(root);
+  // Publisher headings are intentionally separate paragraphs in source mode.
+  // Reconstruct compact semantic headings only for the unified reading mode.
+  if (!preserveSourceFormatting) normalizeSectionHeadings(root);
 
   root.querySelectorAll('p').forEach((paragraph) => {
     if (paragraph.closest('pre,code,table,figure,blockquote')) return;
@@ -142,5 +150,7 @@ export function prepareReaderHTML(
     }
   });
 
-  return sanitizeArticleHTML(template.innerHTML);
+  return sanitizeArticleHTML(template.innerHTML, {
+    preservePresentationStyles: preserveSourceFormatting,
+  });
 }

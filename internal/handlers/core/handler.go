@@ -174,7 +174,7 @@ func (h *Handler) GetArticleContentContext(ctx context.Context, articleID int64)
 	matchingItem := h.findMatchingFeedItem(article, parsedFeed.Items)
 	if matchingItem != nil {
 		content := feed.ExtractContent(matchingItem)
-		cleanContent := textutil.CleanHTML(content)
+		cleanContent := textutil.NormalizeArticleSourceHTML(content)
 
 		if strings.TrimSpace(cleanContent) == "" {
 			return h.recoverArchivedContent(ctx, article, targetFeed, nil)

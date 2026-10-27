@@ -9,19 +9,23 @@ import ArticleSummary from './parts/ArticleSummary.vue';
 import en from '@/i18n/locales/en';
 import type { Article } from '@/types/models';
 import { resetTranslationCooldown, translationQueue } from '@/utils/translationRequest';
+import { setSettingsFromRawData } from '@/composables/core/useSettings';
+
+const renderingMocks = vi.hoisted(() => ({
+  enhanceRendering: vi.fn(),
+  renderMathFormulas: vi.fn(),
+  highlightCodeBlocks: vi.fn(),
+}));
 
 vi.mock('@/composables/article/useArticleRendering', () => ({
-  useArticleRendering: () => ({
-    enhanceRendering: vi.fn(),
-    renderMathFormulas: vi.fn(),
-    highlightCodeBlocks: vi.fn(),
-  }),
+  useArticleRendering: () => renderingMocks,
 }));
 
 describe('reader translation recovery', () => {
   let wrapper: VueWrapper | undefined;
   beforeEach(() => {
     vi.useFakeTimers();
+    vi.clearAllMocks();
     resetTranslationCooldown();
     window.showToast = vi.fn();
   });
@@ -34,13 +38,14 @@ describe('reader translation recovery', () => {
     vi.unstubAllGlobals();
   });
 
-  function reader(content: string, summary = '') {
+  function reader(content: string, summary = '', url = '') {
     wrapper = shallowMount(ArticleContent, {
       props: {
         article: {
           id: 1,
           feed_id: 1,
           title: 'Title',
+          url,
           summary,
           feed_title: 'Feed',
           published_at: '2026-10-07',
@@ -56,15 +61,16 @@ describe('reader translation recovery', () => {
     return wrapper;
   }
 
-  function mockTranslations(limited = false, rssSummary = '') {
+  function mockTranslations(limited = false, rssSummary = '', triggerMode = 'auto') {
     let first = true;
     const mock = vi.fn(async (url: string, options?: RequestInit) => {
       if (url === '/api/settings')
         return new Response(
           JSON.stringify({
             translation_enabled: 'true',
+            preserve_source_formatting: 'true',
             target_language: 'zh',
-            translation_trigger_mode: 'auto',
+            translation_trigger_mode: triggerMode,
             summary_enabled: rssSummary ? 'true' : 'false',
             summary_provider: 'rss',
             summary_trigger_mode: 'manual',
@@ -159,6 +165,92 @@ describe('reader translation recovery', () => {
     await vi.advanceTimersByTimeAsync(0);
     expect(view.findComponent(ArticleTitle).props('translationSkipped')).toBe(false);
     expect(view.find('.translation-text').text()).toBe('译文 English text');
+  });
+
+  it('restores translated text and reader interactions after switching source formatting', async () => {
+    const mock = mockTranslations();
+    const source =
+      '<p style="color:#0f59a4;text-align:center">First paragraph ' +
+      '<a href="https://example.com/story">Source link</a></p>' +
+      '<p><img src="https://example.com/image.jpg"></p>';
+    const view = reader(source, '', 'https://mp.weixin.qq.com/s/example');
+    await vi.advanceTimersByTimeAsync(0);
+    const oldParagraph = view.find('.translation-source').element;
+    expect(view.find('.source-formatting').exists()).toBe(true);
+    expect(view.findAll('.translation-text')).toHaveLength(1);
+
+    const imageClick = vi.fn();
+    const attachImages = vi.fn(() => {
+      view.findAll('img').forEach((image) => image.element.addEventListener('click', imageClick));
+    });
+    await view.setProps({ attachImageEventListeners: attachImages });
+    renderingMocks.enhanceRendering.mockClear();
+    setSettingsFromRawData({ preserve_source_formatting: 'false' });
+    await vi.advanceTimersByTimeAsync(0);
+
+    expect(view.find('.source-formatting').exists()).toBe(false);
+    expect(view.findAll('.translation-text')).toHaveLength(1);
+    expect(view.find('.translation-source').element).not.toBe(oldParagraph);
+    expect(view.find('.translation-source').text()).toBe('First paragraph Source link');
+    expect(view.find('.translation-text').text()).toBe('译文 First paragraph Source link');
+    expect(view.props('articleContent')).toBe(source);
+    expect(renderingMocks.enhanceRendering).toHaveBeenCalledWith('.prose-content');
+    expect(attachImages).toHaveBeenCalled();
+    await view.find('img').trigger('click');
+    expect(imageClick).toHaveBeenCalledTimes(1);
+    await view.find('.translation-source a').trigger('click');
+    expect(
+      mock.mock.calls.some(
+        ([url, options]) =>
+          url === '/api/browser/open' &&
+          JSON.parse(String(options?.body)).url === 'https://example.com/story'
+      )
+    ).toBe(true);
+
+    setSettingsFromRawData({ preserve_source_formatting: 'true' });
+    await vi.advanceTimersByTimeAsync(0);
+    expect(view.find('.source-formatting').exists()).toBe(true);
+    expect(view.find('.translation-source').attributes('style')).toContain('color:');
+    expect(view.findAll('.translation-text')).toHaveLength(1);
+    expect(view.props('articleContent')).toBe(source);
+  });
+
+  it('cancels translation on the replaced DOM while waiting and completes the current body', async () => {
+    mockTranslations(true);
+    const view = reader('<p style="color:blue">First paragraph</p><p>Second paragraph</p>');
+    await vi.advanceTimersByTimeAsync(0);
+    expect(view.findAll('.translation-text')).toHaveLength(0);
+    setSettingsFromRawData({ preserve_source_formatting: 'false' });
+    await vi.advanceTimersByTimeAsync(6000);
+    expect(view.findAll('.translation-text').map((element) => element.text())).toEqual([
+      '译文 First paragraph',
+      '译文 Second paragraph',
+    ]);
+    expect(view.findComponent(ArticleBody).props('isTranslatingContent')).toBe(false);
+    expect(translationQueue.value.pending).toBe(0);
+  });
+
+  it('restores only manually selected paragraphs without translating the rest of the article', async () => {
+    const mock = mockTranslations(false, '', 'manual');
+    const view = reader('<p style="color:blue">Selected paragraph</p><p>Unselected paragraph</p>');
+    await vi.advanceTimersByTimeAsync(0);
+    expect(view.findAll('.translation-text')).toHaveLength(0);
+    await view.find('.prose-content p').trigger('click', { ctrlKey: true });
+    await vi.advanceTimersByTimeAsync(0);
+    expect(view.findAll('.translation-text')).toHaveLength(1);
+
+    setSettingsFromRawData({ preserve_source_formatting: 'false' });
+    await vi.advanceTimersByTimeAsync(0);
+    expect(view.findAll('.translation-text').map((element) => element.text())).toEqual([
+      '译文 Selected paragraph',
+    ]);
+    const requests = mock.mock.calls.filter(([url]) => url === '/api/articles/translate-text');
+    expect(
+      requests.some(
+        ([, options]) => JSON.parse(String(options?.body)).text === 'Unselected paragraph'
+      )
+    ).toBe(false);
+    expect(JSON.parse(String(requests.at(-1)?.[1]?.body)).force).toBe(false);
   });
 
   it('keeps the RSS summary visible while waiting without blocking title translation', async () => {

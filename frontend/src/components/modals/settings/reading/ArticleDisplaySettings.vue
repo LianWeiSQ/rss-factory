@@ -109,6 +109,14 @@ function updateSetting(key: keyof SettingsData, value: string | number | boolean
     />
 
     <SettingWithToggle
+      :icon="PhArticle"
+      :title="t('setting.reading.preserveSourceFormatting')"
+      :description="t('setting.reading.preserveSourceFormattingDesc')"
+      :model-value="settings.preserve_source_formatting"
+      @update:model-value="updateSetting('preserve_source_formatting', $event)"
+    />
+
+    <SettingWithToggle
       :icon="PhImage"
       :title="t('setting.reading.showArticlePreviewImages')"
       :description="t('setting.reading.showArticlePreviewImagesDesc')"

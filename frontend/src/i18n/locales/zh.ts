@@ -1353,6 +1353,8 @@ const zh: TranslationMessages = {
       imageGalleryEnabled: '启用多媒体库',
       imageGalleryEnabledDesc: '为图片、视频等媒体类订阅源启用多媒体瀑布流模式',
       showAdvancedSettings: '显示高级设置',
+      preserveSourceFormatting: '保留原文排版',
+      preserveSourceFormattingDesc: '保留文章原有的配色、字号和对齐方式；关闭后使用统一阅读排版。',
       showArticlePreviewImages: '显示预览图片',
       showArticlePreviewImagesDesc: '在文章列表中显示预览图片',
       showFloatingToc: '显示浮动目录',

@@ -103,6 +103,7 @@ export function generateInitialSettings(): SettingsData {
     obsidian_enabled: settingsDefaults.obsidian_enabled,
     obsidian_vault: settingsDefaults.obsidian_vault,
     obsidian_vault_path: settingsDefaults.obsidian_vault_path,
+    preserve_source_formatting: settingsDefaults.preserve_source_formatting,
     proxy_enabled: settingsDefaults.proxy_enabled,
     proxy_host: settingsDefaults.proxy_host,
     proxy_password: settingsDefaults.proxy_password,
@@ -279,6 +280,7 @@ export function parseSettingsData(data: Record<string, string>): SettingsData {
     obsidian_enabled: data.obsidian_enabled === 'true',
     obsidian_vault: data.obsidian_vault || settingsDefaults.obsidian_vault,
     obsidian_vault_path: data.obsidian_vault_path || settingsDefaults.obsidian_vault_path,
+    preserve_source_formatting: data.preserve_source_formatting === 'true',
     proxy_enabled: data.proxy_enabled === 'true',
     proxy_host: data.proxy_host || settingsDefaults.proxy_host,
     proxy_password: data.proxy_password || settingsDefaults.proxy_password,
@@ -521,6 +523,9 @@ export function buildAutoSavePayload(settingsRef: Ref<SettingsData>): Record<str
     obsidian_vault: settingsRef.value.obsidian_vault ?? settingsDefaults.obsidian_vault,
     obsidian_vault_path:
       settingsRef.value.obsidian_vault_path ?? settingsDefaults.obsidian_vault_path,
+    preserve_source_formatting: (
+      settingsRef.value.preserve_source_formatting ?? settingsDefaults.preserve_source_formatting
+    ).toString(),
     proxy_enabled: (settingsRef.value.proxy_enabled ?? settingsDefaults.proxy_enabled).toString(),
     proxy_host: settingsRef.value.proxy_host ?? settingsDefaults.proxy_host,
     proxy_password: settingsRef.value.proxy_password ?? settingsDefaults.proxy_password,

@@ -7,6 +7,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"golang.org/x/net/html"
+	"golang.org/x/net/html/atom"
 )
 
 var markdownBlock = regexp.MustCompile("(?m)^ {0,3}(#{1,6} |```|~~~|[-*+] |[0-9]+\\. |>|\\|.*\\|)")
@@ -51,6 +52,7 @@ func PrepareArticleContent(content, baseURL string) string {
 	// particular, noscript parses differently in browser templates and must
 	// never carry hidden markup through a second parse (GHSA-8q87-xm7v-xv7q).
 	doc.Find("script,style,link,meta,base,object,embed,form,input,button,textarea,select,svg,template,noscript,noembed,noframes,plaintext,xmp,title,annotation-xml").Remove()
+	normalizeLegacyPresentation(doc)
 	doc.Find("*").Each(func(_ int, sel *goquery.Selection) {
 		if !safeArticleElements[sel.Get(0).Data] {
 			// Preserve text and ordinary descendants in custom feed wrappers.
@@ -108,7 +110,7 @@ func PrepareArticleContent(content, baseURL string) string {
 			case "class":
 				allowed := []string{}
 				for _, c := range strings.Fields(attr.Val) {
-					if strings.HasPrefix(c, "language-") || c == "math" || c == "math-display" {
+					if strings.HasPrefix(c, "language-") || c == "math" || c == "math-display" || c == "MathJax" {
 						allowed = append(allowed, c)
 					}
 				}
@@ -116,6 +118,11 @@ func PrepareArticleContent(content, baseURL string) string {
 					continue
 				}
 				attr.Val = strings.Join(allowed, " ")
+			case "style":
+				attr.Val = SanitizePresentationStyle(attr.Val)
+				if attr.Val == "" {
+					continue
+				}
 			case "alt", "title", "width", "height", "colspan", "rowspan", "id", "controls", "preload", "type", "data-math":
 			default:
 				continue
@@ -140,6 +147,51 @@ func PrepareArticleContent(content, baseURL string) string {
 	})
 	result, _ := doc.Find("body").Html()
 	return strings.TrimSpace(result)
+}
+
+// NormalizeArticleSourceHTML retains source presentation for the rendering
+// boundary while removing active raw-text containers. It does not replace
+// PrepareArticleContent, which must still sanitize before exposing the HTML.
+func NormalizeArticleSourceHTML(content string) string {
+	content = malformedTagRegex.ReplaceAllString(content, "<$1>")
+	content = malformedSelfClosingWithAttrs.ReplaceAllString(content, "<$1 $2>")
+	content = malformedSelfClosingNoAttrs.ReplaceAllString(content, "<$1>")
+	if !htmlElement.MatchString(content) {
+		return strings.TrimSpace(content)
+	}
+	doc, err := goquery.NewDocumentFromReader(strings.NewReader(content))
+	if err != nil {
+		return ""
+	}
+	doc.Find("script,style,link,meta,base,object,embed,form,input,button,textarea,select,svg,template,noscript,noembed,noframes,plaintext,xmp,title,annotation-xml").Remove()
+	result, _ := doc.Find("body").Html()
+	return strings.TrimSpace(result)
+}
+
+// Translate obsolete HTML presentation attributes into the same bounded CSS
+// policy. Attribute values are validated independently to prevent declarations
+// from being injected through a color or alignment attribute.
+func normalizeLegacyPresentation(doc *goquery.Document) {
+	doc.Find("*").Each(func(_ int, element *goquery.Selection) {
+		var legacy []string
+		if align, ok := sanitizePresentationValue("text-align", strings.ToLower(strings.TrimSpace(element.AttrOr("align", "")))); ok {
+			legacy = append(legacy, "text-align:"+align)
+		}
+		if element.Get(0).Data == "font" {
+			node := element.Get(0)
+			node.Data, node.DataAtom = "span", atom.Span
+			if color, ok := presentationColor(strings.ToLower(strings.TrimSpace(element.AttrOr("color", "")))); ok {
+				legacy = append(legacy, "color:"+color)
+			}
+			if size := element.AttrOr("size", ""); len(size) == 1 && size[0] >= '1' && size[0] <= '7' {
+				legacy = append(legacy, "font-size:"+[]string{"10px", "13px", "16px", "18px", "24px", "32px", "48px"}[size[0]-'1'])
+			}
+		}
+		if len(legacy) > 0 {
+			legacy = append(legacy, element.AttrOr("style", ""))
+			element.SetAttr("style", SanitizePresentationStyle(strings.Join(legacy, ";")))
+		}
+	})
 }
 
 // Keep the element policy explicit as well as the attribute policy below it.

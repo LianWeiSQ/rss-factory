@@ -108,6 +108,7 @@ type Defaults struct {
 	ObsidianEnabled               bool   `json:"obsidian_enabled"`
 	ObsidianVault                 string `json:"obsidian_vault"`
 	ObsidianVaultPath             string `json:"obsidian_vault_path"`
+	PreserveSourceFormatting      bool   `json:"preserve_source_formatting"`
 	ProxyEnabled                  bool   `json:"proxy_enabled"`
 	ProxyHost                     string `json:"proxy_host"`
 	ProxyPassword                 string `json:"proxy_password"`
@@ -364,6 +365,8 @@ func GetString(key string) string {
 		return defaults.ObsidianVault
 	case "obsidian_vault_path":
 		return defaults.ObsidianVaultPath
+	case "preserve_source_formatting":
+		return strconv.FormatBool(defaults.PreserveSourceFormatting)
 	case "proxy_enabled":
 		return strconv.FormatBool(defaults.ProxyEnabled)
 	case "proxy_host":

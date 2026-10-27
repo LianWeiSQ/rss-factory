@@ -82,8 +82,8 @@ func (f *Fetcher) processArticles(feed models.Feed, items []*gofeed.Item) []*Art
 		// Extract content from RSS item using centralized extraction logic
 		content := ExtractContent(item)
 
-		// Clean HTML to fix malformed tags that can cause rendering issues
-		content = textutil.CleanHTML(content)
+		// Keep source presentation until the reader's rendering sanitizer.
+		content = textutil.NormalizeArticleSourceHTML(content)
 		originalSummary := textutil.CleanHTML(item.Description)
 
 		// Determine title: prefer media:title if available, then item.Title, then generate from content

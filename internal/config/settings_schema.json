@@ -584,6 +584,13 @@
       "encrypted": false,
       "frontend_key": "showArticlePreviewImages"
     },
+    "preserve_source_formatting": {
+      "type": "bool",
+      "default": true,
+      "category": "reading",
+      "encrypted": false,
+      "frontend_key": "preserveSourceFormatting"
+    },
     "show_floating_toc": {
       "type": "bool",
       "default": false,

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /* eslint-disable vue/no-v-html */
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import { PhSpinnerGap, PhArticle, PhArrowClockwise } from '@phosphor-icons/vue';
 import { useI18n } from 'vue-i18n';
 import { useSettings } from '@/composables/core/useSettings';
@@ -26,15 +26,32 @@ const props = withDefaults(defineProps<Props>(), {
 // Emits
 const emit = defineEmits<{
   retryLoad: [];
+  presentationChanged: [];
 }>();
 
 const hasCustomCSS = computed(() => !!settings.value.custom_css_file);
 const isWeChat = computed(() => !hasCustomCSS.value && isWeChatArticle(props.articleUrl));
+const preserveSourceFormatting = computed(
+  () => !hasCustomCSS.value && settings.value.preserve_source_formatting
+);
 const safeContent = computed(() =>
   prepareReaderHTML(props.articleContent, {
     articleUrl: props.articleUrl,
     normalizeWeChat: !hasCustomCSS.value,
+    preserveSourceFormatting: preserveSourceFormatting.value,
   })
+);
+const hasSourceStyles = computed(
+  () => preserveSourceFormatting.value && /<[^>]+\sstyle=/.test(safeContent.value)
+);
+
+// Notify before Vue replaces v-html so the parent can cancel work on the old DOM.
+// Article changes already have their own lifecycle; this covers reader-mode changes.
+watch(
+  () => [safeContent.value, props.articleContent] as const,
+  ([html, source], [previousHTML, previousSource]) => {
+    if (source === previousSource && html !== previousHTML) emit('presentationChanged');
+  }
 );
 
 // Content styling based on settings
@@ -59,7 +76,12 @@ const contentStyle = computed(() => {
   <div v-if="articleContent">
     <div
       class="prose prose-sm sm:prose-lg w-full max-w-none text-text-primary prose-content"
-      :class="{ 'custom-css-active': hasCustomCSS, 'wechat-reader': isWeChat }"
+      :class="{
+        'custom-css-active': hasCustomCSS,
+        'wechat-reader': isWeChat,
+        'source-formatting': hasSourceStyles,
+        'wechat-source-formatting': isWeChat && hasSourceStyles,
+      }"
       :style="contentStyle"
       v-html="safeContent"
     ></div>

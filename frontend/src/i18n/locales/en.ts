@@ -1408,6 +1408,9 @@ const en: TranslationMessages = {
       imageGalleryEnabled: 'Enable Multimedia Gallery',
       imageGalleryEnabledDesc: 'Enable multimedia waterfall mode for multimedia-focused feeds',
       showAdvancedSettings: 'Show Advanced Settings',
+      preserveSourceFormatting: 'Preserve Original Formatting',
+      preserveSourceFormattingDesc:
+        'Keep the original colors, font sizes, and alignment. Turn off to use consistent reader formatting.',
       showArticlePreviewImages: 'Show Preview Images',
       showArticlePreviewImagesDesc: 'Display preview images in the article list',
       showFloatingToc: 'Show Floating TOC',
