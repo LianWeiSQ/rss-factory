@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the MrRSS skill API reference from the server-mode Swagger file."""
+"""Generate the CSS Factory skill API reference from the server-mode Swagger file."""
 
 from __future__ import annotations
 
@@ -51,12 +51,12 @@ def generate(swagger: dict[str, Any]) -> str:
     paths = swagger.get("paths", {})
 
     lines = [
-        "# MrRSS API Reference",
+        "# CSS Factory API Reference",
         "",
         "Generated from `docs/SERVER_MODE/swagger.json`. Regenerate with:",
         "",
         "```bash",
-        "python skills/mrrss-assistant/scripts/generate_api_reference.py docs/SERVER_MODE/swagger.json skills/mrrss-assistant/references/api.md",
+        "python skills/css-factory-assistant/scripts/generate_api_reference.py docs/SERVER_MODE/swagger.json skills/css-factory-assistant/references/api.md",
         "```",
         "",
         f"- API version: `{info.get('version', 'unknown')}`",
@@ -115,7 +115,8 @@ def main() -> int:
         swagger = json.load(handle)
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(generate(swagger), encoding="utf-8", newline="\n")
+    with output_path.open("w", encoding="utf-8", newline="\n") as output:
+        output.write(generate(swagger))
     return 0
 
 

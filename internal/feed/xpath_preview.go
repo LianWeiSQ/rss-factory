@@ -10,7 +10,7 @@ import (
 	"sort"
 	"strings"
 
-	"MrRSS/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 	"golang.org/x/net/html"
 )
 

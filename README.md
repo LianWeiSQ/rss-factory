@@ -1,290 +1,83 @@
-<h1><img src="imgs/logo-rounded.png" alt="MrRSS logo" style="height: 40px;"/>&nbsp;MrRSS</h1>
+# CSS Factory
 
-<a href="https://trendshift.io/repositories/15731" target="_blank"><img src="https://trendshift.io/api/badge/repositories/15731" alt="DevXDojo%2FMrRSS | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+[简体中文](README_zh.md) · [Source](https://github.com/LianWeiSQ/rss-factory) · [License](LICENSE)
 
-![Screenshot](imgs/og1.png)
+CSS Factory is a local-first RSS reader for AI news, financial news and long-form articles. It is a customized distribution of [DevXDojo/MrRSS](https://github.com/DevXDojo/MrRSS), based on **v1.3.41** (commit `0b064ef54dfb2723fdfe08e63c50c7fe74746a94`). The original project, contributors, copyright notices and GPL-3.0 license are retained.
 
-<p>
-   <strong>English</strong> | <a href="README_zh.md">简体中文</a>
-</p>
+## What this distribution changes
 
-[![Version](https://img.shields.io/badge/version-1.3.41-blue.svg)](https://github.com/DevXDojo/MrRSS/releases)
-[![License](https://img.shields.io/badge/license-GPLv3-green.svg)](LICENSE)
-[![Go](https://img.shields.io/badge/Go-1.27+-00ADD8?logo=go)](https://go.dev/)
-[![Wails](https://img.shields.io/badge/Wails-v3%20alpha-red)](https://wails.io/)
-[![Vue.js](https://img.shields.io/badge/Vue.js-3.5+-4FC08D?logo=vue.js)](https://vuejs.org/)
+- A quieter three-pane desktop interface with a compact source sidebar, article list and focused reader; supports light and dark themes.
+- Improved WeChat article rendering: less empty space, normalized numbered headings, responsive images and readable paragraphs. These changes affect presentation; third-party WeChat-to-RSS sources can still fail or lag.
+- A separate **Show Menu Bar Unread Count** setting on macOS, disabled by default. Counts inside the reader remain independent.
+- CSS Factory product identity and repository/release links, while retaining storage and import compatibility with MrRSS.
 
-## ✨ Features
+The Go backend, Vue/TypeScript frontend, Wails desktop shell and SQLite database are inherited from MrRSS. Existing capabilities include RSS/Atom, RSSHub integration, XPath and script feeds, Newsletter ingestion, filtering rules, article export, optional AI, and FreshRSS/Miniflux integrations. Refer to the [architecture](docs/ARCHITECTURE.md) and [reader integrations](docs/READER_INTEGRATIONS.md) for their boundaries.
 
-- 🌐 **Auto-Translation & Summarization**: Automatically translate article titles and content, and generate concise summaries to help you get information quickly
-- 🤖 **AI-Enhanced Features**: Integrated advanced AI technology for translation, summarization, recommendations, and more. Reading and performing operations through skills are also supported
-- 🔌 **Rich Plugin Ecosystem**: Supports integration with mainstream tools like Obsidian, Notion, FreshRSS, and RSSHub for easy feature extension
-- 📡 **Diverse Subscription Methods**: Supports URL, XPath, scripts, newsletters, and other feed types to meet different needs
-- 🏭 **Custom Scripts & Automation**: Built-in filters and scripting system supporting highly customizable automation workflows
+## Build the desktop app
 
-## 🚀 Quick Start
+Use the versions in `go.mod` and `frontend/package-lock.json`. macOS requires Xcode Command Line Tools; Windows and Linux have [platform prerequisites](docs/BUILD_REQUIREMENTS.md). The iOS directory is experimental and is not a supported one-command mobile release.
 
-### Download and Install
-
-#### Option 1: Download Pre-built Installer (Recommended)
-
-Download the latest installer for your platform from the [Releases](https://github.com/DevXDojo/MrRSS/releases/latest) page.
-
-<details>
-
-<summary>Click to view the list of available installers</summary>
-
-<div markdown="1">
-
-**Standard Installation:**
-
-- **Windows:** `MrRSS-{version}-windows-amd64-installer.exe` / `MrRSS-{version}-windows-arm64-installer.exe`
-- **macOS:** `MrRSS-{version}-darwin-universal.dmg`
-- **Linux:** `MrRSS-{version}-linux-amd64.AppImage` / `MrRSS-{version}-linux-arm64.AppImage`
-
-**Portable Version** (no installation required, all data in one folder):
-
-- **Windows:** `MrRSS-{version}-windows-{arch}-portable.zip`
-- **Linux:** `MrRSS-{version}-linux-{arch}-portable.tar.gz`
-- **macOS:** `MrRSS-{version}-darwin-{arch}-portable.zip`
-
-**AI Agent Skills:**
-
-- **Codex:** `MrRSS-{version}-skills.zip` ([usage guide](docs/SKILLS.md))
-
-</div>
-
-</details>
-
-#### Option 2: Build from Source
-
-<details>
-
-<summary>Click to expand the build from source guide</summary>
-
-<div markdown="1">
-
-### Prerequisites
-
-Before you begin, ensure you have the following installed:
-
-- [Go](https://go.dev/) (1.27 or higher)
-- [Node.js](https://nodejs.org/) (20 LTS or higher with npm)
-- [Wails v3](https://v3alpha.wails.io/getting-started/installation/) CLI
-
-**Platform-specific requirements:**
-
-- **Linux**: GTK4, WebKitGTK 6.0, libsoup 3.0, GCC, pkg-config
-- **Windows**: MinGW-w64 (for CGO support), NSIS (for installers)
-- **macOS**: Xcode Command Line Tools
-
-For detailed installation instructions, see [Build Requirements](docs/BUILD_REQUIREMENTS.md)
-
-```bash
-# Quick setup for Linux (Ubuntu 24.04+):
-sudo apt-get install libgtk-4-dev libwebkitgtk-6.0-dev libsoup-3.0-dev gcc pkg-config
+```sh
+git clone https://github.com/LianWeiSQ/rss-factory.git
+cd rss-factory
+cd frontend
+CYPRESS_INSTALL_BINARY=0 npm ci
+cd ..
+CYPRESS_INSTALL_BINARY=0 go run github.com/wailsapp/wails/v3/cmd/wails3@v3.0.0-beta.31 build
 ```
 
-### Installation
+On macOS, the build produces `build/bin/CSSFactory.app`, displayed as **CSS Factory**. For local use, sign it before copying it to Applications:
 
-1. **Clone the repository**
-
-   ```bash
-   git clone https://github.com/DevXDojo/MrRSS.git
-   cd MrRSS
-   ```
-
-2. **Install frontend dependencies**
-
-   ```bash
-   cd frontend
-   npm install
-   cd ..
-   ```
-
-3. **Install Wails v3 CLI**
-
-   ```bash
-   go install github.com/wailsapp/wails/v3/cmd/wails3@v3.0.0-beta.20
-   ```
-
-4. **Build the application**
-
-   ```bash
-   # Using Task (recommended)
-   task build
-
-   # Or using Makefile
-   make build
-
-   # Or directly with wails3
-   wails3 build
-   ```
-
-   The executable will be created in the `build/bin` directory.
-
-5. **Run the application**
-
-   - Windows: `build/bin/MrRSS.exe`
-   - macOS: `build/bin/MrRSS.app`
-   - Linux: `build/bin/MrRSS`
-
-</div>
-
-</details>
-
-### Data Storage
-
-<details>
-
-<summary>Click to expand data storage details</summary>
-
-<div markdown="1">
-
-**Normal Mode** (default):
-
-- **Windows:** `%APPDATA%\MrRSS\` (e.g., `C:\Users\YourName\AppData\Roaming\MrRSS\`)
-- **macOS:** `~/Library/Application Support/MrRSS/`
-- **Linux:** `~/.local/share/MrRSS/`
-
-**Portable Mode** (when `portable.txt` exists):
-
-- All data stored in `data/` folder
-
-This ensures your data persists across application updates and reinstalls.
-
-</div>
-
-</details>
-
-## 🛠️ Development Guide
-
-<details>
-
-<summary>Click to expand the development guide</summary>
-
-<div markdown="1">
-
-### Running in Development Mode
-
-Start the application with hot reloading:
-
-```bash
-# Using Wails v3
-wails3 dev
-
-# Or using Task
-task dev
+```sh
+codesign --deep --force --sign - \
+  --entitlements build/darwin/entitlements.plist \
+  build/bin/CSSFactory.app
+codesign --verify --deep --strict build/bin/CSSFactory.app
 ```
 
-### Code Quality Tools
+Fully quit the running reader before replacing an installed application. Changing source files alone does not update an installed app. Published packages, when available, are listed in [this repository's releases](https://github.com/LianWeiSQ/rss-factory/releases); upstream MrRSS installers do not contain this distribution's changes.
 
-#### Using Make
+## Data and compatibility
 
-We provide a `Makefile` for handling common development tasks (available on Linux/macOS/Windows):
+This distribution intentionally keeps the existing default data locations so renaming the product does not silently create an empty library:
 
-```bash
-# Show all available commands
-make help
+| Platform | Existing default directory |
+| --- | --- |
+| macOS | `~/Library/Application Support/MrRSS/` |
+| Windows | `%APPDATA%\MrRSS\` |
+| Linux | `~/.local/share/MrRSS/` |
 
-# Run full check (lint + test + build)
-make check
+The `MrRSS-bootstrap/storage.json`, portable `mrrss-storage.json`, `MRRSS_*` environment variables, single-instance identity `com.mrrss.app`, encrypted marker `MrRSS-v1:` and rule backup format `mrrss-rules` remain compatibility interfaces. They are not branding omissions. Do not run MrRSS and CSS Factory against the same library concurrently. See [data directory selection and migration](docs/DATA_DIRECTORY.md) before moving data. Machine-bound encrypted credentials may need to be entered again on another computer.
 
-# Clean build artifacts
-make clean
+Personal databases, subscriptions, API keys and built applications are not part of this repository.
 
-# Setup development environment
-make setup
+## Browser / server mode
+
+Build this source tree to retain the customized frontend:
+
+```sh
+cd frontend
+npm run build
+cd ..
+go build -tags server -o css-factory-server .
+./css-factory-server --host 127.0.0.1 --port 1235 --data-dir ./data
 ```
 
-### Pre-commit Hooks
+Open `http://127.0.0.1:1235/`. Server mode serves both the reader page and `/api/*`. The desktop listener only exposes the local API. A server uses its own data directory; it does **not** automatically synchronize the desktop database.
 
-This project uses pre-commit hooks to ensure code quality:
+The server has **no built-in user login**. Keep it on loopback or behind an authenticated private gateway. Phone/iPad access requires reachable deployment and mobile UI verification; complete offline use and cloud synchronization are not supplied by adding a Home Screen icon. See [server mode](docs/SERVER_MODE/README.md).
 
-```bash
-# Install hooks
-pre-commit install
+## AI and agents
 
-# Run on all files
-pre-commit run --all-files
-```
+AI is optional. Configure your own provider or local model only when needed; selected article content is sent to the configured provider. See [AI provider configuration](docs/AI_PROVIDERS.md).
 
-### Running Tests
+The [CSS Factory Assistant](skills/css-factory-assistant/SKILL.md) skill lets an external agent inspect and search the running instance through its REST API. Install it using the [skill guide](docs/SKILLS.md). It can read a compatible existing MrRSS instance; neither an application-specific model key nor automatic summaries are required for an external agent to analyze fetched articles.
 
-```bash
-make test
-```
+## Development and attribution
 
-### Local API and Server Mode
+- `cd frontend` then `npm run test:unit` for frontend tests.
+- `go test -timeout=5m ./internal/...` for backend tests.
+- [Contributing](CONTRIBUTING.md), [project conventions](AGENTS.md), [security boundaries](SECURITY.md).
+- The website directory is source only; this fork does not claim the upstream domain or a deployed hosted service.
 
-The desktop app exposes its REST API at `http://localhost:1234/api` while it is
-running. The listener is restricted to the local computer.
-
-For server deployments and API integration, use the headless server version:
-
-```bash
-# Using Docker (recommended)
-docker run -p 1234:1234 mrrss-server:latest
-
-# Or build from source
-go build -tags server -o mrrss-server .
-./mrrss-server
-```
-
-Pre-built server images based on ghcr.io are also available:
-
-```bash
-docker run -d -p 1234:1234 ghcr.io/devxdojo/mrrss:latest-amd64
-docker run -d -p 1234:1234 ghcr.io/devxdojo/mrrss:latest-arm64
-```
-
-For browser access and local setup, see [Browser interface](docs/SERVER_MODE/README.md).
-
-Please refer to the [Server Mode API Documentation](docs/SERVER_MODE/swagger.json) for a complete API reference.
-To let Codex operate MrRSS through this API, install the release skill package described in [MrRSS Skills](docs/SKILLS.md).
-
-</div>
-
-</details>
-
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
-
-<details>
-
-<summary>Click to expand the contributing guidelines</summary>
-
-<div markdown="1">
-
-Before contributing:
-
-1. Read the [Code of Conduct](CODE_OF_CONDUCT.md)
-2. Check existing issues or create a new one
-3. Fork the repository and create a feature branch
-4. Make your changes and add tests
-5. Submit a pull request
-
-</div>
-
-</details>
-
-## 🔒 Security
-
-If you discover a security vulnerability, please follow our [Security Policy](SECURITY.md).
-
-## 📝 License
-
-This project is licensed under the GPL-3.0 License - see the [LICENSE](LICENSE) file for details.
-
-## 📮 Contact & Support
-
-- **Issues**: [GitHub Issues](https://github.com/DevXDojo/MrRSS/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/DevXDojo/MrRSS/discussions)
-- **Repository**: [github.com/DevXDojo/MrRSS](https://github.com/DevXDojo/MrRSS)
-
-<div align="center">
-  <img src="imgs/sponsor.png" alt="Sponsor MrRSS"/>
-  <p>Made with ❤️ by the MrRSS Team</p>
-  <p>⭐ Star us on GitHub if you find this project useful!</p>
-</div>
+CSS Factory is based on **MrRSS by Ch3nyang and the MrRSS contributors**. The upstream history, [GPL-3.0 license](LICENSE) and original copyright headers are retained. See the unchanged upstream [changelog](CHANGELOG.md) for history before this distribution's changes.

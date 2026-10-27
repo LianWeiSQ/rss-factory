@@ -16,6 +16,8 @@ import {
   PhCheckSquare,
   PhSquare,
   PhX,
+  PhSortAscending,
+  PhSortDescending,
 } from '@phosphor-icons/vue';
 import ArticleFilterModal from '../modals/filter/ArticleFilterModal.vue';
 import ArticleListMoreMenu from './ArticleListMoreMenu.vue';
@@ -1312,15 +1314,12 @@ async function reloadArticleOrder(): Promise<void> {
       { 'card-mode': isCardMode, 'table-mode': isTableMode },
     ]"
   >
-    <div class="p-2 sm:p-4 border-b border-border bg-bg-primary">
-      <div class="flex items-center justify-between">
-        <h3
-          class="m-0 text-base sm:text-lg font-semibold truncate flex-1"
-          :title="articleListTitle"
-        >
+    <div class="article-list-header">
+      <div class="article-list-heading-row">
+        <h3 class="article-list-heading" :title="articleListTitle">
           {{ articleListTitle }}
         </h3>
-        <div class="flex items-center gap-1 sm:gap-2">
+        <div class="article-list-actions flex items-center gap-1">
           <!-- Clear Read Later button - only shown when viewing Read Later list -->
           <button
             v-if="store.currentFilter === 'readLater'"
@@ -1512,6 +1511,29 @@ async function reloadArticleOrder(): Promise<void> {
             <PhList :size="18" class="sm:w-5 sm:h-5" />
           </button>
         </div>
+      </div>
+      <div class="article-list-status">
+        <span class="article-list-scope">{{
+          store.showOnlyUnread && store.currentFilter !== 'favorites'
+            ? t('sidebar.activity.unreadArticles')
+            : t('sidebar.feedList.articles')
+        }}</span>
+        <button
+          type="button"
+          class="article-list-sort"
+          :title="
+            t(
+              store.articleSortOrder === 'newest'
+                ? 'article.action.sortOldestFirst'
+                : 'article.action.sortNewestFirst'
+            )
+          "
+          @click="changeArticleSortOrder(store.articleSortOrder === 'newest' ? 'oldest' : 'newest')"
+        >
+          <PhSortDescending v-if="store.articleSortOrder === 'newest'" :size="13" />
+          <PhSortAscending v-else :size="13" />
+          {{ t(`article.list.sorting.${store.articleSortOrder}`) }}
+        </button>
       </div>
       <div
         v-if="selectionMode"
@@ -1746,10 +1768,7 @@ async function reloadArticleOrder(): Promise<void> {
         <!-- Normal/Compact mode: list layout -->
         <div v-else class="article-list-container">
           <template v-for="article in windowItems" :key="article.id">
-            <h4
-              v-if="groupStarts.has(article.id)"
-              class="border-b border-border bg-bg-secondary px-3 py-2 text-sm font-medium text-text-secondary"
-            >
+            <h4 v-if="groupStarts.has(article.id)" class="article-group-heading">
               {{ groupLabel(article) }}
             </h4>
             <div class="min-w-0">
@@ -1874,6 +1893,93 @@ async function reloadArticleOrder(): Promise<void> {
 
 <style scoped>
 @reference "../../style.css";
+.article-list-header {
+  position: relative;
+  z-index: 25;
+  flex-shrink: 0;
+  padding: 20px 18px 12px;
+  border-bottom: 1px solid color-mix(in srgb, var(--border-color) 70%, transparent);
+  background: var(--bg-primary);
+}
+.article-list-heading-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.article-list-heading {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: calc(16px * var(--ui-font-scale, 1));
+  font-weight: 650;
+  letter-spacing: -0.025em;
+}
+.article-list-actions {
+  flex-shrink: 0;
+}
+.article-list-actions > button,
+.article-list-actions > div > button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 27px;
+  height: 29px;
+  padding: 0;
+  border-radius: 7px;
+}
+.article-list-actions :deep(svg) {
+  width: 17px;
+  height: 17px;
+}
+.article-list-actions button:focus-visible,
+.article-list-sort:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+.article-list-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  gap: 12px;
+}
+.article-list-scope {
+  color: var(--text-tertiary);
+  font-size: calc(11px * var(--ui-font-scale, 1));
+}
+.article-list-sort {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 5px;
+  color: var(--text-secondary);
+  font-size: calc(11px * var(--ui-font-scale, 1));
+  line-height: 20px;
+  cursor: pointer;
+}
+.article-list-sort:hover {
+  color: var(--accent-color);
+}
+.article-group-heading {
+  margin: 0;
+  padding: 16px 26px 6px;
+  color: var(--text-tertiary);
+  font-size: calc(10px * var(--ui-font-scale, 1));
+  font-weight: 550;
+  letter-spacing: 0.04em;
+}
+.article-list-container {
+  padding: 6px 0 14px;
+}
+@media (max-width: 767px) {
+  .article-list-header {
+    padding: 16px 18px 12px;
+  }
+}
+
 .article-table {
   min-width: 600px;
 }
@@ -1922,32 +2028,32 @@ async function reloadArticleOrder(): Promise<void> {
 
 /* Card grid layout - narrower cards */
 .card-grid-container {
-  @apply grid gap-3 p-3;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  @apply grid gap-4 p-5;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
 }
 
 /* Responsive adjustments for card grid */
 @media (min-width: 640px) {
   .card-grid-container {
-    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   }
 }
 
 @media (min-width: 1024px) {
   .card-grid-container {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   }
 }
 
 @media (min-width: 1400px) {
   .card-grid-container {
-    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   }
 }
 
 .filter-active {
   @apply text-accent border-accent;
-  background-color: rgba(59, 130, 246, 0.1);
+  background-color: color-mix(in srgb, var(--accent-color) 8%, transparent);
 }
 
 .animate-spin {

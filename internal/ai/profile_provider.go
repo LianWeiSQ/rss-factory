@@ -3,8 +3,8 @@ package ai
 import (
 	"strconv"
 
-	"MrRSS/internal/config"
-	"MrRSS/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/config"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 )
 
 // ProfileProvider provides AI profile resolution for different features

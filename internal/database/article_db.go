@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"MrRSS/internal/models"
-	"MrRSS/internal/utils/urlutil"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/urlutil"
 
 	"modernc.org/sqlite"
 )

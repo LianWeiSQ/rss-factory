@@ -1,9 +1,9 @@
 package readingreport
 
 import (
-	"MrRSS/internal/models"
 	"context"
 	"errors"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 	"strings"
 	"testing"
 	"unicode/utf8"

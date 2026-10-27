@@ -16,7 +16,7 @@ import (
 	"strings"
 	"time"
 
-	"MrRSS/internal/utils/httputil"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/httputil"
 )
 
 // MediaCache handles caching of images and videos to work around anti-hotlinking

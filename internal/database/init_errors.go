@@ -25,7 +25,7 @@ func explainInitializationError(err error) error {
 	case sqlite3.SQLITE_FULL:
 		hint = "database storage is full; check free space on both the data and temporary-file disks"
 	case sqlite3.SQLITE_CORRUPT, sqlite3.SQLITE_NOTADB:
-		hint = "database contents could not be read as a valid SQLite database; stop MrRSS and back up the complete data directory before recovery"
+		hint = "database contents could not be read as a valid SQLite database; stop CSS Factory and back up the complete data directory before recovery"
 	default:
 		return err
 	}

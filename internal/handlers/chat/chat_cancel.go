@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strings"
 
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/handlers/response"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/response"
 )
 
 // CancelChatRequest identifies one logical generation in a saved session.

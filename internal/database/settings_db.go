@@ -1,9 +1,9 @@
 package database
 
 import (
-	"MrRSS/internal/crypto"
 	"context"
 	"fmt"
+	"github.com/LianWeiSQ/rss-factory/internal/crypto"
 	"log"
 )
 

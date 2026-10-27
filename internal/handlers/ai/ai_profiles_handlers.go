@@ -11,11 +11,11 @@ import (
 	"sync"
 	"time"
 
-	"MrRSS/internal/ai"
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/handlers/response"
-	"MrRSS/internal/models"
-	"MrRSS/internal/utils/httputil"
+	"github.com/LianWeiSQ/rss-factory/internal/ai"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/response"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/httputil"
 )
 
 // ProfileRequest represents the request body for creating/updating an AI profile

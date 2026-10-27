@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"MrRSS/internal/ai"
-	"MrRSS/internal/utils/httputil"
+	"github.com/LianWeiSQ/rss-factory/internal/ai"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/httputil"
 )
 
 type rtFunc func(*http.Request) (*http.Response, error)

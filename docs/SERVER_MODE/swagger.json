@@ -1,12 +1,11 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "MrRSS is a modern, cross-platform desktop RSS reader with auto-translation, smart feed discovery, and AI-powered summarization.",
-        "title": "MrRSS API",
+        "description": "CSS Factory is a modern, cross-platform desktop RSS reader with auto-translation, smart feed discovery, and AI-powered summarization.",
+        "title": "CSS Factory API",
         "contact": {
             "name": "API Support",
-            "url": "https://github.com/DevXDojo/MrRSS",
-            "email": "mail@ch3nyang.top"
+            "url": "https://github.com/LianWeiSQ/rss-factory"
         },
         "license": {
             "name": "GPL-3.0",
@@ -17,9 +16,9 @@
     "host": "localhost:1234",
     "basePath": "/api",
     "paths": {
-        "/miniflux/status": {
-            "get": {
-                "description": "Get the current synchronization status with Miniflux",
+        "/ai-chat": {
+            "post": {
+                "description": "Send messages to AI for discussing article content (requires ai_chat_enabled setting). For cancellable requests, create a session first and send its session_id with a unique request_id.",
                 "consumes": [
                     "application/json"
                 ],
@@ -27,48 +26,49 @@
                     "application/json"
                 ],
                 "tags": [
-                    "miniflux"
+                    "chat"
                 ],
-                "summary": "Get Miniflux sync status",
-                "responses": {
-                    "200": {
-                        "description": "Sync status (pending_changes, failed_items, last_sync_time)",
+                "summary": "AI chat with article",
+                "parameters": [
+                    {
+                        "description": "Chat request (messages, article info)",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/chat.ChatRequest"
                         }
                     }
-                }
-            }
-        },
-        "/miniflux/sync": {
-            "post": {
-                "description": "Perform bidirectional synchronization with Miniflux server (pull and push changes)",
-                "consumes": [
-                    "application/json"
                 ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "miniflux"
-                ],
-                "summary": "Sync with Miniflux",
                 "responses": {
                     "200": {
-                        "description": "Sync started status (status, message)",
+                        "description": "AI response (response, html)",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/chat.ChatResponse"
                         }
                     },
                     "400": {
-                        "description": "Bad request (Miniflux disabled or incomplete settings)",
+                        "description": "Bad request (missing messages)",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
                                 "type": "string"
                             }
+                        }
+                    },
+                    "403": {
+                        "description": "AI chat is disabled or limit reached",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "408": {
+                        "description": "Chat generation stopped",
+                        "schema": {
+                            "$ref": "#/definitions/chat.chatErrorResponse"
                         }
                     },
                     "500": {
@@ -83,9 +83,9 @@
                 }
             }
         },
-        "/miniflux/sync-feed": {
+        "/ai-chat/cancel": {
             "post": {
-                "description": "Synchronize articles for a specific Miniflux feed/stream",
+                "description": "Cancel one request by session_id and request_id. Repeated, finished, and early cancellation all return success.",
                 "consumes": [
                     "application/json"
                 ],
@@ -93,28 +93,75 @@
                     "application/json"
                 ],
                 "tags": [
-                    "miniflux"
+                    "chat"
                 ],
-                "summary": "Sync single Miniflux feed",
+                "summary": "Stop AI chat generation",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Miniflux stream ID",
-                        "name": "stream_id",
-                        "in": "query",
-                        "required": true
+                        "description": "Request to cancel",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/chat.CancelChatRequest"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Sync started status (status, message)",
+                        "description": "success",
                         "schema": {
                             "type": "object",
-                            "additionalProperties": true
+                            "additionalProperties": {
+                                "type": "boolean"
+                            }
                         }
                     },
                     "400": {
-                        "description": "Bad request (Miniflux disabled or stream_id missing)",
+                        "description": "Invalid request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ai/chat/session/create": {
+            "post": {
+                "description": "Create a new chat session for an article",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "chat"
+                ],
+                "summary": "Create chat session",
+                "parameters": [
+                    {
+                        "description": "Session creation request (article_id, title)",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/chat.CreateSessionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Created chat session",
+                        "schema": {
+                            "$ref": "#/definitions/database.ChatSession"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (missing article_id)",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -559,6 +606,102 @@
                             "additionalProperties": {
                                 "type": "string"
                             }
+                        }
+                    }
+                }
+            }
+        },
+        "/ai/reading-report": {
+            "post": {
+                "description": "Generate a transient report from 1-20 selected local articles, with optional AI profile and focus (500 characters maximum). Honors AI usage limits, proxy settings and request cancellation. Does not mark articles read or save reports.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ai"
+                ],
+                "summary": "Generate AI reading report",
+                "parameters": [
+                    {
+                        "description": "Selected articles, optional profile and focus",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ReadingReportRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ReadingReportResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/ai/reading-report/preview": {
+            "post": {
+                "description": "Inspect local content coverage for 1-20 distinct article IDs; no external requests or reading-state changes.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ai"
+                ],
+                "summary": "Preview reading report sources",
+                "parameters": [
+                    {
+                        "description": "Selected article IDs",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ReadingReportRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ReadingReportPreview"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     }
                 }
@@ -1115,6 +1258,33 @@
                         "in": "query"
                     },
                     {
+                        "type": "boolean",
+                        "description": "Filter for only unread articles",
+                        "name": "only_unread",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "newest",
+                            "oldest"
+                        ],
+                        "type": "string",
+                        "description": "Publication order: newest or oldest",
+                        "name": "sort_order",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "none",
+                            "date",
+                            "feed"
+                        ],
+                        "type": "string",
+                        "description": "Group articles by feed before pagination",
+                        "name": "group_by",
+                        "in": "query"
+                    },
+                    {
                         "minimum": 1,
                         "type": "integer",
                         "description": "Page number (default: 1)",
@@ -1154,7 +1324,7 @@
         },
         "/articles/cleanup": {
             "post": {
-                "description": "Delete all articles and article contents (keeps feeds and settings)",
+                "description": "Delete unread articles that are neither favorited nor saved for later",
                 "consumes": [
                     "application/json"
                 ],
@@ -1164,7 +1334,7 @@
                 "tags": [
                     "articles"
                 ],
-                "summary": "Cleanup all articles",
+                "summary": "Cleanup unimportant articles",
                 "responses": {
                     "200": {
                         "description": "Cleanup statistics (deleted, articles, contents, type)",
@@ -1763,6 +1933,22 @@
                         "in": "query"
                     },
                     {
+                        "type": "string",
+                        "description": "Filter by media type: all, images, or videos",
+                        "name": "media_type",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "newest",
+                            "oldest"
+                        ],
+                        "type": "string",
+                        "description": "Publication order: newest or oldest",
+                        "name": "sort_order",
+                        "in": "query"
+                    },
+                    {
                         "minimum": 1,
                         "type": "integer",
                         "description": "Page number (default: 1)",
@@ -1995,6 +2181,68 @@
                 }
             }
         },
+        "/articles/read-batch": {
+            "post": {
+                "description": "Update the read state of up to 5000 selected articles and sync supported reader services",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "articles"
+                ],
+                "summary": "Mark selected articles as read or unread",
+                "parameters": [
+                    {
+                        "description": "Selected article IDs and target read state",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/article.BatchReadRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "405": {
+                        "description": "Method Not Allowed",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/articles/refresh": {
             "post": {
                 "description": "Trigger a background refresh of all feeds",
@@ -2013,6 +2261,69 @@
                         "description": "Refresh started successfully",
                         "schema": {
                             "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/articles/reload-content": {
+            "post": {
+                "description": "Clear cached RSS content for an article so the next content request reloads it",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "articles"
+                ],
+                "summary": "Reload article content",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "int64",
+                        "description": "Article ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reload status",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid article ID)",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Article not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     }
                 }
@@ -2306,119 +2617,6 @@
                 }
             }
         },
-        "/ai-chat": {
-            "post": {
-                "description": "Send messages to AI for discussing article content (requires ai_chat_enabled setting). For cancellable requests, create a session first and send its session_id with a unique request_id.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "chat"
-                ],
-                "summary": "AI chat with article",
-                "parameters": [
-                    {
-                        "description": "Chat request (messages, article info)",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/chat.ChatRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "AI response (response, html)",
-                        "schema": {
-                            "$ref": "#/definitions/chat.ChatResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request (missing messages)",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "AI chat is disabled or limit reached",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "408": {
-                        "description": "Chat generation stopped",
-                        "schema": {
-                            "$ref": "#/definitions/chat.chatErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/ai-chat/cancel": {
-            "post": {
-                "description": "Cancel one request by session_id and request_id. Repeated, finished, and early cancellation all return success.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "chat"
-                ],
-                "summary": "Stop AI chat generation",
-                "parameters": [
-                    {
-                        "description": "Request to cancel",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/chat.CancelChatRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "success",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "boolean"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/chat/message": {
             "delete": {
                 "description": "Delete a specific chat message",
@@ -2675,58 +2873,6 @@
                     },
                     "400": {
                         "description": "Bad request (missing or invalid session_id)",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/ai/chat/session/create": {
-            "post": {
-                "description": "Create a new chat session for an article",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "chat"
-                ],
-                "summary": "Create chat session",
-                "parameters": [
-                    {
-                        "description": "Session creation request (article_id, title)",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/chat.CreateSessionRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Created chat session",
-                        "schema": {
-                            "$ref": "#/definitions/database.ChatSession"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request (missing article_id)",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -3557,6 +3703,170 @@
                 }
             }
         },
+        "/feeds/category": {
+            "post": {
+                "description": "Atomically dissolve a category into uncategorized feeds or unsubscribe the category tree. FreshRSS categories are protected.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "feeds"
+                ],
+                "summary": "Dissolve a category or unsubscribe its feeds",
+                "parameters": [
+                    {
+                        "description": "category and action (dissolve or unsubscribe)",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/feeds/content-options": {
+            "get": {
+                "description": "Get or save content and removal CSS selectors for one feed.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "feeds"
+                ],
+                "summary": "Feed content extraction settings",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "int64",
+                        "description": "Feed ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/database.FeedContentOptions"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Get or save content and removal CSS selectors for one feed.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "feeds"
+                ],
+                "summary": "Feed content extraction settings",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "int64",
+                        "description": "Feed ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/database.FeedContentOptions"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/feeds/delete": {
             "post": {
                 "description": "Delete a feed subscription by ID",
@@ -3620,6 +3930,12 @@
                         "name": "id",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Reset existing visible articles to unread before refreshing",
+                        "name": "reset_read",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -5600,277 +5916,23 @@
                     }
                 }
             }
-        },
-        "/feeds/category": {
-            "post": {
-                "description": "Atomically dissolve a category into uncategorized feeds or unsubscribe the category tree. FreshRSS categories are protected.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "feeds"
-                ],
-                "summary": "Dissolve a category or unsubscribe its feeds",
-                "parameters": [
-                    {
-                        "description": "category and action (dissolve or unsubscribe)",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "integer"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/feeds/content-options": {
-            "get": {
-                "description": "Read or save per-feed content/removal CSS selectors and an encrypted, exact-origin Cookie. Cookie is write-only: responses return has_cookie; omit cookie to retain it or send an empty string to remove it. Available for local and FreshRSS feeds.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "feeds"
-                ],
-                "summary": "Feed content extraction settings",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "format": "int64",
-                        "description": "Feed ID",
-                        "name": "id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/database.FeedContentOptions"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "Read or save per-feed content/removal CSS selectors and an encrypted, exact-origin Cookie. Cookie is write-only: responses return has_cookie; omit cookie to retain it or send an empty string to remove it. Available for local and FreshRSS feeds.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "feeds"
-                ],
-                "summary": "Feed content extraction settings",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "format": "int64",
-                        "description": "Feed ID",
-                        "name": "id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "name": "options",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/database.FeedContentOptions"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/database.FeedContentOptions"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/ai/reading-report": {
-            "post": {
-                "description": "Generate a transient report from 1-20 selected local articles, with optional AI profile and focus (500 characters maximum). Honors AI usage limits, proxy settings and request cancellation. Does not mark articles read or save reports.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "ai"
-                ],
-                "summary": "Generate AI reading report",
-                "parameters": [
-                    {
-                        "description": "Selected articles, optional profile and focus",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/handlers.ReadingReportRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.ReadingReportResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "429": {
-                        "description": "Too Many Requests",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "502": {
-                        "description": "Bad Gateway",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
-        "/ai/reading-report/preview": {
-            "post": {
-                "description": "Inspect local content coverage for 1-20 distinct article IDs; no external requests or reading-state changes.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "ai"
-                ],
-                "summary": "Preview reading report sources",
-                "parameters": [
-                    {
-                        "description": "Selected article IDs",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/handlers.ReadingReportRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.ReadingReportPreview"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
         }
     },
     "definitions": {
+        "article.BatchReadRequest": {
+            "type": "object",
+            "properties": {
+                "ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "read": {
+                    "type": "boolean"
+                }
+            }
+        },
         "article.ExportToNotionRequest": {
             "type": "object",
             "properties": {
@@ -5939,11 +6001,17 @@
                         "$ref": "#/definitions/article.FilterCondition"
                     }
                 },
+                "group_by": {
+                    "type": "string"
+                },
                 "limit": {
                     "type": "integer"
                 },
                 "page": {
                     "type": "integer"
+                },
+                "sort_order": {
+                    "type": "string"
                 }
             }
         },
@@ -6068,6 +6136,9 @@
                 "profile_id": {
                     "type": "integer"
                 },
+                "rebind_session": {
+                    "type": "boolean"
+                },
                 "request_id": {
                     "description": "Requires session_id when provided",
                     "type": "string"
@@ -6098,17 +6169,6 @@
                 }
             }
         },
-        "chat.chatErrorResponse": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "type": "string"
-                },
-                "session_id": {
-                    "type": "integer"
-                }
-            }
-        },
         "chat.CreateSessionRequest": {
             "type": "object",
             "properties": {
@@ -6125,6 +6185,20 @@
             "properties": {
                 "title": {
                     "type": "string"
+                }
+            }
+        },
+        "chat.chatErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "error_code": {
+                    "type": "string"
+                },
+                "session_id": {
+                    "type": "integer"
                 }
             }
         },
@@ -6170,6 +6244,26 @@
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "database.FeedContentOptions": {
+            "type": "object",
+            "properties": {
+                "content_selector": {
+                    "type": "string"
+                },
+                "cookie": {
+                    "type": "string"
+                },
+                "cookie_origin": {
+                    "type": "string"
+                },
+                "has_cookie": {
+                    "type": "boolean"
+                },
+                "remove_selector": {
                     "type": "string"
                 }
             }
@@ -6263,6 +6357,12 @@
                 "error": {
                     "type": "string"
                 },
+                "error_code": {
+                    "type": "string"
+                },
+                "expanded_terms": {
+                    "$ref": "#/definitions/handlers.SearchTerms"
+                },
                 "search_terms": {
                     "type": "string"
                 },
@@ -6323,6 +6423,9 @@
                 "connection_success": {
                     "type": "boolean"
                 },
+                "error_code": {
+                    "type": "string"
+                },
                 "error_message": {
                     "type": "string"
                 },
@@ -6340,6 +6443,77 @@
                 }
             }
         },
+        "handlers.ReadingReportPreview": {
+            "type": "object",
+            "properties": {
+                "sources": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/readingreport.Source"
+                    }
+                }
+            }
+        },
+        "handlers.ReadingReportRequest": {
+            "type": "object",
+            "properties": {
+                "article_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "focus": {
+                    "type": "string"
+                },
+                "profile_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "handlers.ReadingReportResponse": {
+            "type": "object",
+            "properties": {
+                "model": {
+                    "type": "string"
+                },
+                "report": {
+                    "$ref": "#/definitions/readingreport.Report"
+                },
+                "sources": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/readingreport.Source"
+                    }
+                }
+            }
+        },
+        "handlers.SearchTerms": {
+            "type": "object",
+            "properties": {
+                "optional": {
+                    "description": "Boost relevance if matched",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "patterns": {
+                    "description": "LIKE patterns like \"详解%llm\"",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "required": {
+                    "description": "Must match at least one",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "handlers.TestResult": {
             "type": "object",
             "properties": {
@@ -6348,6 +6522,9 @@
                 },
                 "connection_success": {
                     "type": "boolean"
+                },
+                "error_code": {
+                    "type": "string"
                 },
                 "error_message": {
                     "type": "string"
@@ -6437,6 +6614,10 @@
                 "is_read_later": {
                     "type": "boolean"
                 },
+                "original_summary": {
+                    "description": "Summary/description provided by the RSS item",
+                    "type": "string"
+                },
                 "published_at": {
                     "type": "string"
                 },
@@ -6516,13 +6697,6 @@
                     "description": "IMAP username",
                     "type": "string"
                 },
-                "sync_provider": {
-                    "type": "string",
-                    "enum": [
-                        "freshrss",
-                        "miniflux"
-                    ]
-                },
                 "freshrss_stream_id": {
                     "description": "FreshRSS stream ID (e.g., \"feed/http://...\")",
                     "type": "string"
@@ -6578,11 +6752,14 @@
                     "type": "string"
                 },
                 "refresh_interval": {
-                    "description": "Custom refresh interval in minutes (0 = use global, -1 = intelligent, -2 = never, >0 = custom minutes)",
+                    "description": "Custom refresh interval in minutes (0 = use global, -1 = intelligent, -2 = never, \u003e0 = custom minutes)",
                     "type": "integer"
                 },
                 "script_path": {
                     "description": "Path to custom script for fetching feed",
+                    "type": "string"
+                },
+                "sync_provider": {
                     "type": "string"
                 },
                 "tags": {
@@ -6723,6 +6900,93 @@
                 "SpeedMedium",
                 "SpeedFast"
             ]
+        },
+        "readingreport.ReadingItem": {
+            "type": "object",
+            "properties": {
+                "reason": {
+                    "type": "string"
+                },
+                "source_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "readingreport.Report": {
+            "type": "object",
+            "properties": {
+                "caveats": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "overview": {
+                    "type": "string"
+                },
+                "reading_order": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/readingreport.ReadingItem"
+                    }
+                },
+                "topics": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/readingreport.Topic"
+                    }
+                }
+            }
+        },
+        "readingreport.Source": {
+            "type": "object",
+            "properties": {
+                "article_id": {
+                    "type": "integer"
+                },
+                "characters": {
+                    "type": "integer"
+                },
+                "excerpt": {
+                    "type": "string"
+                },
+                "feed": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "kind": {
+                    "description": "cached, rss_excerpt, or missing",
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "truncated": {
+                    "type": "boolean"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "readingreport.Topic": {
+            "type": "object",
+            "properties": {
+                "source_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "summary": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
         },
         "rules.Condition": {
             "type": "object",
@@ -6913,6 +7177,9 @@
                 "error": {
                     "type": "string"
                 },
+                "error_code": {
+                    "type": "string"
+                },
                 "result": {
                     "type": "string"
                 },
@@ -6940,166 +7207,6 @@
                     "type": "integer"
                 }
             }
-        },
-        "database.FeedContentOptions": {
-            "type": "object",
-            "properties": {
-                "content_selector": {
-                    "type": "string"
-                },
-                "cookie": {
-                    "type": "string"
-                },
-                "cookie_origin": {
-                    "type": "string"
-                },
-                "has_cookie": {
-                    "type": "boolean"
-                },
-                "remove_selector": {
-                    "type": "string"
-                }
-            }
-        },
-        "handlers.ReadingReportPreview": {
-            "type": "object",
-            "properties": {
-                "sources": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/readingreport.Source"
-                    }
-                }
-            }
-        },
-        "handlers.ReadingReportRequest": {
-            "type": "object",
-            "properties": {
-                "article_ids": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                },
-                "focus": {
-                    "type": "string"
-                },
-                "profile_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "handlers.ReadingReportResponse": {
-            "type": "object",
-            "properties": {
-                "model": {
-                    "type": "string"
-                },
-                "report": {
-                    "$ref": "#/definitions/readingreport.Report"
-                },
-                "sources": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/readingreport.Source"
-                    }
-                }
-            }
-        },
-        "readingreport.ReadingItem": {
-            "type": "object",
-            "properties": {
-                "reason": {
-                    "type": "string"
-                },
-                "source_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "readingreport.Report": {
-            "type": "object",
-            "properties": {
-                "caveats": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "overview": {
-                    "type": "string"
-                },
-                "reading_order": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/readingreport.ReadingItem"
-                    }
-                },
-                "topics": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/readingreport.Topic"
-                    }
-                }
-            }
-        },
-        "readingreport.Source": {
-            "type": "object",
-            "properties": {
-                "article_id": {
-                    "type": "integer"
-                },
-                "characters": {
-                    "type": "integer"
-                },
-                "excerpt": {
-                    "type": "string"
-                },
-                "feed": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "kind": {
-                    "description": "cached, rss_excerpt, or missing",
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "truncated": {
-                    "type": "boolean"
-                },
-                "url": {
-                    "type": "string"
-                }
-            }
-        },
-        "readingreport.Topic": {
-            "type": "object",
-            "properties": {
-                "source_ids": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                },
-                "summary": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        }
-    },
-    "securityDefinitions": {
-        "BearerAuth": {
-            "description": "Type \"Bearer\" followed by a space and JWT token.",
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header"
         }
     }
 }

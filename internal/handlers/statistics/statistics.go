@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"time"
 
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/handlers/response"
-	"MrRSS/internal/statistics"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/response"
+	"github.com/LianWeiSQ/rss-factory/internal/statistics"
 )
 
 // HandleGetStatistics retrieves statistics for a specific time period

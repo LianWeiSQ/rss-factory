@@ -1,11 +1,11 @@
 package article_test
 
 import (
-	"MrRSS/internal/handlers/article"
-	"MrRSS/internal/models"
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/article"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 	"net/http"
 	"net/http/httptest"
 	"strings"

@@ -1,7 +1,7 @@
 package database
 
 import (
-	"MrRSS/internal/config"
+	"github.com/LianWeiSQ/rss-factory/internal/config"
 	"log"
 
 	_ "modernc.org/sqlite"

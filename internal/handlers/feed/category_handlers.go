@@ -5,9 +5,9 @@ import (
 	"errors"
 	"net/http"
 
-	"MrRSS/internal/database"
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/handlers/response"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/response"
 )
 
 // HandleCategory changes all local subscriptions in a category and its descendants.

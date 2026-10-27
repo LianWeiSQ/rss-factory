@@ -1,6 +1,6 @@
-# Code Patterns for MrRSS
+# Code Patterns for CSS Factory
 
-This document provides common coding patterns and best practices for the MrRSS project.
+This document provides common coding patterns and best practices for the CSS Factory project.
 
 ## Table of Contents
 
@@ -1080,7 +1080,7 @@ Use Tailwind responsive prefixes:
 
 ### Frontend API Calls
 
-MrRSS uses direct HTTP fetch (not Wails bindings) for better control.
+CSS Factory uses direct HTTP fetch (not Wails bindings) for better control.
 
 #### GET Request
 

@@ -18,12 +18,12 @@ import (
 	"strings"
 	"time"
 
-	"MrRSS/internal/cache"
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/handlers/response"
-	"MrRSS/internal/utils/fileutil"
-	"MrRSS/internal/utils/httputil"
-	"MrRSS/internal/utils/textutil"
+	"github.com/LianWeiSQ/rss-factory/internal/cache"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/response"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/fileutil"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/httputil"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/textutil"
 
 	htmlparser "golang.org/x/net/html"
 )

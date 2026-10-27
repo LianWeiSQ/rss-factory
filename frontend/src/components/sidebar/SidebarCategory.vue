@@ -211,6 +211,7 @@ onUnmounted(() => {
       props.compactMode ? 'mb-0.5' : 'mb-1',
     ]"
     :data-level="level"
+    :style="{ '--category-level': level }"
     :data-category-path="fullPath"
     @dragover.self="handleCategoryDragOver"
     @dragleave.self="(e) => $emit('dragleave', dragPath, e)"
@@ -218,8 +219,6 @@ onUnmounted(() => {
   >
     <div
       :draggable="isEditMode && !isUncategorized"
-      @dragstart="categoryDrag?.start(fullPath, $event)"
-      @dragend="categoryDrag?.end()"
       :class="[
         'category-header',
         isActive ? 'active' : '',
@@ -231,6 +230,8 @@ onUnmounted(() => {
             categoryDrag?.preview.value?.path === fullPath && !categoryDrag?.preview.value?.before,
         },
       ]"
+      @dragstart="categoryDrag?.start(fullPath, $event)"
+      @dragend="categoryDrag?.end()"
       @click="handleCategoryClick"
       @dblclick="handleCategoryDoubleClick"
       @contextmenu="(e) => emit('categoryContextMenu', e, fullPath)"
@@ -245,11 +246,11 @@ onUnmounted(() => {
       >
         <PhDotsSixVertical :size="16" />
       </span>
-      <span class="flex-1 flex items-center gap-2">
-        <PhFolderDashed v-if="isUncategorized" :size="20" />
-        <PhFolder v-else :size="20" :weight="'fill'" />
+      <span class="reader-category-label flex-1 min-w-0 flex items-center gap-2">
+        <PhFolderDashed v-if="isUncategorized" :size="16" class="shrink-0" />
+        <PhFolder v-else :size="16" :weight="isActive ? 'fill' : 'regular'" class="shrink-0" />
         <PhPushPin v-if="isItemPinned(`category:${fullPath}`)" :size="12" class="text-accent" />
-        {{ name }}
+        <span class="truncate">{{ name }}</span>
         <!-- FreshRSS indicator on category -->
         <!-- Only show if ALL feeds in this category are from FreshRSS -->
         <img
@@ -265,7 +266,7 @@ onUnmounted(() => {
       </span>
       <button
         type="button"
-        class="-mr-1 flex h-8 w-8 shrink-0 items-center justify-center rounded text-text-secondary transition-colors hover:bg-bg-tertiary hover:text-text-primary"
+        class="reader-category-toggle flex h-6 w-6 shrink-0 items-center justify-center rounded text-text-secondary transition-colors hover:bg-bg-tertiary hover:text-text-primary"
         :title="t(isOpen ? 'sidebar.categoryActions.collapse' : 'sidebar.categoryActions.expand')"
         :aria-label="
           t(isOpen ? 'sidebar.categoryActions.collapse' : 'sidebar.categoryActions.expand')
@@ -273,7 +274,7 @@ onUnmounted(() => {
         @click.stop="handleCaretClick"
         @dblclick.stop
       >
-        <PhCaretDown :size="16" class="transition-transform" :class="{ 'rotate-180': isOpen }" />
+        <PhCaretDown :size="12" class="transition-transform" :class="{ '-rotate-90': !isOpen }" />
       </button>
     </div>
     <div
@@ -378,173 +379,107 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-@reference "../../style.css";
+.category-container {
+  margin-bottom: 8px;
+}
 .category-header {
-  @apply px-2 sm:px-3 py-1.5 sm:py-2 cursor-pointer font-semibold text-xs sm:text-sm text-text-secondary flex items-center justify-between hover:bg-bg-tertiary hover:text-text-primary transition-colors;
-  @apply sticky z-10 bg-bg-secondary;
-  top: -0.375rem; /* matches container's p-1.5 */
-  margin-left: -0.375rem;
-  margin-right: -0.375rem;
-  padding-left: calc(0.5rem + 0.375rem);
-  padding-right: calc(0.75rem + 0.375rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 34px;
+  padding: 4px 5px 4px calc(8px + var(--category-level, 0) * 12px);
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
 }
-
-/* Compact mode: reduce padding for category headers */
+.category-header:hover {
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+}
+.category-header.active {
+  color: var(--accent-color);
+  background: color-mix(in srgb, var(--accent-color) 9%, transparent);
+}
+.reader-category-label {
+  overflow: hidden;
+  line-height: 1.4;
+}
+.reader-category-toggle {
+  margin-left: 1px;
+}
+.reader-category-toggle:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 1px;
+}
 .category-header.compact {
-  @apply px-1.5 sm:px-2 py-1 sm:py-1.5;
+  min-height: 28px;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
-
-/* Indentation for nested categories */
-.category-container[data-level='1'] .category-header {
-  padding-left: calc(0.5rem + 0.375rem + 1rem);
-}
-
-.category-container[data-level='2'] .category-header {
-  padding-left: calc(0.5rem + 0.375rem + 2rem);
-}
-
-.category-container[data-level='3'] .category-header {
-  padding-left: calc(0.5rem + 0.375rem + 3rem);
-}
-
-.category-container[data-level='4'] .category-header {
-  padding-left: calc(0.5rem + 0.375rem + 4rem);
-}
-
-/* Compact mode indentation for nested categories */
-.category-container[data-level='1'] .category-header.compact {
-  padding-left: calc(0.375rem + 0.375rem + 1rem);
-}
-
-.category-container[data-level='2'] .category-header.compact {
-  padding-left: calc(0.375rem + 0.375rem + 2rem);
-}
-
-.category-container[data-level='3'] .category-header.compact {
-  padding-left: calc(0.375rem + 0.375rem + 3rem);
-}
-
-.category-container[data-level='4'] .category-header.compact {
-  padding-left: calc(0.375rem + 0.375rem + 4rem);
-}
-
-/* Special styling for category header when its container is a drag target */
 .category-container.drag-over .category-header {
-  @apply text-accent;
-  background-color: transparent;
+  color: var(--accent-color);
 }
-@media (min-width: 640px) {
-  .category-header {
-    top: -0.5rem; /* matches container's sm:p-2 */
-    margin-left: -0.5rem;
-    margin-right: -0.5rem;
-    padding-left: calc(0.75rem + 0.5rem);
-    padding-right: calc(0.75rem + 0.5rem);
-  }
-
-  /* Compact mode at sm breakpoint */
-  .category-header.compact {
-    top: -0.25rem; /* matches container's compact p-1 */
-    margin-left: -0.25rem;
-    margin-right: -0.25rem;
-    padding-left: calc(0.5rem + 0.25rem);
-    padding-right: calc(0.5rem + 0.25rem);
-  }
-
-  /* Compact mode indentation for nested categories at sm breakpoint */
-  .category-container[data-level='1'] .category-header.compact {
-    padding-left: calc(0.5rem + 0.25rem + 1rem);
-  }
-
-  .category-container[data-level='2'] .category-header.compact {
-    padding-left: calc(0.5rem + 0.25rem + 2rem);
-  }
-
-  .category-container[data-level='3'] .category-header.compact {
-    padding-left: calc(0.5rem + 0.25rem + 3rem);
-  }
-
-  .category-container[data-level='4'] .category-header.compact {
-    padding-left: calc(0.5rem + 0.25rem + 4rem);
-  }
+.category-container.drag-over {
+  border-radius: 8px;
+  outline: 2px solid var(--accent-color);
+  outline-offset: -2px;
+  background: color-mix(in srgb, var(--accent-color) 5%, transparent);
 }
 .category-header.category-drop-before {
-  box-shadow: inset 0 3px var(--accent-color);
+  box-shadow: inset 0 2px var(--accent-color);
 }
 .category-header.category-drop-after {
-  box-shadow: inset 0 -3px var(--accent-color);
+  box-shadow: inset 0 -2px var(--accent-color);
 }
-
-.category-header.active {
-  @apply bg-bg-tertiary text-accent;
-}
-
-/* Container drag-over styling */
-.category-container.drag-over {
-  @apply rounded-lg;
-  outline: 2px solid var(--accent-color, #007bff);
-  outline-offset: -2px;
-  background-color: var(--bg-tertiary, rgba(0, 123, 255, 0.05));
-}
-
 .feeds-list {
   position: relative;
-  min-height: 40px; /* Ensure empty categories have a drop zone */
+  min-height: 36px;
+  padding-top: 2px;
+  padding-bottom: 3px;
 }
-
-/* Wrapper to position drop indicators relative to each feed */
 .feed-wrapper {
   position: relative;
 }
-
-/* Drop indicator positioned absolutely to avoid layout shift */
 .drop-indicator {
   position: absolute;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, var(--accent-color, #007bff), transparent);
-  border-radius: 1.5px;
-  animation: pulse-indicator 1.5s ease-in-out infinite;
+  inset-inline: 0;
+  height: 2px;
+  background: var(--accent-color);
+  border-radius: 2px;
   pointer-events: none;
   z-index: 10;
 }
-
-/* End indicator positioned relative to feeds list */
 .drop-indicator.end-indicator {
-  position: absolute;
   bottom: 0;
 }
-
-/* Empty category indicator - more prominent */
 .drop-indicator.empty-category-indicator {
-  height: 4px;
   top: 8px;
   bottom: auto;
 }
-
-@keyframes pulse-indicator {
-  0%,
-  100% {
-    opacity: 0.6;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
 .unread-badge {
-  @apply text-[9px] sm:text-[10px] font-medium rounded-full min-w-[14px] sm:min-w-[16px] h-[14px] sm:h-[16px] px-0.5 sm:px-1 flex items-center justify-center;
-  background-color: rgba(120, 120, 120, 0.15);
-  color: #666666;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  min-width: 20px;
+  padding: 0 2px;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-tertiary);
 }
-</style>
-
-<style>
-@reference "../../style.css";
-.dark-mode .unread-badge {
-  /* This style will be applied to child components, so it can not use scoped */
-  background-color: rgba(100, 100, 100, 0.4) !important;
-  color: #d0d0d0 !important;
+.category-header.active .unread-badge {
+  color: var(--accent-color);
+}
+@media (prefers-reduced-motion: reduce) {
+  .category-header {
+    transition: none;
+  }
 }
 </style>

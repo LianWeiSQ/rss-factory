@@ -10,13 +10,13 @@ import (
 	"sync"
 	"time"
 
-	"MrRSS/internal/database"
-	"MrRSS/internal/models"
-	"MrRSS/internal/rsshub"
-	"MrRSS/internal/rules"
-	"MrRSS/internal/utils"
-	"MrRSS/internal/utils/fileutil"
-	"MrRSS/internal/utils/httputil"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/rsshub"
+	"github.com/LianWeiSQ/rss-factory/internal/rules"
+	"github.com/LianWeiSQ/rss-factory/internal/utils"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/fileutil"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/httputil"
 
 	"github.com/mmcdole/gofeed"
 )

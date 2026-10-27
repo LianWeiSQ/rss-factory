@@ -10,6 +10,7 @@ import {
   PhPlus,
   PhGear,
   PhSidebar,
+  PhRss,
 } from '@phosphor-icons/vue';
 import { ref, onMounted } from 'vue';
 import { useAppStore } from '@/stores/app';
@@ -120,11 +121,19 @@ function handleNavClick(item: NavItem) {
 
 <template>
   <div
-    class="smart-activity-bar flex flex-col items-center py-3 bg-bg-tertiary border-r border-border h-full select-none shrink-0 relative z-30"
+    class="smart-activity-bar flex flex-col items-center h-full select-none shrink-0 relative z-30"
   >
+    <button
+      class="reader-brand-mark"
+      title="CSS Factory"
+      aria-label="CSS Factory"
+      @click="handleNavClick(navItems[0])"
+    >
+      <PhRss :size="21" weight="bold" />
+    </button>
     <!-- Navigation Items -->
     <div
-      class="flex-1 flex flex-col items-center gap-1 w-full overflow-y-auto overflow-x-hidden nav-items-container"
+      class="flex-1 flex flex-col items-center gap-2 w-full overflow-y-auto overflow-x-hidden nav-items-container"
     >
       <TransitionGroup name="nav-item">
         <button
@@ -132,17 +141,18 @@ function handleNavClick(item: NavItem) {
           v-show="item.id !== 'imageGallery' || imageGalleryEnabled"
           :key="item.id"
           :class="[
-            'relative flex items-center justify-center text-text-secondary flex-shrink-0 transition-all hover:text-accent',
-            store.currentFilter === item.filterType ? 'text-accent' : '',
+            'reader-nav-button relative flex items-center justify-center text-text-secondary flex-shrink-0 transition-all hover:text-accent',
+            store.currentFilter === item.filterType ? 'is-active' : '',
           ]"
-          style="width: 44px; height: 44px"
           :title="item.shortcut ? withShortcut(item.label, item.shortcut) : item.label"
+          :aria-label="item.label"
+          :aria-pressed="store.currentFilter === item.filterType"
           @click="handleNavClick(item)"
         >
           <!-- Icon -->
           <component
             :is="store.currentFilter === item.filterType ? item.activeIcon || item.icon : item.icon"
-            :size="24"
+            :size="21"
             :weight="store.currentFilter === item.filterType ? 'fill' : 'regular'"
             :class="[
               store.currentFilter === item.filterType ? 'text-accent' : '',
@@ -153,7 +163,7 @@ function handleNavClick(item: NavItem) {
           <!-- Unread Badge (only for 'all' button) -->
           <span
             v-if="settings.show_unread_counts && item.id === 'all' && store.unreadCounts?.total > 0"
-            class="absolute bottom-0.5 right-0.5 min-w-[14px] h-[14px] px-0.5 text-[9px] font-semibold flex items-center justify-center rounded-full bg-accent text-white ring-1 ring-bg-primary"
+            class="reader-nav-badge"
           >
             {{ store.unreadCounts?.total > 99 ? '99+' : store.unreadCounts?.total }}
           </span>
@@ -162,20 +172,19 @@ function handleNavClick(item: NavItem) {
     </div>
 
     <!-- Bottom Actions -->
-    <div class="flex flex-col items-center gap-1 mt-auto w-full">
+    <div class="reader-nav-actions flex flex-col items-center gap-2 mt-auto w-full">
       <button
-        class="relative flex items-center justify-center text-text-secondary flex-shrink-0 transition-all hover:text-accent"
-        style="width: 44px; height: 44px"
+        class="reader-nav-button reader-add-feed relative flex items-center justify-center text-text-secondary flex-shrink-0 transition-all hover:text-accent"
         :title="withShortcut(t('sidebar.activity.addFeed'), 'addFeed')"
+        :aria-label="t('sidebar.activity.addFeed')"
         @click="emit('add-feed')"
       >
-        <PhPlus :size="24" weight="regular" class="transition-all" />
+        <PhPlus :size="20" weight="regular" class="transition-all" />
       </button>
 
       <!-- Feed List Button -->
       <button
-        class="relative flex items-center justify-center text-text-secondary flex-shrink-0 transition-all hover:text-accent"
-        style="width: 44px; height: 44px"
+        class="reader-nav-button relative flex items-center justify-center text-text-secondary flex-shrink-0 transition-all hover:text-accent"
         :title="
           withShortcut(
             isFeedListExpanded
@@ -187,16 +196,16 @@ function handleNavClick(item: NavItem) {
         :aria-expanded="isFeedListExpanded"
         @click="emit('toggle-feed-drawer')"
       >
-        <PhSidebar :size="24" :weight="isFeedListExpanded ? 'fill' : 'regular'" />
+        <PhSidebar :size="20" :weight="isFeedListExpanded ? 'fill' : 'regular'" />
       </button>
 
       <button
-        class="relative flex items-center justify-center text-text-secondary flex-shrink-0 transition-all hover:text-accent"
-        style="width: 44px; height: 44px"
+        class="reader-nav-button relative flex items-center justify-center text-text-secondary flex-shrink-0 transition-all hover:text-accent"
         :title="withShortcut(t('setting.tab.settings'), 'openSettings')"
+        :aria-label="t('setting.tab.settings')"
         @click="emit('settings')"
       >
-        <PhGear :size="24" weight="regular" class="transition-all" />
+        <PhGear :size="20" weight="regular" class="transition-all" />
       </button>
     </div>
   </div>
@@ -204,23 +213,87 @@ function handleNavClick(item: NavItem) {
 
 <style scoped>
 .smart-activity-bar {
-  width: 56px;
-  min-width: 56px;
+  width: 52px;
+  min-width: 52px;
   position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
+  inset: 0 auto 0 0;
   z-index: 15;
-  /* Prevent layout shift during animations */
+  padding: 18px 0 12px;
+  background: var(--bg-secondary);
+  border-right: 1px solid color-mix(in srgb, var(--border-color) 60%, transparent);
   backface-visibility: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Navigation items smooth transitions */
+.reader-brand-mark {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin: 0 0 26px;
+  border: 0;
+  border-radius: 10px;
+  color: var(--accent-on-color, #fff);
+  background: var(--accent-color);
+  box-shadow: 0 3px 8px color-mix(in srgb, var(--accent-color) 18%, transparent);
+  cursor: pointer;
+}
+
+.reader-nav-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  color: var(--text-secondary);
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+}
+
+.reader-nav-button:hover {
+  color: var(--text-primary);
+  background: color-mix(in srgb, var(--text-secondary) 8%, transparent);
+}
+
+.reader-nav-button.is-active {
+  color: var(--accent-color);
+  background: color-mix(in srgb, var(--accent-color) 12%, transparent);
+}
+
+.reader-nav-button:focus-visible,
+.reader-brand-mark:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 3px;
+}
+
+.reader-nav-badge {
+  position: absolute;
+  right: -2px;
+  bottom: -1px;
+  display: grid;
+  place-items: center;
+  min-width: 18px;
+  height: 15px;
+  padding: 0 3px;
+  border-radius: 5px;
+  border: 2px solid var(--bg-secondary);
+  color: var(--accent-on-color, #fff);
+  background: var(--accent-color);
+  font-size: 8px;
+  font-weight: 650;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.reader-nav-actions {
+  padding-top: 12px;
+}
+
+.reader-add-feed {
+  border: 1px solid var(--border-color);
+  margin-bottom: 5px;
+}
+
 .nav-items-container {
-  /* Smooth height transition when items are added/removed */
-  transition: height 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  /* Keep scrolling without reserving a native gutter in WKWebView. */
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -229,67 +302,54 @@ function handleNavClick(item: NavItem) {
   display: none;
 }
 
-/* Nav item enter/leave transitions */
 .nav-item-enter-active,
-.nav-item-leave-active {
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: opacity, transform;
+.nav-item-leave-active,
+.nav-item-move {
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
 }
 
-.nav-item-enter-from {
-  opacity: 0;
-  transform: scale(0.9) translateY(-10px);
-}
-
+.nav-item-enter-from,
 .nav-item-leave-to {
   opacity: 0;
-  transform: scale(0.9) translateY(10px);
+  transform: translateY(-4px);
 }
 
-.nav-item-move {
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform;
-}
-
-/* Ensure smooth transitions for icon scale changes */
-.smart-activity-bar button .ph,
-.smart-activity-bar button svg {
-  display: block;
-  shape-rendering: geometricPrecision;
-  transition: color 0.2s ease;
-}
-
-/* Improve button hover transition */
-.smart-activity-bar button {
-  transition:
-    color 0.2s ease,
-    background-color 0.2s ease;
-  will-change: color, background-color;
-}
-
-/* Smaller screens (laptops, tablets) */
 @media (max-width: 1400px) {
   .smart-activity-bar {
     width: 48px;
     min-width: 48px;
   }
-
-  button[style*='width: 44px'] {
-    width: 40px !important;
-    height: 40px !important;
+  .reader-nav-button {
+    width: 34px;
+    height: 34px;
   }
 }
 
-/* Mobile devices */
 @media (max-width: 767px) {
   .smart-activity-bar {
     width: 44px;
     min-width: 44px;
+    padding-top: 12px;
   }
+  .reader-brand-mark {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 20px;
+  }
+  .reader-nav-button {
+    width: 32px;
+    height: 34px;
+  }
+}
 
-  button[style*='width: 44px'] {
-    width: 36px !important;
-    height: 36px !important;
+@media (prefers-reduced-motion: reduce) {
+  .reader-nav-button,
+  .nav-item-enter-active,
+  .nav-item-leave-active,
+  .nav-item-move {
+    transition: none;
   }
 }
 </style>

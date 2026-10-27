@@ -45,7 +45,7 @@ Fixes #(issue)
 ### Test Configuration
 
 - **OS**:
-- **MrRSS Version**:
+- **CSSFactory Version**:
 - **Go Version**:
 - **Node Version**:
 

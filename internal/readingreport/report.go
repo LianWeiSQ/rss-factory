@@ -10,9 +10,9 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"MrRSS/internal/ai"
-	"MrRSS/internal/models"
-	"MrRSS/internal/utils/textutil"
+	"github.com/LianWeiSQ/rss-factory/internal/ai"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/textutil"
 )
 
 const MaxArticles = 20

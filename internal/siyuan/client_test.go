@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"MrRSS/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 )
 
 const testNotebook = "20210817205410-2kvfpfn"

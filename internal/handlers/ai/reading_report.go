@@ -9,12 +9,12 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"MrRSS/internal/ai"
-	"MrRSS/internal/config"
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/handlers/response"
-	"MrRSS/internal/readingreport"
-	"MrRSS/internal/utils/httputil"
+	"github.com/LianWeiSQ/rss-factory/internal/ai"
+	"github.com/LianWeiSQ/rss-factory/internal/config"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/response"
+	"github.com/LianWeiSQ/rss-factory/internal/readingreport"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/httputil"
 )
 
 type ReadingReportRequest struct {

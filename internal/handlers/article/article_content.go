@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"strconv"
 
-	"MrRSS/internal/feed"
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/handlers/response"
-	"MrRSS/internal/utils/textutil"
+	"github.com/LianWeiSQ/rss-factory/internal/feed"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/response"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/textutil"
 )
 
 // HandleGetArticleContent fetches the article content from RSS feed dynamically.

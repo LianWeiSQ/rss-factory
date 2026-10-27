@@ -5,7 +5,7 @@
 package settings
 
 import (
-	"MrRSS/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
 )
 
 // SettingDef defines a single setting's metadata
@@ -127,6 +127,7 @@ var AllSettings = []SettingDef{
 	{Key: "show_article_preview_images", Encrypted: false},
 	{Key: "show_floating_toc", Encrypted: false},
 	{Key: "show_hidden_articles", Encrypted: false},
+	{Key: "show_tray_unread_count", Encrypted: false},
 	{Key: "show_unread_counts", Encrypted: false},
 	{Key: "sidebar_category_order", Encrypted: false},
 	{Key: "sidebar_pinned_items", Encrypted: false},

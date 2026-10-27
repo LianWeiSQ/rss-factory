@@ -5,6 +5,7 @@ import type { Article } from '@/types/models';
 import { useArticleDateFormat } from '@/composables/article/useArticleDateFormat';
 import { useI18n } from 'vue-i18n';
 import { useAppStore } from '@/stores/app';
+import FeedIcon from '@/components/common/FeedIcon.vue';
 
 interface Props {
   article: Article;
@@ -31,6 +32,7 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const store = useAppStore();
+const feed = computed(() => store.feeds.find((item) => item.id === props.article.feed_id));
 
 const { formatArticleDate: formatDateWithI18n, formatArticleDateTime } = useArticleDateFormat();
 
@@ -60,11 +62,11 @@ function selectArticleFeed() {
 
 <template>
   <!-- Title Section - Bilingual when translation enabled -->
-  <div class="mb-3 sm:mb-4">
+  <div class="reader-title-block">
     <!-- Original Title -->
     <h1
       v-if="!translationOnlyMode || !showBilingualTitle"
-      class="text-xl sm:text-3xl font-bold leading-tight text-text-primary select-text"
+      class="reader-title text-text-primary select-text"
     >
       {{ article.title }}
     </h1>
@@ -85,7 +87,7 @@ function selectArticleFeed() {
       class="leading-tight select-text"
       :class="
         translationOnlyMode
-          ? 'text-xl sm:text-3xl font-bold text-text-primary'
+          ? 'reader-title text-text-primary'
           : 'text-base sm:text-xl font-medium mt-2 text-text-secondary'
       "
     >
@@ -99,16 +101,17 @@ function selectArticleFeed() {
   </div>
 
   <div
-    class="text-xs sm:text-sm text-text-secondary mb-4 sm:mb-6 flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-1.5 sm:gap-3"
+    class="reader-byline text-xs text-text-secondary flex flex-wrap items-center gap-y-2 gap-x-4"
   >
     <div class="flex items-center gap-2">
       <button
         type="button"
-        class="font-medium text-text-primary hover:text-accent transition-colors cursor-pointer"
+        class="reader-source-chip font-medium hover:text-accent transition-colors cursor-pointer"
         :title="t('article.action.goToFeed')"
         @click="selectArticleFeed"
       >
-        {{ article.feed_title }}
+        <FeedIcon v-if="feed" :feed="feed" class="reader-source-icon" />
+        <span>{{ article.feed_title }}</span>
       </button>
       <template v-if="article.author && article.author !== article.feed_title">
         <span class="text-text-secondary font-normal text-[11px] sm:text-xs opacity-75">{{
@@ -116,7 +119,7 @@ function selectArticleFeed() {
         }}</span>
       </template>
     </div>
-    <div class="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+    <div class="flex items-center gap-2 sm:gap-3">
       <span class="text-text-secondary" :title="formatArticleDateTime(article.published_at)">{{
         formatDateWithI18n(article.published_at)
       }}</span>
@@ -141,3 +144,48 @@ function selectArticleFeed() {
     </div>
   </div>
 </template>
+
+<style scoped>
+.reader-title-block {
+  margin-bottom: 20px;
+}
+.reader-title {
+  font-size: clamp(23px, 2.2vw, 32px);
+  line-height: 1.42;
+  letter-spacing: -0.035em;
+  font-weight: 720;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+}
+.reader-byline {
+  margin-bottom: 30px;
+  padding-bottom: 26px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.reader-source-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  text-align: left;
+}
+.reader-source-icon {
+  width: 19px;
+  height: 19px;
+  padding: 2px;
+  border-radius: 6px;
+  background: var(--bg-secondary);
+}
+@media (max-width: 767px) {
+  .reader-title {
+    font-size: 25px;
+    line-height: 1.45;
+  }
+  .reader-byline {
+    margin-bottom: 24px;
+    padding-bottom: 22px;
+  }
+}
+</style>

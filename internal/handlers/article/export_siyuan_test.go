@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"MrRSS/internal/handlers/article"
-	"MrRSS/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/article"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 )
 
 func TestSiYuanExportUsesEncryptedTokenAndCachedContent(t *testing.T) {

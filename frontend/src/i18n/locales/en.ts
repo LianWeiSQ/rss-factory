@@ -162,6 +162,8 @@ const en: TranslationMessages = {
       noContentAvailable: 'No content available',
       renderContent: 'Render Content',
       selectArticle: 'Select an article to start reading',
+      readingSpace: 'A little room to read',
+      readingSpaceHint: 'Your sources, together. A quieter place to catch up.',
     },
     imageGallery: {
       actionFavorite: 'Add to Favorites',
@@ -285,7 +287,7 @@ const en: TranslationMessages = {
     configuration_invalid:
       'The AI configuration is incomplete or invalid. Check the endpoint and model.',
     usage_limit_reached:
-      'The AI usage limit configured in MrRSS has been reached. Adjust it and try again.',
+      'The AI usage limit configured in CSS Factory has been reached. Adjust it and try again.',
     rate_limited: 'The AI service is receiving too many requests. Please try again later.',
     authentication_failed: 'AI authentication failed. Check the API key and access permissions.',
     payment_required:
@@ -818,6 +820,7 @@ const en: TranslationMessages = {
       placeholder: 'Search settings',
     },
     about: {
+      upstreamAttribution: 'CSS Factory is based on MrRSS by Ch3nyang and contributors.',
       version: 'Version',
       viewOnGitHub: 'View on GitHub',
     },
@@ -1049,7 +1052,7 @@ const en: TranslationMessages = {
         headers: 'HTTP Headers',
         headersDesc: 'Custom HTTP headers',
         langMapping: 'Language Code Mapping',
-        langMappingDesc: 'Map MrRSS language codes to API-specific codes',
+        langMappingDesc: 'Map CSS Factory language codes to API-specific codes',
         method: 'HTTP Method',
         methodDesc: 'HTTP method for the API request',
         responsePath: 'Response Path',
@@ -1108,15 +1111,15 @@ const en: TranslationMessages = {
     database: {
       dataDirectory: 'Data directory',
       directoryDescription:
-        'Choose an empty folder. On the next launch, MrRSS copies subscriptions, articles, settings, scripts and caches before opening the database. The original folder is kept as a backup.',
+        'Choose an empty folder. On the next launch, CSS Factory copies subscriptions, articles, settings, scripts and caches before opening the database. The original folder is kept as a backup.',
       directoryCurrent: 'Current location:',
       directoryDestination: 'New empty folder',
       directoryBrowse: 'Browse…',
       directoryChange: 'Change directory',
       directoryConfirm:
-        'Copy your data to {path} on the next launch? Fully quit MrRSS (including the system tray), then reopen it. Keep the original folder until you have checked your data.',
+        'Copy your data to {path} on the next launch? Fully quit CSS Factory (including the system tray), then reopen it. Keep the original folder until you have checked your data.',
       directoryScheduled:
-        'Saved. Fully quit MrRSS, then reopen it to migrate. Closing to the tray is not sufficient.',
+        'Saved. Fully quit CSS Factory, then reopen it to migrate. Closing to the tray is not sufficient.',
       directoryPending: 'Next launch:',
       directoryCancel: 'Cancel directory change',
       directoryOverridden:
@@ -1187,6 +1190,9 @@ const en: TranslationMessages = {
       auto: 'Auto (Follow System)',
       closeToTray: 'Minimize to Tray on Close',
       closeToTrayDesc: 'Hide the window to the system tray instead of quitting',
+      showTrayUnreadCount: 'Show Menu Bar Unread Count',
+      showTrayUnreadCountDesc:
+        'Show the unread article count beside the macOS menu bar icon; turn off to show only the icon',
       dark: 'Dark',
       language: 'Language',
       languageDesc: 'Select interface language',
@@ -1196,9 +1202,9 @@ const en: TranslationMessages = {
       uiFontSize: 'Interface Font Size',
       uiFontSizeDesc: 'Base font size for the application interface',
       startupOnBoot: 'Start on System Boot',
-      startupOnBootDesc: 'Automatically start MrRSS when the computer starts',
+      startupOnBootDesc: 'Automatically start CSS Factory when the computer starts',
       startupMinimized: 'Start in System Tray',
-      startupMinimizedDesc: 'Keep the window hidden when MrRSS starts with the system',
+      startupMinimizedDesc: 'Keep the window hidden when CSS Factory starts with the system',
       theme: 'Theme',
       themeDesc: 'Choose the preferred color scheme',
     },
@@ -1288,13 +1294,13 @@ const en: TranslationMessages = {
           'Keep SiYuan running and its destination notebook open. Copy the API token from SiYuan Settings → Authentication. Images remain links to their original hosts.',
         endpoint: 'SiYuan address',
         endpointDesc:
-          'The default connects to SiYuan on the machine running MrRSS. In server mode, use an address reachable from the server.',
+          'The default connects to SiYuan on the machine running CSS Factory. In server mode, use an address reachable from the server.',
         token: 'API token',
         notebook: 'Notebook ID',
         notebookDesc: 'Copy the destination notebook ID from SiYuan, not its display name.',
         folder: 'Document folder',
         folderDesc:
-          'Start with /, for example /MrRSS. Article IDs distinguish titles. Re-exporting does not overwrite an existing document.',
+          'Start with /, for example /Clippings. Article IDs distinguish titles. Re-exporting does not overwrite an existing document.',
         exportTo: 'Export to SiYuan',
         exporting: 'Exporting to SiYuan…',
         exported: 'Article saved to SiYuan.',
@@ -1454,7 +1460,7 @@ const en: TranslationMessages = {
       importConfirm:
         'Append {count} rules to the existing list? Their enabled states will be preserved. They will apply to future refreshes; existing articles will not be processed now.',
       importSuccess: 'Imported {count} rules',
-      invalidBackup: 'Invalid or unsupported MrRSS rules backup. No rules were imported.',
+      invalidBackup: 'Invalid or unsupported CSS Factory rules backup. No rules were imported.',
       backupTooLarge: 'The rules backup exceeds the 5 MB limit.',
       importFailed: 'Could not import rules. Please reload settings before retrying.',
       noRules: 'No rules defined',
@@ -1645,7 +1651,7 @@ const en: TranslationMessages = {
 
   // Top-level keys (used without namespace)
   // Only appName should remain as top-level key
-  appName: 'MrRSS',
+  appName: 'CSS Factory',
 };
 
 export default en;

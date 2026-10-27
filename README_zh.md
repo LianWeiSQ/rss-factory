@@ -1,288 +1,83 @@
-<h1><img src="imgs/logo-rounded.png" alt="MrRSS logo" style="height: 40px;"/>&nbsp;MrRSS</h1>
+# CSS Factory
 
-<a href="https://trendshift.io/repositories/15731" target="_blank"><img src="https://trendshift.io/api/badge/repositories/15731" alt="DevXDojo%2FMrRSS | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+[English](README.md) · [源码仓库](https://github.com/LianWeiSQ/rss-factory) · [许可证](LICENSE)
 
-![Screenshot](imgs/og1.png)
+CSS Factory 是面向 AI、金融资讯和长文阅读的本地 RSS 阅读器，基于 [DevXDojo/MrRSS](https://github.com/DevXDojo/MrRSS) **v1.3.41** 二次开发，上游基线提交为 `0b064ef54dfb2723fdfe08e63c50c7fe74746a94`。保留原项目历史、作者署名、版权声明及 GPL-3.0 许可证。
 
-<p>
-   <a href="README.md">English</a> | <strong>简体中文</strong>
-</p>
+## 本次定制包含什么
 
-[![Version](https://img.shields.io/badge/version-1.3.41-blue.svg)](https://github.com/DevXDojo/MrRSS/releases)
-[![License](https://img.shields.io/badge/license-GPLv3-green.svg)](LICENSE)
-[![Go](https://img.shields.io/badge/Go-1.27+-00ADD8?logo=go)](https://go.dev/)
-[![Wails](https://img.shields.io/badge/Wails-v3%20alpha-red)](https://wails.io/)
-[![Vue.js](https://img.shields.io/badge/Vue.js-3.5+-4FC08D?logo=vue.js)](https://vuejs.org/)
+- 三栏桌面阅读界面：紧凑的订阅侧栏、文章列表、聚焦正文的阅读区，支持亮色与暗色。
+- 优化公众号正文：收敛多余空白、整理编号章节标题、改善图片与段落排版。排版优化不等于采集保障，第三方公众号转 RSS 源仍可能延迟或失效。
+- macOS 独立的「显示菜单栏未读数量」开关，默认关闭；阅读器内部的未读计数独立保留。
+- 产品名称与仓库、更新链接统一为 CSS Factory，同时保留旧版数据和导入格式兼容。
 
-## ✨ 功能特性
+技术底座沿用 MrRSS 的 Go 后端、Vue/TypeScript 前端、Wails 桌面壳和 SQLite 数据库。已有 RSS/Atom、RSSHub、XPath、脚本、Newsletter、过滤规则、文章导出、可选 AI，以及 FreshRSS/Miniflux 集成。各项边界见[架构说明](docs/ARCHITECTURE.md)和[阅读器同步说明](docs/READER_INTEGRATIONS.md)。
 
-- 🌐 **自动翻译与摘要**: 自动翻译文章标题与正文，并生成简洁的内容摘要，助你快速获取信息
-- 🤖 **AI 增强功能**: 集成先进 AI 技术，赋能翻译、摘要、推荐等多种功能，并支持通过 skill 读取与操作
-- 🔌 **丰富的插件生态**: 支持 Obsidian、Notion、FreshRSS、RSSHub 等主流工具集成，轻松扩展功能
-- 📡 **多样化订阅方式**: 支持 URL、XPath、脚本、Newsletter 等多种订阅源类型，满足不同需求
-- 🏭 **自定义脚本与自动化**: 内置过滤器与脚本系统，支持高度自定义的自动化流程
+## 从源码构建桌面版
 
-## 🚀 快速开始
+依赖版本以 `go.mod` 和 `frontend/package-lock.json` 为准。macOS 需要 Xcode Command Line Tools；其他平台参见[构建要求](docs/BUILD_REQUIREMENTS.md)。iOS 目录属于实验性预留工程，尚不支持一条命令构建可交付的手机版本。
 
-### 下载与安装
-
-#### 选项 1: 下载预构建安装包（推荐）
-
-从 [Releases](https://github.com/DevXDojo/MrRSS/releases/latest) 页面下载适合您平台的最新安装包。
-
-<details>
-
-<summary>点击查看可用的安装包列表</summary>
-
-<div markdown="1">
-
-**标准安装版：**
-
-- **Windows:** `MrRSS-{version}-windows-amd64-installer.exe` / `MrRSS-{version}-windows-arm64-installer.exe`
-- **macOS:** `MrRSS-{version}-darwin-universal.dmg`
-- **Linux:** `MrRSS-{version}-linux-amd64.AppImage` / `MrRSS-{version}-linux-arm64.AppImage`
-
-**便携版**（无需安装，所有数据在一个文件夹内）：
-
-- **Windows:** `MrRSS-{version}-windows-{arch}-portable.zip`
-- **Linux:** `MrRSS-{version}-linux-{arch}-portable.tar.gz`
-- **macOS:** `MrRSS-{version}-darwin-{arch}-portable.zip`
-
-**AI Agent Skills：**
-
-- **Codex:** `MrRSS-{version}-skills.zip`（[使用说明](docs/SKILLS.zh.md)）
-
-</div>
-
-</details>
-
-#### 选项 2: 源码构建
-
-<details>
-
-<summary>点击展开源码构建指南</summary>
-
-<div markdown="1">
-
-##### 前置要求
-
-在开始之前，请确保已安装以下环境：
-
-- [Go](https://go.dev/) (1.27 或更高版本)
-- [Node.js](https://nodejs.org/) (20 LTS 或更高版本，带 npm)
-- [Wails v3](https://v3alpha.wails.io/getting-started/installation/) CLI
-
-**平台特定要求：**
-
-- **Linux**: GTK4、WebKitGTK 6.0、libsoup 3.0、GCC、pkg-config
-- **Windows**: MinGW-w64（用于 CGO 支持）、NSIS（用于安装包）
-- **macOS**: Xcode 命令行工具
-
-详细安装说明请参见[构建要求](docs/BUILD_REQUIREMENTS.md)
-
-```bash
-# Linux 快速设置（Ubuntu 24.04+）：
-sudo apt-get install libgtk-4-dev libwebkitgtk-6.0-dev libsoup-3.0-dev gcc pkg-config
+```sh
+git clone https://github.com/LianWeiSQ/rss-factory.git
+cd rss-factory
+cd frontend
+CYPRESS_INSTALL_BINARY=0 npm ci
+cd ..
+CYPRESS_INSTALL_BINARY=0 go run github.com/wailsapp/wails/v3/cmd/wails3@v3.0.0-beta.31 build
 ```
 
-##### 安装步骤
+macOS 产物为 `build/bin/CSSFactory.app`，显示名称为 **CSS Factory**。本机使用时签名后再复制到「应用程序」：
 
-1. **克隆仓库**
-
-   ```bash
-   git clone https://github.com/DevXDojo/MrRSS.git
-   cd MrRSS
-   ```
-
-2. **安装前端依赖**
-
-   ```bash
-   cd frontend
-   npm install
-   cd ..
-   ```
-
-3. **安装 Wails v3 CLI**
-
-   ```bash
-   go install github.com/wailsapp/wails/v3/cmd/wails3@v3.0.0-beta.20
-   ```
-
-4. **构建应用**
-
-   ```bash
-   # 使用 Task（推荐）
-   task build
-
-   # 或使用 Makefile
-   make build
-
-   # 或直接使用 wails3
-   wails3 build
-   ```
-
-   可执行文件将在 `build/bin` 目录下生成。
-
-5. **运行应用**
-
-   - Windows: `build/bin/MrRSS.exe`
-   - macOS: `build/bin/MrRSS.app`
-   - Linux: `build/bin/MrRSS`
-
-</div>
-
-</details>
-
-### 数据存储
-
-<details>
-
-<summary>点击展开数据存储说明</summary>
-
-<div markdown="1">
-
-**正常模式**（默认）：
-
-- **Windows:** `%APPDATA%\MrRSS\` (例如 `C:\Users\YourName\AppData\Roaming\MrRSS\`)
-- **macOS:** `~/Library/Application Support/MrRSS/`
-- **Linux:** `~/.local/share/MrRSS/`
-
-**便携模式**（当 `portable.txt` 文件存在时）：
-
-- 所有数据存储在 `data/` 文件夹中
-
-这确保了您的数据在应用更新和重新安装时得以保留。
-
-</div>
-
-</details>
-
-## 🛠️ 开发指南
-
-<details>
-
-<summary>点击展开开发指南</summary>
-
-<div markdown="1">
-
-### 开发模式运行
-
-启动带有热重载的应用：
-
-```bash
-# 使用 Wails v3
-wails3 dev
-
-# 或使用 Task
-task dev
+```sh
+codesign --deep --force --sign - \
+  --entitlements build/darwin/entitlements.plist \
+  build/bin/CSSFactory.app
+codesign --verify --deep --strict build/bin/CSSFactory.app
 ```
 
-### 代码质量工具
+替换安装前请完全退出正在运行的阅读器。修改源码不会自动更新已安装的 App。本项目后续安装包以[当前仓库 Releases](https://github.com/LianWeiSQ/rss-factory/releases) 为准；MrRSS 官方安装包不包含本次定制改动。
 
-#### 使用 Make
+## 数据兼容
 
-我们提供了 `Makefile` 来处理常见的开发任务（在 Linux/macOS/Windows 上都可用）：
+为了避免改名后出现空资料库，默认数据目录有意沿用旧版位置：
 
-```bash
-# 显示所有可用命令
-make help
+| 系统 | 兼容目录 |
+| --- | --- |
+| macOS | `~/Library/Application Support/MrRSS/` |
+| Windows | `%APPDATA%\MrRSS\` |
+| Linux | `~/.local/share/MrRSS/` |
 
-# 运行完整检查（lint + 测试 + 构建）
-make check
+`MrRSS-bootstrap/storage.json`、便携版的 `mrrss-storage.json`、`MRRSS_*` 环境变量、单实例标识 `com.mrrss.app`、加密标记 `MrRSS-v1:` 及规则备份格式 `mrrss-rules`也保留兼容。这些属于数据接口，不是遗漏改名。不要让 MrRSS 和 CSS Factory 同时操作同一份资料库。迁移前阅读[数据目录说明](docs/DATA_DIRECTORY.md)；换电脑后，绑定机器加密的凭证可能需要重新输入。
 
-# 清理构建产物
-make clean
+个人数据库、订阅清单、API Key 和编译后的应用均不包含在源码仓库中。
 
-# 设置开发环境
-make setup
+## 浏览器与服务器模式
+
+从这份源码构建，才能包含定制后的前端：
+
+```sh
+cd frontend
+npm run build
+cd ..
+go build -tags server -o css-factory-server .
+./css-factory-server --host 127.0.0.1 --port 1235 --data-dir ./data
 ```
 
-### Pre-commit Hooks
+浏览器打开 `http://127.0.0.1:1235/`。Server 同时提供阅读页面与 `/api/*`；桌面 App 的回环监听器只提供 API。服务端使用独立的数据目录，**不会自动与桌面数据库同步**。
 
-本项目使用 pre-commit hooks 来确保代码质量：
+服务端**没有内置用户登录**。应仅监听本机，或放在有身份校验的私人网关之后。iPhone/iPad 使用需要部署可访问的服务并验证移动布局；添加主屏幕图标不会自动获得完整离线能力或云同步。详见 [Server 模式](docs/SERVER_MODE/README.md)。
 
-```bash
-# 安装 hooks
-pre-commit install
+## AI 与 Agent 接入
 
-# 在所有文件上运行
-pre-commit run --all-files
-```
+AI 是可选功能。可以按需配置自己的服务商或本地模型；调用时选定内容会发送至所配置的服务。参见[模型服务配置](docs/AI_PROVIDERS.md)。
 
-### 运行测试
+[CSS Factory Assistant](skills/css-factory-assistant/SKILL.md) 让外部 Agent 通过 REST API 检索、阅读运行中的实例。安装见[技能说明](docs/SKILLS.zh.md)。该技能也兼容现有 MrRSS 的本地 API；外部 Agent 分析文章不要求阅读器另配模型密钥，也不要求启用自动摘要。
 
-```bash
-make test
-```
+## 开发与致谢
 
-### 本地 API 与服务器模式
+- 前端测试：在 `frontend/` 执行 `npm run test:unit`。
+- 后端测试：在仓库根目录执行 `go test -timeout=5m ./internal/...`。
+- [贡献指南](CONTRIBUTING.md)、[项目约定](AGENTS.md)、[安全边界](SECURITY.md)。
+- `website/` 仅为站点源码，本项目不使用上游的域名，也不宣称已上线托管服务。
 
-桌面应用运行时会在 `http://localhost:1234/api` 提供 REST API。该监听器仅允许
-本机访问。
-
-对于服务器部署和 API 集成，请使用无界面服务器版本：
-
-```bash
-# 使用 Docker（推荐）
-docker run -p 1234:1234 mrrss-server:latest
-
-# 或从源码构建
-go build -tags server -o mrrss-server .
-./mrrss-server
-```
-
-本项目也提供了基于 ghcr.io 的预构建服务器镜像：
-
-```bash
-docker run -d -p 1234:1234 ghcr.io/devxdojo/mrrss:latest-amd64
-docker run -d -p 1234:1234 ghcr.io/devxdojo/mrrss:latest-arm64
-```
-
-请参阅[服务器模式 API 文档](docs/SERVER_MODE/swagger.json)以获取完整的 API 参考。
-如需让 Codex 通过该 API 操作 MrRSS，请安装 release 中的 skills 包，详见 [MrRSS Skills](docs/SKILLS.zh.md)。
-
-</div>
-
-</details>
-
-## 🤝 贡献
-
-我们欢迎贡献！详情请参阅我们的[贡献指南](CONTRIBUTING.md)。
-
-<details>
-
-<summary>点击展开贡献指南</summary>
-
-<div markdown="1">
-
-在贡献之前：
-
-1. 阅读[行为准则](CODE_OF_CONDUCT.md)
-2. 检查现有 issue 或创建一个新 issue
-3. Fork 仓库并创建功能分支
-4. 进行更改并添加测试
-5. 提交 Pull Request
-
-</div>
-
-</details>
-
-## 🔒 安全
-
-如果您发现安全漏洞，请遵循我们的[安全策略](SECURITY.md)。
-
-## 📝 许可证
-
-本项目采用 GPL-3.0 许可证 - 详情请参阅 [LICENSE](LICENSE) 文件。
-
-## 📮 联系与支持
-
-- **Issues**: [GitHub Issues](https://github.com/DevXDojo/MrRSS/issues)
-- **讨论**: [GitHub Discussions](https://github.com/DevXDojo/MrRSS/discussions)
-- **仓库**: [github.com/DevXDojo/MrRSS](https://github.com/DevXDojo/MrRSS)
-
-<div align="center">
-  <img src="imgs/sponsor.png" alt="Sponsor MrRSS"/>
-  <p>Made with ❤️ by the MrRSS Team</p>
-  <p>⭐ 如果您觉得这个项目有用，请在 GitHub 上给我们点星！</p>
-</div>
+感谢 **Ch3nyang 和 MrRSS 的所有贡献者**。本仓库保留[GPL-3.0 许可证](LICENSE)、上游历史与原始版权头。本次定制以前的版本历史见未改写的上游[变更记录](CHANGELOG.zh-CN.md)。

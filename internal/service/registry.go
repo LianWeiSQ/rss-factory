@@ -4,13 +4,13 @@ import (
 	"sync"
 	"time"
 
-	"MrRSS/internal/ai"
-	"MrRSS/internal/cache"
-	"MrRSS/internal/database"
-	"MrRSS/internal/discovery"
-	"MrRSS/internal/feed"
-	"MrRSS/internal/statistics"
-	"MrRSS/internal/translation"
+	"github.com/LianWeiSQ/rss-factory/internal/ai"
+	"github.com/LianWeiSQ/rss-factory/internal/cache"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/discovery"
+	"github.com/LianWeiSQ/rss-factory/internal/feed"
+	"github.com/LianWeiSQ/rss-factory/internal/statistics"
+	"github.com/LianWeiSQ/rss-factory/internal/translation"
 )
 
 // Registry is the central service registry that manages all application services.

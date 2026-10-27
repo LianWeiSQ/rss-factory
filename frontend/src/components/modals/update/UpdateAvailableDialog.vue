@@ -93,7 +93,7 @@ const downloadErrorMessage = computed(() => {
 });
 
 function openReleasePage() {
-  openInBrowser('https://github.com/DevXDojo/MrRSS/releases/latest');
+  openInBrowser('https://github.com/LianWeiSQ/rss-factory/releases/latest');
 }
 
 function handleKeyDown(e: KeyboardEvent) {
@@ -183,7 +183,7 @@ onUnmounted(() => {
       <p v-if="!updateInfo.download_url" class="text-text-secondary text-xs mt-4">
         {{ t('setting.update.noInstallerAvailable') }}
         <a
-          href="https://github.com/DevXDojo/MrRSS/releases/latest"
+          href="https://github.com/LianWeiSQ/rss-factory/releases/latest"
           target="_blank"
           class="text-accent hover:underline"
         >

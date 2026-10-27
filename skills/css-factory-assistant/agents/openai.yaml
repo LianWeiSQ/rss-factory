@@ -1,0 +1,4 @@
+interface:
+  display_name: "CSS Factory Assistant"
+  short_description: "Control and analyze CSS Factory through its local API"
+  default_prompt: "Use $css-factory-assistant to inspect my CSS Factory feeds and summarize recent unread articles."

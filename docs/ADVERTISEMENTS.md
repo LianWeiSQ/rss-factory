@@ -1,6 +1,6 @@
 # Partner advertisements / 合作广告
 
-Edit the repository-root [`ads.json`](../ads.json). The shipped default is `{"version":1,"ads":[]}`: no advertisements. The desktop and server use the same `/api/ads` endpoint. On first access and at most hourly afterwards, the backend requests only the public file at `https://raw.githubusercontent.com/DevXDojo/MrRSS/main/ads.json`, through the configured global proxy. It sends no subscriptions, article contents, identifiers or credentials. There is no analytics, remote media or executable advertising content.
+Edit the repository-root [`ads.json`](../ads.json). The shipped default is `{"version":1,"ads":[]}`: no advertisements. The desktop and server use the same `/api/ads` endpoint. On first access and at most hourly afterwards, the backend requests only the public file at `https://raw.githubusercontent.com/LianWeiSQ/rss-factory/main/ads.json`, through the configured global proxy. It sends no subscriptions, article contents, identifiers or credentials. There is no analytics, remote media or executable advertising content.
 
 编辑根目录 [`ads.json`](../ads.json) 即可更新广告，默认 `ads` 为空。桌面版和 server 版共用 HTTP 接口；首次访问时优先获取 GitHub `main` 分支上的文件，之后最多每小时检查一次，沿用全局代理。请求不携带订阅、文章、用户标识或凭据，不包含统计、远程图片或可执行广告内容。
 

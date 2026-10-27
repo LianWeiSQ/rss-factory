@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	dbpkg "MrRSS/internal/database"
+	dbpkg "github.com/LianWeiSQ/rss-factory/internal/database"
 )
 
 // TestNewDBMemoryLimits pins the limits that bound how much memory the database

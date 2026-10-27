@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"MrRSS/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 )
 
 func TestFilterConditionsRemainStableAcrossArticles(t *testing.T) {

@@ -4,12 +4,12 @@ package routes
 import (
 	"net/http"
 
-	"MrRSS/internal/handlers/core"
-	discovery "MrRSS/internal/handlers/discovery"
-	feedhandlers "MrRSS/internal/handlers/feed"
-	filter_category "MrRSS/internal/handlers/filter_category"
-	rsshubHandler "MrRSS/internal/handlers/rsshub"
-	taghandlers "MrRSS/internal/handlers/tags"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	discovery "github.com/LianWeiSQ/rss-factory/internal/handlers/discovery"
+	feedhandlers "github.com/LianWeiSQ/rss-factory/internal/handlers/feed"
+	filter_category "github.com/LianWeiSQ/rss-factory/internal/handlers/filter_category"
+	rsshubHandler "github.com/LianWeiSQ/rss-factory/internal/handlers/rsshub"
+	taghandlers "github.com/LianWeiSQ/rss-factory/internal/handlers/tags"
 )
 
 // registerFeedRoutes registers all feed-related routes

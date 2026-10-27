@@ -1,6 +1,6 @@
 # Wails v3 Build System Guide
 
-This document describes how to build and package MrRSS using the Wails v3 build system with Task runner.
+This document describes how to build and package CSS Factory using the Wails v3 build system with Task runner.
 
 ## Prerequisites
 
@@ -8,7 +8,7 @@ This document describes how to build and package MrRSS using the Wails v3 build 
 
 - **Go 1.27+**: [https://golang.org/dl/](https://golang.org/dl/)
 - **Node.js 22.22.2 LTS or 24.15+**: [https://nodejs.org/](https://nodejs.org/)
-- **Wails CLI v3**: `go install github.com/wailsapp/wails/v3/cmd/wails3@v3.0.0-beta.20`
+- **Wails CLI v3**: `go install github.com/wailsapp/wails/v3/cmd/wails3@v3.0.0-beta.31`
 - **Task**: [https://taskfile.dev/installation/](https://taskfile.dev/installation/)
 
 ### Platform-Specific Dependencies
@@ -119,17 +119,14 @@ task linux:build ARCH=arm64
 task darwin:build ARCH=universal  # Intel + Apple Silicon
 ```
 
-### Mobile Platforms (Wails v3 only)
+### Mobile Platforms (experimental, not configured)
 
-**Note**: iOS and Android support is experimental in Wails v3 alpha.
-
-```bash
-# iOS (requires macOS + Xcode)
-task ios:build
-
-# Android (requires Android SDK)
-task android:build
-```
+Wails offers experimental mobile support, but this fork does not currently provide
+working `ios:build` or `android:build` tasks. The `build/ios/` files are incomplete
+scaffolding, not a supported iPhone/iPad installation or signing workflow.
+Use Server mode with the browser interface for a multi-device deployment. Native
+mobile work requires the platform SDK, application bridge, signing, and device
+validation before enabling a release target.
 
 ## Task Commands Reference
 
@@ -314,6 +311,6 @@ npm run build
 
 For issues:
 
-1. Check [GitHub Issues](https://github.com/DevXDojo/MrRSS/issues)
+1. Check [GitHub Issues](https://github.com/LianWeiSQ/rss-factory/issues)
 2. Review [Build Requirements](../docs/BUILD_REQUIREMENTS.md)
 3. Check [Wails Discord](https://discord.gg/wails)

@@ -3,9 +3,9 @@
 package settings
 
 import (
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/handlers/response"
-	"MrRSS/internal/utils/fileutil"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/response"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/fileutil"
 	"github.com/wailsapp/wails/v3/pkg/application"
 	"net/http"
 )
@@ -24,7 +24,7 @@ func HandleSelectDataDirectory(h *core.Handler, w http.ResponseWriter, r *http.R
 		w.WriteHeader(http.StatusNotImplemented)
 		return
 	}
-	path, err := app.Dialog.OpenFileWithOptions(&application.OpenFileDialogOptions{Title: "MrRSS", CanChooseDirectories: true, CanChooseFiles: false}).PromptForSingleSelection()
+	path, err := app.Dialog.OpenFileWithOptions(&application.OpenFileDialogOptions{Title: "CSS Factory", CanChooseDirectories: true, CanChooseFiles: false}).PromptForSingleSelection()
 	if err != nil {
 		response.Error(w, err, http.StatusInternalServerError)
 		return

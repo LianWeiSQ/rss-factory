@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { withShortcut } from '@/composables/ui/shortcutBindings';
-import { PhNewspaper, PhCaretLeft, PhCaretRight } from '@phosphor-icons/vue';
+import { PhBookOpenText, PhCaretLeft, PhCaretRight } from '@phosphor-icons/vue';
 import { useArticleDetail } from '@/composables/article/useArticleDetail';
 import ArticleToolbar from './ArticleToolbar.vue';
 import ArticleContent from './ArticleContent.vue';
@@ -91,16 +91,19 @@ onBeforeUnmount(() => {
 <template>
   <main
     :class="[
-      'flex-1 bg-bg-primary flex flex-col h-full absolute w-full md:static md:w-auto z-30 transition-transform duration-300',
+      'reader-detail min-w-0 flex-1 bg-bg-primary flex flex-col h-full absolute w-full md:static md:w-auto z-30 transition-transform duration-300',
       article ? 'translate-x-0' : 'translate-x-full md:translate-x-0',
     ]"
   >
     <div
       v-if="!article"
-      class="hidden md:flex flex-col items-center justify-center h-full text-text-secondary text-center px-4"
+      class="reader-empty hidden md:flex flex-col items-center justify-center h-full text-text-secondary text-center px-8"
     >
-      <PhNewspaper :size="48" class="mb-4 sm:mb-5 opacity-50 sm:w-16 sm:h-16" />
-      <p class="text-sm sm:text-base">{{ t('article.content.selectArticle') }}</p>
+      <div class="reader-empty-symbol"><PhBookOpenText :size="36" weight="duotone" /></div>
+      <span class="reader-empty-brand">CSS Factory</span>
+      <h2>{{ t('article.content.readingSpace') }}</h2>
+      <p>{{ t('article.content.selectArticle') }}</p>
+      <span class="reader-empty-note">{{ t('article.content.readingSpaceHint') }}</span>
     </div>
 
     <div v-else class="flex flex-col h-full bg-bg-primary">
@@ -152,7 +155,7 @@ onBeforeUnmount(() => {
       <!-- Navigation buttons -->
       <div
         v-if="hasPreviousArticle || hasNextArticle"
-        class="flex items-center justify-between bg-bg-primary px-3 py-1.5"
+        class="reader-navigation flex items-center justify-between bg-bg-primary px-5 py-2"
       >
         <button
           v-if="hasPreviousArticle"
@@ -209,3 +212,53 @@ onBeforeUnmount(() => {
     />
   </main>
 </template>
+
+<style scoped>
+.reader-empty {
+  background: radial-gradient(
+    ellipse at 50% 42%,
+    color-mix(in srgb, var(--accent-color) 3%, var(--bg-primary)),
+    var(--bg-primary) 62%
+  );
+}
+.reader-empty-symbol {
+  display: grid;
+  place-items: center;
+  width: 80px;
+  height: 80px;
+  border: 1px solid color-mix(in srgb, var(--accent-color) 12%, var(--border-color));
+  border-radius: 25px;
+  background: color-mix(in srgb, var(--accent-color) 7%, var(--bg-primary));
+  color: var(--accent-color);
+  margin-bottom: 24px;
+  box-shadow: 0 12px 35px color-mix(in srgb, var(--accent-color) 5%, transparent);
+}
+.reader-empty-brand {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--text-tertiary);
+  margin-bottom: 12px;
+}
+.reader-empty h2 {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+}
+.reader-empty p {
+  font-size: 14px;
+  line-height: 1.8;
+}
+.reader-empty-note {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-top: 8px;
+  max-width: 300px;
+  line-height: 1.8;
+}
+.reader-navigation {
+  border-top: 1px solid var(--border-color);
+  min-height: 43px;
+}
+</style>

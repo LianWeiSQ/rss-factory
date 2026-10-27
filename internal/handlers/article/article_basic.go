@@ -5,8 +5,10 @@ import (
 	"net/http"
 	"strconv"
 
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/handlers/response"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/response"
+	// Referenced by the Swagger response annotations below.
+	_ "github.com/LianWeiSQ/rss-factory/internal/models"
 )
 
 // HandleArticles returns articles with filtering and pagination.

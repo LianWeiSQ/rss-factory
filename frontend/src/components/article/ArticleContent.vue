@@ -1229,7 +1229,7 @@ onBeforeUnmount(() => {
     <div
       ref="articleScrollContainer"
       data-article-content
-      class="h-full overflow-y-scroll p-3 sm:p-6 scroll-smooth"
+      class="reader-scroll h-full overflow-y-auto scroll-smooth"
       @click="handleContainerClick"
       @contextmenu="onTextContextMenu"
       @scroll="handleArticleScroll"
@@ -1240,7 +1240,7 @@ onBeforeUnmount(() => {
       @wheel="swipe.wheel"
     >
       <div
-        class="max-w-3xl mx-auto bg-bg-primary [container-type:inline-size]"
+        class="reader-document mx-auto bg-bg-primary [container-type:inline-size]"
         :class="{
           'hide-translations': !showTranslations,
           'translation-only-mode': translationSettings.translationOnlyMode,
@@ -1299,6 +1299,7 @@ onBeforeUnmount(() => {
         />
 
         <ArticleBody
+          :article-url="article.url"
           :article-content="displayContent"
           :is-translating-content="isTranslatingContent"
           :has-media-content="!!(article.audio_url || article.video_url)"
@@ -1372,6 +1373,36 @@ onBeforeUnmount(() => {
 
 <style scoped>
 @reference "../../style.css";
+.reader-scroll {
+  padding: 42px clamp(24px, 4vw, 72px) 96px;
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+}
+
+.reader-document {
+  width: 100%;
+  max-width: 720px;
+  min-width: 0;
+}
+
+@media (max-width: 1100px) {
+  .reader-scroll {
+    padding: 30px 28px 72px;
+  }
+}
+
+@media (max-width: 767px) {
+  .reader-scroll {
+    padding: 28px 22px 64px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reader-scroll {
+    scroll-behavior: auto;
+  }
+}
+
 .btn-secondary {
   @apply bg-bg-tertiary border border-border text-text-primary px-3 sm:px-4 py-1.5 sm:py-2 rounded-md cursor-pointer flex items-center gap-1.5 sm:gap-2 font-medium hover:bg-bg-secondary transition-colors;
 }

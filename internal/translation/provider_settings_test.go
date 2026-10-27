@@ -1,9 +1,9 @@
 package translation
 
 import (
-	"MrRSS/internal/ai"
-	"MrRSS/internal/models"
 	"context"
+	"github.com/LianWeiSQ/rss-factory/internal/ai"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 	"io"
 	"net/http"
 	"strings"

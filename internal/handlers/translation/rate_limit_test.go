@@ -1,12 +1,12 @@
 package translation
 
 import (
-	"MrRSS/internal/ai"
-	"MrRSS/internal/handlers/core"
-	translator "MrRSS/internal/translation"
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/LianWeiSQ/rss-factory/internal/ai"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	translator "github.com/LianWeiSQ/rss-factory/internal/translation"
 	"net/http"
 	"net/http/httptest"
 	"testing"

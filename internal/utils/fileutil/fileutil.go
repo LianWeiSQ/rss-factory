@@ -106,6 +106,7 @@ func DefaultDataDir() (string, error) {
 			}
 		}
 
+		// Retain the legacy directory when rebranding so existing libraries remain available.
 		dataDir = filepath.Join(baseDir, "MrRSS")
 	}
 

@@ -82,11 +82,11 @@ function handleDownloadInstall() {
 }
 
 function openGitHubRepo() {
-  openInBrowser('https://github.com/DevXDojo/MrRSS');
+  openInBrowser('https://github.com/LianWeiSQ/rss-factory');
 }
 
 function openGitHubRelease() {
-  openInBrowser('https://github.com/DevXDojo/MrRSS/releases/latest');
+  openInBrowser('https://github.com/LianWeiSQ/rss-factory/releases/latest');
 }
 
 function formatBytes(bytes: number): string {
@@ -220,6 +220,7 @@ function formatBytes(bytes: number): string {
 
     <!-- Copyright information at the bottom -->
     <div class="mt-auto pt-4 text-center">
+      <p class="text-text-secondary text-xs">{{ t('setting.about.upstreamAttribution') }}</p>
       <p class="text-text-secondary text-xs">© 2026 MrRSS. All rights reserved.</p>
       <p class="text-text-secondary text-xs">Open source and available under GPL-3.0 License.</p>
     </div>

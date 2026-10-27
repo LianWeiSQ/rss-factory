@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"MrRSS/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 )
 
 func TestDatabaseInitialization(t *testing.T) {

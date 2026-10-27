@@ -1,8 +1,8 @@
 package feed
 
 import (
-	"MrRSS/internal/database"
 	"context"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
 	"testing"
 
 	"github.com/mmcdole/gofeed"

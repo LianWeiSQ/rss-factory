@@ -37,7 +37,7 @@ def generate_rss(records):
         ET.SubElement(item, "title").text = title.strip()
         ET.SubElement(item, "link").text = link
         ET.SubElement(item, "guid", isPermaLink="true").text = link
-        # Leave body empty: MrRSS can fetch full text from the article URL.
+        # Leave body empty: CSSFactory can fetch full text from the article URL.
         try:
             date = datetime.strptime(record.get("DOCRELPUBTIME", ""), "%Y-%m-%d")
             date = date.replace(tzinfo=timezone(timedelta(hours=8)))
@@ -50,7 +50,7 @@ def generate_rss(records):
 
 
 def main():
-    request = Request(DATA_URL, headers={"User-Agent": "MrRSS policy feed", "Accept": "application/json"})
+    request = Request(DATA_URL, headers={"User-Agent": "CSSFactory policy feed", "Accept": "application/json"})
     with urlopen(request, timeout=20) as response:
         data = response.read(MAX_BYTES + 1)
     if len(data) > MAX_BYTES:

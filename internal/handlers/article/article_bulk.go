@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"MrRSS/internal/database"
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/handlers/response"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/response"
 )
 
 const maxBatchReadArticles = 5000

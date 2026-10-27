@@ -7,11 +7,11 @@ import (
 	"net/url"
 	"time"
 
-	"MrRSS/internal/ai"
-	"MrRSS/internal/config"
-	"MrRSS/internal/database"
-	"MrRSS/internal/models"
-	"MrRSS/internal/utils/httputil"
+	"github.com/LianWeiSQ/rss-factory/internal/ai"
+	"github.com/LianWeiSQ/rss-factory/internal/config"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/httputil"
 )
 
 // aiService implements AIService interface

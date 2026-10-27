@@ -1,9 +1,9 @@
 package freshrss
 
 import (
-	"MrRSS/internal/database"
-	"MrRSS/internal/handlers/core"
 	"encoding/json"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
 	"net/http"
 	"net/http/httptest"
 	"testing"

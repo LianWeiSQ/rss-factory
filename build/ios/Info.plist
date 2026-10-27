@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleExecutable</key>
-    <string>MrRSS</string>
+    <string>CSSFactory</string>
     <key>CFBundleIdentifier</key>
-    <string>com.mrrss.app</string>
+    <string>io.github.lianweisq.cssfactory</string>
     <key>CFBundleName</key>
-    <string>MrRSS</string>
+    <string>CSSFactory</string>
     <key>CFBundleDisplayName</key>
-    <string>MrRSS</string>
+    <string>CSS Factory</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>

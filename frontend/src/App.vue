@@ -548,7 +548,7 @@ function onFeedUpdated(): void {
     min-width: 0;
     min-height: 0;
   }
-  .reader-panes.table-mode > :deep(main) {
+  .reader-panes.table-mode > main {
     height: auto;
     min-height: 0;
     flex: 1 1 0;

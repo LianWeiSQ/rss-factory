@@ -1,5 +1,5 @@
 /**
- * Clipboard utilities for MrRSS
+ * Clipboard utilities for CSS Factory
  * Uses Wails v3 native Clipboard API
  */
 

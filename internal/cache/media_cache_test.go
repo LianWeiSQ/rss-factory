@@ -14,7 +14,7 @@ import (
 	"testing"
 	"time"
 
-	"MrRSS/internal/utils/httputil"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/httputil"
 )
 
 func TestMediaCacheRefererFallback(t *testing.T) {

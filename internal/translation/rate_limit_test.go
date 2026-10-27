@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"MrRSS/internal/ai"
+	"github.com/LianWeiSQ/rss-factory/internal/ai"
 )
 
 func TestProvidersPreserveRateLimitDelay(t *testing.T) {

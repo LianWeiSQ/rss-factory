@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	"MrRSS/internal/discovery"
+	"github.com/LianWeiSQ/rss-factory/internal/discovery"
 )
 
 // discoveryServiceWrapper wraps the existing discovery.Service

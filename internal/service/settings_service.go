@@ -1,7 +1,7 @@
 package service
 
 import (
-	"MrRSS/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
 )
 
 // settingsService implements SettingsService interface

@@ -3,8 +3,8 @@ package main
 import (
 	_ "embed"
 
-	"MrRSS/internal/advertisement"
-	"MrRSS/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/advertisement"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
 )
 
 //go:embed ads.json

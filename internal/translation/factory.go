@@ -6,7 +6,7 @@ import (
 	"strings"
 	"sync"
 
-	"MrRSS/internal/ai"
+	"github.com/LianWeiSQ/rss-factory/internal/ai"
 )
 
 // Factory 翻译提供商工厂

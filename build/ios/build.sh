@@ -1,9 +1,10 @@
 #!/bin/bash
+# Experimental scaffolding: the iOS application bridge and signing pipeline are not complete.
 set -e
 
 # Build configuration
-APP_NAME="MrRSS"
-BUNDLE_ID="com.mrrss.app"
+APP_NAME="CSSFactory"
+BUNDLE_ID="io.github.lianweisq.cssfactory"
 VERSION="1.3.41"
 BUILD_NUMBER="1.3.41"
 BUILD_DIR="build/ios"

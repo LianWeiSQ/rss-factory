@@ -1,25 +1,26 @@
 #!/bin/bash
-# Script to create a Linux AppImage for MrRSS
+# Script to create a Linux AppImage for CSSFactory
 #
 # Application Information:
-# Name: MrRSS
+# Name: CSSFactory
 # Description: A Modern, Cross-Platform Desktop RSS Reader
-# Publisher: Ch3nyang
-# URL: https://github.com/DevXDojo/MrRSS
+# Publisher: LianWeiSQ
+# URL: https://github.com/LianWeiSQ/rss-factory
 # Copyright: Copyright © Ch3nyang
 
 # Exit on error, but allow some commands to fail gracefully
 set -e
 
-APP_NAME="MrRSS"
+APP_NAME="CSSFactory"
+APP_DISPLAY_NAME="CSS Factory"
 # Get version from frontend/package.json if available, otherwise use default
 VERSION=$(grep -o '"version"[[:space:]]*:[[:space:]]*"[^"]*"' frontend/package.json 2>/dev/null | head -1 | sed 's/.*"\([^"]*\)".*/\1/' || echo "1.3.41")
 # Get architecture from environment variable or default to amd64
 ARCH=${ARCH:-amd64}
 echo "Target architecture: ${ARCH}"
 echo "System architecture: $(uname -m)"
-APP_PUBLISHER="Ch3nyang"
-APP_URL="https://github.com/DevXDojo/MrRSS"
+APP_PUBLISHER="LianWeiSQ"
+APP_URL="https://github.com/LianWeiSQ/rss-factory"
 APP_DESCRIPTION="A Modern, Cross-Platform Desktop RSS Reader"
 BUILD_DIR="build/bin"
 APPDIR="build/appimage/${APP_NAME}.AppDir"
@@ -54,7 +55,7 @@ echo "Creating desktop file..."
 cat > "${APPDIR}/usr/share/applications/${APP_NAME}.desktop" << EOF
 [Desktop Entry]
 Type=Application
-Name=${APP_NAME}
+Name=${APP_DISPLAY_NAME}
 GenericName=RSS Reader
 Comment=${APP_DESCRIPTION}
 Exec=${APP_NAME}
@@ -74,7 +75,7 @@ SELF=$(readlink -f "$0")
 HERE=${SELF%/*}
 export PATH="${HERE}/usr/bin:${PATH}"
 export LD_LIBRARY_PATH="${HERE}/usr/lib:${LD_LIBRARY_PATH}"
-exec "${HERE}/usr/bin/MrRSS" "$@"
+exec "${HERE}/usr/bin/CSSFactory" "$@"
 EOF
 chmod +x "${APPDIR}/AppRun"
 

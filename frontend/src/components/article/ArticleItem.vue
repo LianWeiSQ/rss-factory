@@ -11,6 +11,7 @@ import { useShowPreviewImages } from '@/composables/ui/useShowPreviewImages';
 import { useAppStore } from '@/stores/app';
 import { useSettings } from '@/composables/core/useSettings';
 import { imageCache } from '@/utils/imageCache';
+import DOMPurify from 'dompurify';
 
 interface Props {
   article: Article;
@@ -37,6 +38,19 @@ const store = useAppStore();
 // Compact mode setting (layout_mode === 'compact')
 const compactMode = computed(() => {
   return settings.value.layout_mode === 'compact';
+});
+
+// RSS descriptions are display text, never injected as article markup.
+const articleExcerpt = computed(() => {
+  const summary = props.article.original_summary;
+  if (!summary || compactMode.value) return '';
+  const text = document.createElement('div');
+  text.innerHTML = DOMPurify.sanitize(
+    summary.replace(/<(?:br\b[^>]*|\/(?:p|div|li|h[1-6]))>/gi, ' '),
+    { ALLOWED_TAGS: [], ALLOWED_ATTR: [] }
+  );
+  const excerpt = (text.textContent || '').replace(/\s+/g, ' ').trim();
+  return excerpt === props.article.title ? '' : excerpt.slice(0, 220);
 });
 
 const { enter: handleMouseEnter, leave: handleMouseLeave } = useArticleHoverRead(
@@ -174,30 +188,104 @@ function handleImageError(event: Event) {
         ? t(selected ? 'article.action.deselectArticle' : 'article.action.selectArticle')
         : withShortcut(t('article.action.openArticle'), 'openArticle')
     "
+    role="button"
+    :tabindex="disabled ? -1 : 0"
+    :aria-current="isActive ? 'true' : undefined"
     :class="[
       'article-card',
-      article.is_read ? 'read' : '',
-      article.is_favorite ? 'favorite' : '',
-      article.is_hidden ? 'hidden' : '',
-      article.is_read_later ? 'read-later' : '',
-      isActive ? 'active' : '',
-      compactMode ? 'compact' : '',
-      selected ? 'selected' : '',
+      {
+        read: article.is_read,
+        favorite: article.is_favorite,
+        'hidden-article': article.is_hidden,
+        'read-later': article.is_read_later,
+        active: isActive,
+        compact: compactMode,
+        selected,
+      },
     ]"
     @click="emit('click')"
+    @keydown.enter.stop.prevent="emit('click')"
+    @keydown.space.stop.prevent="emit('click')"
     @contextmenu="emit('contextmenu', $event)"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
   >
-    <span
-      v-if="selectionMode"
-      class="flex h-5 w-5 shrink-0 items-center justify-center self-center text-accent"
-      aria-hidden="true"
-    >
+    <span v-if="selectionMode" class="article-selection" aria-hidden="true">
       <PhCheckSquare v-if="selected" :size="19" weight="fill" />
       <PhSquare v-else :size="19" />
     </span>
-    <!-- Image placeholder with lazy loading - hidden completely on error -->
+    <span v-else-if="!article.is_read" class="article-unread-dot" aria-hidden="true" />
+
+    <div class="article-copy">
+      <div class="article-meta">
+        <span class="article-source-mark" aria-hidden="true">{{
+          (article.feed_title || 'M').slice(0, 1)
+        }}</span>
+        <span class="article-source" :title="article.feed_title">{{ article.feed_title }}</span>
+        <span class="article-meta-separator" aria-hidden="true">·</span>
+        <time
+          :datetime="article.published_at"
+          :title="formatArticleDateTime(article.published_at)"
+          >{{ formatDateWithI18n(article.published_at) }}</time
+        >
+      </div>
+
+      <div class="article-title-row">
+        <h4
+          v-if="
+            !article.translated_title || article.translated_title === article.title || compactMode
+          "
+          class="article-title"
+          :class="{ 'compact-title': compactMode }"
+        >
+          <span v-if="article.translated_title && article.translated_title !== article.title">{{
+            article.translated_title
+          }}</span>
+          <span v-else>{{ article.title }}</span>
+          <span
+            v-if="
+              compactMode && article.translated_title && article.translated_title !== article.title
+            "
+            class="original-title-inline"
+            >{{ article.title }}</span
+          >
+        </h4>
+        <div v-else class="min-w-0 flex-1">
+          <h4 class="article-title">{{ article.translated_title }}</h4>
+          <div class="article-original-title">{{ article.title }}</div>
+        </div>
+      </div>
+
+      <p v-if="articleExcerpt" class="article-excerpt">{{ articleExcerpt }}</p>
+
+      <div
+        v-if="
+          article.is_favorite ||
+          article.is_read_later ||
+          article.is_hidden ||
+          article.freshrss_item_id ||
+          isRSSHubArticle
+        "
+        class="article-indicators"
+      >
+        <PhEyeSlash v-if="article.is_hidden" :size="12" :title="t('article.action.hideArticle')" />
+        <PhClockCountdown v-if="article.is_read_later" :size="12" class="text-accent" />
+        <PhStar v-if="article.is_favorite" :size="12" class="text-yellow-500" weight="fill" />
+        <img
+          v-if="article.freshrss_item_id"
+          src="/assets/plugin_icons/freshrss.svg"
+          :title="t('setting.freshrss.syncedFeed')"
+          alt="FreshRSS"
+        />
+        <img
+          v-if="isRSSHubArticle"
+          src="/assets/plugin_icons/rsshub.svg"
+          :title="t('setting.rsshub.feed')"
+          alt="RSSHub"
+        />
+      </div>
+    </div>
+
     <div
       v-if="shouldShowImage && !imageFailed"
       ref="imageContainerRef"
@@ -214,148 +302,7 @@ function handleImageError(event: Event) {
         @load="handleImageLoad"
         @error="handleImageError"
       />
-      <!-- Loading placeholder - only shown while loading -->
-      <div
-        v-if="imageLoading && imageInViewport"
-        class="article-thumbnail article-thumbnail-loading"
-      />
-    </div>
-
-    <div class="flex-1 min-w-0">
-      <div class="flex items-start gap-1.5 sm:gap-2">
-        <!-- Normal mode or no translation: single line title -->
-        <h4
-          v-if="
-            !article.translated_title || article.translated_title === article.title || compactMode
-          "
-          class="flex-1 m-0 text-base sm:text-base font-semibold leading-snug text-text-primary article-title"
-          :class="{
-            'mb-0.5 sm:mb-1': !compactMode,
-            'mb-0': compactMode,
-            'compact-title': compactMode,
-            'read-title': article.is_read && compactMode,
-          }"
-        >
-          <span
-            v-if="article.translated_title && article.translated_title !== article.title"
-            :class="{ 'read-translated-title': article.is_read && compactMode }"
-          >
-            {{ article.translated_title }}
-          </span>
-          <span v-else>{{ article.title }}</span>
-          <span
-            v-if="
-              compactMode && article.translated_title && article.translated_title !== article.title
-            "
-            class="original-title-inline"
-          >
-            {{ article.title }}
-          </span>
-        </h4>
-        <!-- Non-compact mode with translation: separate lines -->
-        <div v-else class="flex-1">
-          <h4
-            class="m-0 mb-0 sm:mb-0.5 text-base sm:text-base font-semibold leading-snug text-text-primary article-title"
-          >
-            {{ article.translated_title }}
-          </h4>
-          <div
-            class="article-original-title sm:text-xs text-text-secondary italic mb-0.5 sm:mb-1 article-title"
-          >
-            {{ article.title }}
-          </div>
-        </div>
-        <PhEyeSlash
-          v-if="article.is_hidden"
-          :size="18"
-          class="text-text-secondary flex-shrink-0 sm:w-5 sm:h-5"
-          :title="t('article.action.hideArticle')"
-        />
-        <!-- Compact mode icons on the right -->
-        <div
-          v-if="compactMode"
-          class="flex items-center gap-1.5 sm:gap-2 shrink-0 ml-1 self-center"
-        >
-          <PhClockCountdown
-            v-if="article.is_read_later"
-            :size="16"
-            class="text-blue-500"
-            weight="fill"
-          />
-          <PhStar v-if="article.is_favorite" :size="16" class="text-yellow-500" weight="fill" />
-          <!-- FreshRSS indicator -->
-          <img
-            v-if="article.freshrss_item_id"
-            src="/assets/plugin_icons/freshrss.svg"
-            class="w-4 h-4 shrink-0"
-            :title="t('setting.freshrss.syncedFeed')"
-            alt="FreshRSS"
-          />
-          <!-- RSSHub indicator -->
-          <img
-            v-if="isRSSHubArticle"
-            src="/assets/plugin_icons/rsshub.svg"
-            class="w-4 h-4 shrink-0"
-            :title="t('setting.rsshub.feed')"
-            alt="RSSHub"
-          />
-        </div>
-      </div>
-
-      <!-- Feed source name and time - shown in both normal and compact mode -->
-      <div
-        class="flex justify-between items-center text-[11px] sm:text-xs text-text-secondary"
-        :class="{
-          'mt-0 sm:mt-1': !compactMode,
-          'mt-0': compactMode,
-        }"
-      >
-        <span class="flex items-center gap-1.5 truncate flex-1 min-w-0 mr-2">
-          <span class="font-medium text-accent">{{ article.feed_title }}</span>
-          <template v-if="article.author && article.author !== article.feed_title">
-            <span
-              class="text-[11px] sm:text-[11px] text-text-secondary opacity-75 truncate max-w-[120px]"
-              >{{ article.author }}</span
-            >
-          </template>
-        </span>
-        <div class="flex items-center gap-1 sm:gap-2 shrink-0 min-h-[14px] sm:min-h-[18px]">
-          <!-- Icons only shown in normal mode -->
-          <template v-if="!compactMode">
-            <PhClockCountdown
-              v-if="article.is_read_later"
-              :size="14"
-              class="text-blue-500 sm:w-[18px] sm:h-[18px]"
-              weight="fill"
-            />
-            <PhStar
-              v-if="article.is_favorite"
-              :size="14"
-              class="text-yellow-500 sm:w-[18px] sm:h-[18px]"
-              weight="fill"
-            />
-            <!-- FreshRSS indicator -->
-            <img
-              v-if="article.freshrss_item_id"
-              src="/assets/plugin_icons/freshrss.svg"
-              class="w-3.5 h-3.5 shrink-0 sm:w-4 sm:h-4"
-              :title="t('setting.freshrss.syncedFeed')"
-              alt="FreshRSS"
-            />
-            <!-- RSSHub indicator -->
-            <img
-              v-if="isRSSHubArticle"
-              src="/assets/plugin_icons/rsshub.svg"
-              class="w-3.5 h-3.5 shrink-0 sm:w-4 sm:h-4"
-              :title="t('setting.rsshub.feed')"
-              alt="RSSHub"
-            />
-          </template>
-          <span class="whitespace-nowrap" :title="formatArticleDateTime(article.published_at)">{{
-            formatDateWithI18n(article.published_at)
-          }}</span>
-        </div>
-      </div>
+      <div v-if="imageLoading && imageInViewport" class="article-thumbnail-loading" />
     </div>
   </div>
 </template>
@@ -363,165 +310,226 @@ function handleImageError(event: Event) {
 <style scoped>
 @reference "../../style.css";
 .article-card {
-  @apply py-2 px-1.5 sm:p-3 border-b border-border cursor-pointer transition-colors flex gap-2 sm:gap-3 relative border-l-2 sm:border-l-[3px] border-l-transparent;
+  position: relative;
+  display: flex;
+  gap: 14px;
+  margin: 2px 8px;
+  padding: 16px 14px 16px 20px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease;
 }
-
-/* Compact mode: reduce padding */
-.article-card.compact {
-  @apply py-1 px-2;
+.article-card + .article-card {
+  margin-top: 2px;
 }
-
 .article-card:hover {
-  @apply bg-bg-tertiary;
+  background: color-mix(in srgb, var(--bg-tertiary) 55%, transparent);
 }
-
-.article-card.active {
-  @apply bg-bg-tertiary border-l-accent;
+.article-card:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: -2px;
 }
-
+.article-card.active,
 .article-card.selected {
-  @apply bg-accent/10 border-l-accent;
+  background: color-mix(in srgb, var(--accent-color) 7%, var(--bg-primary));
+  border-color: color-mix(in srgb, var(--accent-color) 16%, transparent);
 }
-
-.article-card.read h4 {
-  @apply text-text-secondary font-normal;
+.article-card.hidden-article {
+  opacity: 0.55;
 }
-
-.article-card.read .text-sm {
-  @apply text-text-secondary opacity-80;
+.article-card.hidden-article:hover {
+  opacity: 0.8;
 }
-
-.article-card.favorite {
-  background-color: rgba(255, 215, 0, 0.05);
+.article-copy {
+  flex: 1;
+  min-width: 0;
 }
-
-.article-card.read-later {
-  background-color: rgba(59, 130, 246, 0.05);
+.article-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 7px;
+  min-width: 0;
+  font-size: calc(11px * var(--ui-font-scale, 1));
+  line-height: 16px;
+  color: var(--text-secondary);
 }
-
-.article-card.hidden {
-  @apply opacity-60 bg-gray-100 dark:bg-gray-800;
+.article-source-mark {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--accent-color) 9%, var(--bg-primary));
+  color: var(--accent-color);
+  font-size: 9px;
+  font-weight: 650;
 }
-
-.article-card.hidden:hover {
-  @apply opacity-80;
+.article-source {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
-
+.article-card.active .article-source {
+  color: var(--accent-color);
+  font-weight: 550;
+}
+.article-meta time {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.article-meta-separator {
+  color: var(--text-tertiary);
+}
+.article-title-row {
+  display: flex;
+  align-items: flex-start;
+  min-width: 0;
+}
 .article-title {
-  word-break: break-word;
-  overflow-wrap: anywhere;
+  display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  display: -webkit-box;
   overflow: hidden;
+  margin: 0;
+  font-size: calc(14px * var(--ui-font-scale, 1));
+  font-weight: 620;
+  line-height: 1.6;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
 }
-
-.article-title.compact-title {
-  -webkit-line-clamp: 1;
-  font-size: calc(0.875rem * var(--ui-font-scale, 1)); /* 14px at the default scale */
+.article-card.active .article-title {
+  color: var(--text-primary);
+  font-weight: 620;
 }
-
+.article-card.read:not(.active) .article-title {
+  color: var(--text-secondary);
+  font-weight: 450;
+}
+.article-original-title,
+.article-excerpt {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 5px 0 0;
+  color: var(--text-secondary);
+  font-size: calc(11.5px * var(--ui-font-scale, 1));
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
 .article-original-title {
-  font-size: calc(0.5625rem * var(--ui-font-scale, 1));
-  line-height: calc(0.75rem * var(--ui-font-scale, 1));
+  -webkit-line-clamp: 1;
 }
-
-/* Compact mode: read article title styling */
-.article-card.read .read-title {
-  @apply text-text-secondary opacity-70;
+.article-card.read .article-excerpt {
+  opacity: 0.8;
 }
-
-/* Compact mode: translated title when article is read */
-.article-card.read .read-translated-title {
-  @apply text-text-secondary opacity-75 font-normal;
+.article-unread-dot {
+  position: absolute;
+  top: 23px;
+  left: 7px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-color);
 }
-
-/* Compact mode: original title displayed inline */
-.original-title-inline {
-  @apply text-text-secondary text-xs font-normal opacity-50 italic ml-2;
+.article-selection {
+  display: flex;
+  align-self: center;
+  flex-shrink: 0;
+  color: var(--accent-color);
 }
-
-/* Compact mode: original title when article is read */
-.article-card.read .original-title-inline {
-  @apply opacity-40;
+.article-indicators {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-tertiary);
+  margin-top: 7px;
 }
-
+.article-indicators img {
+  width: 12px;
+  height: 12px;
+}
+.article-thumbnail-placeholder {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  margin-top: 22px;
+  overflow: hidden;
+  border-radius: 9px;
+  background: var(--bg-secondary);
+  contain: layout style;
+}
+.article-thumbnail,
+.article-thumbnail-loading {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
 .article-thumbnail {
-  @apply w-16 h-12 sm:w-20 sm:h-[60px] object-cover rounded bg-bg-tertiary shrink-0 border border-border;
-  /* Performance optimizations */
-  contain: layout style paint;
-  will-change: auto;
+  object-fit: cover;
   opacity: 0;
-  transition: opacity 0.2s ease-in-out;
+  transition: opacity 200ms ease;
 }
-
-/* Compact mode: smaller thumbnails */
-.article-card.compact .article-thumbnail {
-  @apply w-12 h-9 sm:w-14 sm:h-[42px];
-}
-
 .article-thumbnail.image-loaded {
   opacity: 1;
 }
-
-.article-thumbnail-placeholder {
-  @apply w-16 h-12 sm:w-20 sm:h-[60px] shrink-0 border border-border rounded overflow-hidden bg-bg-tertiary;
-  /* Prevent layout shift and optimize rendering */
-  contain: layout style;
-  flex-shrink: 0;
-}
-
-/* Compact mode: smaller thumbnails */
-.article-thumbnail-placeholder.compact-thumbnail {
-  @apply w-12 h-9 sm:w-14 sm:h-[42px];
-}
-
 .article-thumbnail-loading {
-  @apply w-full h-full bg-bg-tertiary animate-pulse;
-  /* Minimal styling for loading state */
-  contain: layout style;
+  background: var(--bg-tertiary);
+  animation: pulse 1.6s ease-in-out infinite;
 }
-
-/* Responsive optimizations for medium screens */
-@media (max-width: 1400px) {
-  /* Smaller thumbnails */
-  .article-thumbnail,
-  .article-thumbnail-placeholder {
-    width: 56px !important;
-    height: 42px !important;
+.article-card.compact {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  gap: 10px;
+  border-radius: 8px;
+}
+.article-card.compact .article-meta {
+  margin-bottom: 2px;
+  font-size: calc(10px * var(--ui-font-scale, 1));
+}
+.article-card.compact .article-source-mark {
+  display: none;
+}
+.article-card.compact .article-title {
+  -webkit-line-clamp: 1;
+  font-size: calc(13px * var(--ui-font-scale, 1));
+}
+.article-card.compact .article-unread-dot {
+  top: 17px;
+}
+.article-thumbnail-placeholder.compact-thumbnail {
+  width: 46px;
+  height: 46px;
+  margin-top: 0;
+  border-radius: 7px;
+}
+.original-title-inline {
+  font-size: 0.85em;
+  font-weight: 400;
+  color: var(--text-tertiary);
+  margin-left: 6px;
+}
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
   }
-
-  /* Smaller title font */
-  .article-card .article-title {
-    font-size: calc(0.938rem * var(--ui-font-scale, 1)) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .article-card,
+  .article-thumbnail {
+    transition: none;
   }
-
-  /* Smaller metadata font */
-  .article-card .text-xs {
-    font-size: calc(0.688rem * var(--ui-font-scale, 1)) !important;
-  }
-
-  .article-card .text-\[11px\] {
-    font-size: calc(0.688rem * var(--ui-font-scale, 1)) !important;
-  }
-
-  /* Tighter spacing */
-  .article-card {
-    padding: 0.5rem 0.5rem !important; /* py-2 px-1.5 -> py-2 px-1.5 (8px 6px) */
-    gap: 0.5rem !important; /* gap-2 sm:gap-3 -> gap-2 */
-  }
-
-  /* Smaller icon sizes */
-  .article-card .text-sm {
-    font-size: calc(0.75rem * var(--ui-font-scale, 1)) !important;
-  }
-
-  .article-card .article-original-title {
-    font-size: calc(0.563rem * var(--ui-font-scale, 1)) !important;
-  }
-
-  .article-card .text-\[11px\] {
-    font-size: calc(0.688rem * var(--ui-font-scale, 1)) !important;
+  .article-thumbnail-loading {
+    animation: none;
   }
 }
 </style>

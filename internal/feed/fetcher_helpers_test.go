@@ -1,10 +1,10 @@
 package feed
 
 import (
-	"MrRSS/internal/database"
-	"MrRSS/internal/models"
-	"MrRSS/internal/utils/httputil"
 	"context"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/httputil"
 	"net/http"
 	"net/url"
 	"testing"

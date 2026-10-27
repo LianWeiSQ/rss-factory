@@ -74,7 +74,7 @@ function updateSetting(key: keyof SettingsData, value: string | boolean) {
         <InputControl
           :model-value="settings.siyuan_folder"
           width="lg"
-          placeholder="/MrRSS"
+          placeholder="/Clippings"
           @update:model-value="updateSetting('siyuan_folder', $event)"
         />
       </SubSettingItem>

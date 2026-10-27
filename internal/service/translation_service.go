@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 
-	"MrRSS/internal/ai"
-	"MrRSS/internal/translation"
+	"github.com/LianWeiSQ/rss-factory/internal/ai"
+	"github.com/LianWeiSQ/rss-factory/internal/translation"
 )
 
 // translationService implements TranslationService interface

@@ -5,11 +5,11 @@ import (
 	"log"
 	"net/http"
 
-	"MrRSS/internal/ai"
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/handlers/response"
-	"MrRSS/internal/summary"
-	"MrRSS/internal/utils/textutil"
+	"github.com/LianWeiSQ/rss-factory/internal/ai"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/response"
+	"github.com/LianWeiSQ/rss-factory/internal/summary"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/textutil"
 )
 
 // HandleSummarizeArticle generates a summary for an article's content.

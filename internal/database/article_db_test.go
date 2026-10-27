@@ -11,8 +11,8 @@ import (
 	"testing"
 	"time"
 
-	dbpkg "MrRSS/internal/database"
-	"MrRSS/internal/models"
+	dbpkg "github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 )
 
 func setupDBWithFeed(t *testing.T) *dbpkg.DB {

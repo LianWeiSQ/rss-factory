@@ -9,9 +9,9 @@ import (
 	"testing"
 	"time"
 
-	"MrRSS/internal/database"
-	ff "MrRSS/internal/feed"
-	"MrRSS/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	ff "github.com/LianWeiSQ/rss-factory/internal/feed"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 )
 
 // Test that FetchAll respects concurrency limits

@@ -6,9 +6,9 @@ import (
 	"strings"
 	"testing"
 
-	"MrRSS/internal/database"
-	"MrRSS/internal/feed"
-	corepkg "MrRSS/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/feed"
+	corepkg "github.com/LianWeiSQ/rss-factory/internal/handlers/core"
 )
 
 func TestHandleOPMLImport_RawBody(t *testing.T) {

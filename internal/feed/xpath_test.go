@@ -1,7 +1,7 @@
 package feed
 
 import (
-	"MrRSS/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 	"strings"
 	"testing"
 	"time"

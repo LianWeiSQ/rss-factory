@@ -7,9 +7,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"MrRSS/internal/database"
-	corepkg "MrRSS/internal/handlers/core"
-	transpkg "MrRSS/internal/translation"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	corepkg "github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	transpkg "github.com/LianWeiSQ/rss-factory/internal/translation"
 )
 
 func setupDB(t *testing.T) *database.DB {

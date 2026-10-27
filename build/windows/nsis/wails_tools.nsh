@@ -5,13 +5,13 @@
 !include "FileFunc.nsh"
 
 !ifndef INFO_PROJECTNAME
-    !define INFO_PROJECTNAME "MrRSS"
+    !define INFO_PROJECTNAME "CSSFactory"
 !endif
 !ifndef INFO_COMPANYNAME
-    !define INFO_COMPANYNAME "Ch3nyang"
+    !define INFO_COMPANYNAME "LianWeiSQ"
 !endif
 !ifndef INFO_PRODUCTNAME
-    !define INFO_PRODUCTNAME "MrRSS"
+    !define INFO_PRODUCTNAME "CSS Factory"
 !endif
 !ifndef INFO_PRODUCTVERSION
     !define INFO_PRODUCTVERSION "1.3.41"
@@ -34,7 +34,7 @@
 RequestExecutionLevel "${REQUEST_EXECUTION_LEVEL}"
 
 !ifndef ARG_WAILS_AMD64_BINARY
-    !define ARG_WAILS_AMD64_BINARY "MrRSS.exe"
+    !define ARG_WAILS_AMD64_BINARY "CSSFactory.exe"
 !endif
 
 !ifdef ARG_WAILS_AMD64_BINARY

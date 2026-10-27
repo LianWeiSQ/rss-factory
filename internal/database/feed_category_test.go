@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"testing"
 
-	"MrRSS/internal/database"
-	"MrRSS/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 )
 
 func TestCategoryActions(t *testing.T) {

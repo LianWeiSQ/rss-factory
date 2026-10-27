@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"MrRSS/internal/config"
+	"github.com/LianWeiSQ/rss-factory/internal/config"
 )
 
 func TestMockTranslator(t *testing.T) {

@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"MrRSS/internal/database"
-	"MrRSS/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
 )
 
 func TestSnoozePersistsForOneWeek(t *testing.T) {

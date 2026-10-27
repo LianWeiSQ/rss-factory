@@ -36,7 +36,7 @@ export function importRules(
   }
   const object = (value: unknown): value is Record<string, unknown> =>
     !!value && typeof value === 'object' && !Array.isArray(value);
-  // Also accept the raw MrRSS rules array from older settings backups.
+  // Also accept legacy raw rules arrays from older settings backups.
   if (!Array.isArray(data)) {
     if (!object(data) || data.format !== 'mrrss-rules' || data.version !== 1)
       throw new Error('invalidBackup');

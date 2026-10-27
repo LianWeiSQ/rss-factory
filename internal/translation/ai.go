@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"MrRSS/internal/ai"
-	"MrRSS/internal/config"
+	"github.com/LianWeiSQ/rss-factory/internal/ai"
+	"github.com/LianWeiSQ/rss-factory/internal/config"
 )
 
 // AITranslator implements translation using OpenAI-compatible APIs (GPT, Claude, etc.).

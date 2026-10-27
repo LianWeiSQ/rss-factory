@@ -20,20 +20,20 @@ import (
 	"github.com/wailsapp/wails/v3/pkg/application"
 	"github.com/wailsapp/wails/v3/pkg/events"
 
-	"MrRSS/internal/ai"
-	"MrRSS/internal/database"
-	"MrRSS/internal/desktopapi"
-	"MrRSS/internal/feed"
-	handlers "MrRSS/internal/handlers/core"
-	"MrRSS/internal/monitor"
-	"MrRSS/internal/network"
-	"MrRSS/internal/routes"
-	"MrRSS/internal/singleinstance"
-	"MrRSS/internal/translation"
-	"MrRSS/internal/tray"
-	"MrRSS/internal/utils"
-	"MrRSS/internal/utils/fileutil"
-	"MrRSS/internal/utils/httputil"
+	"github.com/LianWeiSQ/rss-factory/internal/ai"
+	"github.com/LianWeiSQ/rss-factory/internal/branding"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/desktopapi"
+	"github.com/LianWeiSQ/rss-factory/internal/feed"
+	handlers "github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/network"
+	"github.com/LianWeiSQ/rss-factory/internal/routes"
+	"github.com/LianWeiSQ/rss-factory/internal/singleinstance"
+	"github.com/LianWeiSQ/rss-factory/internal/translation"
+	"github.com/LianWeiSQ/rss-factory/internal/tray"
+	"github.com/LianWeiSQ/rss-factory/internal/utils"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/fileutil"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/httputil"
 )
 
 var debugLogging = os.Getenv("MRRSS_DEBUG") != ""
@@ -279,7 +279,7 @@ func main() {
 
 	// Create new Wails v3 application
 	app := application.New(application.Options{
-		Name:        "MrRSS",
+		Name:        branding.Name,
 		Description: "A modern, privacy-focused RSS reader",
 		LogLevel:    slog.LevelError,
 		Assets: application.AssetOptions{
@@ -295,6 +295,7 @@ func main() {
 				return nil
 			}
 			return &application.SingleInstanceOptions{
+				// Preserve the legacy lock identity while using the same data directory.
 				UniqueID:      "com.mrrss.app",
 				EncryptionKey: encryptionKey,
 				OnSecondInstanceLaunch: func(data application.SecondInstanceData) {
@@ -388,8 +389,8 @@ func main() {
 
 	// Create main window options
 	windowOptions := application.WebviewWindowOptions{
-		Name:             "MrRSS-main-window",
-		Title:            "MrRSS",
+		Name:             "CSSFactory-main-window",
+		Title:            branding.Name,
 		Width:            windowWidth,
 		Height:           windowHeight,
 		URL:              "/",
@@ -450,11 +451,11 @@ func main() {
 		var showLabel, refreshLabel, quitLabel string
 		switch {
 		case strings.HasPrefix(strings.ToLower(strings.TrimSpace(lang)), "zh"):
-			showLabel = "显示 MrRSS"
+			showLabel = "显示 " + branding.Name
 			refreshLabel = "立即刷新"
 			quitLabel = "退出"
 		default:
-			showLabel = "Show MrRSS"
+			showLabel = "Show " + branding.Name
 			refreshLabel = "Refresh now"
 			quitLabel = "Quit"
 		}
@@ -608,13 +609,6 @@ func main() {
 		time.Sleep(5 * time.Second)
 		log.Println("Starting background scheduler...")
 		h.StartBackgroundScheduler(bgCtx)
-	}()
-
-	// Report app startup to analytics (non-blocking)
-	go func() {
-		time.Sleep(2 * time.Second) // Small delay to ensure app starts smoothly
-		monitorClient := monitor.NewMonitorClient("https://cf-monitor-api.ch3nyang.workers.dev", "mrrss")
-		_ = monitorClient.ReportAppStart(context.Background())
 	}()
 
 	log.Println("Window initialized, running app...")

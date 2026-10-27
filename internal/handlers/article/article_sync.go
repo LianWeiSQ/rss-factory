@@ -7,10 +7,10 @@ import (
 	"strconv"
 	"time"
 
-	"MrRSS/internal/database"
-	"MrRSS/internal/freshrss"
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/handlers/response"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/freshrss"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/response"
 )
 
 // HandleMarkReadWithImmediateSync marks an article as read/unread and immediately syncs to FreshRSS

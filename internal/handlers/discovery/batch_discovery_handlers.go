@@ -6,10 +6,10 @@ import (
 	"log"
 	"net/http"
 
-	"MrRSS/internal/discovery"
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/handlers/response"
-	"MrRSS/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/discovery"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/response"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 )
 
 // HandleDiscoverAllFeeds discovers feeds from all subscriptions that haven't been discovered yet.

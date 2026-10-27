@@ -12,11 +12,12 @@ import (
 	"syscall"
 	"time"
 
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/handlers/response"
-	"MrRSS/internal/utils/fileutil"
-	"MrRSS/internal/utils/httputil"
-	"MrRSS/internal/version"
+	"github.com/LianWeiSQ/rss-factory/internal/branding"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/response"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/fileutil"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/httputil"
+	"github.com/LianWeiSQ/rss-factory/internal/version"
 )
 
 // isNetworkError checks if the error is related to network connectivity issues
@@ -114,7 +115,7 @@ func HandleCheckUpdates(h *core.Handler, w http.ResponseWriter, r *http.Request)
 
 	currentVersion := version.Version
 	// Use /releases endpoint to get all releases, then filter for stable versions
-	const githubAPI = "https://api.github.com/repos/DevXDojo/MrRSS/releases"
+	const githubAPI = branding.ReleasesAPIURL
 
 	// Use the same proxy-aware client as the update downloader.
 	client, err := createUpdateHTTPClient(h, 30*time.Second)
@@ -225,8 +226,8 @@ func HandleCheckUpdates(h *core.Handler, w http.ResponseWriter, r *http.Request)
 
 		// Match platform-specific installer/package with architecture
 		// Asset naming convention:
-		//   Installer: MrRSS-{version}-{platform}-{arch}-installer.{ext}
-		//   Portable: MrRSS-{version}-{platform}-{arch}-portable.{ext}
+		//   Installer: CSSFactory-{version}-{platform}-{arch}-installer.{ext}
+		//   Portable: CSSFactory-{version}-{platform}-{arch}-portable.{ext}
 		platformArch := platform + "-" + arch
 
 		if platform == "windows" {

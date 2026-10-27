@@ -1,13 +1,13 @@
 package feed
 
 import (
-	"MrRSS/internal/database"
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/models"
 	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 	"net/http/httptest"
 	"strings"
 	"testing"

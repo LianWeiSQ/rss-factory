@@ -1,19 +1,19 @@
 package routes
 
 import (
-	"MrRSS/internal/handlers/advertisement"
-	"MrRSS/internal/handlers/article"
-	browser "MrRSS/internal/handlers/browser"
-	"MrRSS/internal/handlers/core"
-	customcss "MrRSS/internal/handlers/custom_css"
-	freshrssHandler "MrRSS/internal/handlers/freshrss"
-	media "MrRSS/internal/handlers/media"
-	networkhandlers "MrRSS/internal/handlers/network"
-	opml "MrRSS/internal/handlers/opml"
-	rules "MrRSS/internal/handlers/rules"
-	script "MrRSS/internal/handlers/script"
-	update "MrRSS/internal/handlers/update"
-	window "MrRSS/internal/handlers/window"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/advertisement"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/article"
+	browser "github.com/LianWeiSQ/rss-factory/internal/handlers/browser"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	customcss "github.com/LianWeiSQ/rss-factory/internal/handlers/custom_css"
+	freshrssHandler "github.com/LianWeiSQ/rss-factory/internal/handlers/freshrss"
+	media "github.com/LianWeiSQ/rss-factory/internal/handlers/media"
+	networkhandlers "github.com/LianWeiSQ/rss-factory/internal/handlers/network"
+	opml "github.com/LianWeiSQ/rss-factory/internal/handlers/opml"
+	rules "github.com/LianWeiSQ/rss-factory/internal/handlers/rules"
+	script "github.com/LianWeiSQ/rss-factory/internal/handlers/script"
+	update "github.com/LianWeiSQ/rss-factory/internal/handlers/update"
+	window "github.com/LianWeiSQ/rss-factory/internal/handlers/window"
 	"net/http"
 )
 

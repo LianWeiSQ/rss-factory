@@ -10,8 +10,9 @@ import (
 	"strings"
 	"time"
 
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/handlers/response"
+	"github.com/LianWeiSQ/rss-factory/internal/branding"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/response"
 )
 
 // HandleDownloadUpdate downloads the update file.
@@ -42,7 +43,7 @@ func HandleDownloadUpdate(h *core.Handler, w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	const allowedURLPrefix = "https://github.com/DevXDojo/MrRSS/releases/download/"
+	const allowedURLPrefix = branding.DownloadURLPrefix
 	if !strings.HasPrefix(req.DownloadURL, allowedURLPrefix) {
 		log.Printf("Invalid update download URL")
 		response.Error(w, fmt.Errorf("invalid download URL"), http.StatusBadRequest)

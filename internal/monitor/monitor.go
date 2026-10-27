@@ -15,8 +15,8 @@ import (
 	"strings"
 	"time"
 
-	"MrRSS/internal/utils/fileutil"
-	"MrRSS/internal/version"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/fileutil"
+	"github.com/LianWeiSQ/rss-factory/internal/version"
 )
 
 const (

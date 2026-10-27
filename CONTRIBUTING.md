@@ -1,6 +1,6 @@
-# Contributing to MrRSS
+# Contributing to CSS Factory
 
-Thank you for your interest in contributing to MrRSS! We welcome contributions from everyone.
+Thank you for your interest in contributing to CSS Factory! We welcome contributions from everyone.
 
 ## Table of Contents
 
@@ -21,8 +21,8 @@ This project and everyone participating in it is governed by our [Code of Conduc
 ## Getting Started
 
 1. Fork the repository
-2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/MrRSS.git`
-3. Add upstream remote: `git remote add upstream https://github.com/DevXDojo/MrRSS.git`
+2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/rss-factory.git`
+3. Add upstream remote: `git remote add upstream https://github.com/LianWeiSQ/rss-factory.git`
 4. Create a new branch: `git checkout -b feature/your-feature-name`
 
 ## Development Setup
@@ -31,17 +31,9 @@ This project and everyone participating in it is governed by our [Code of Conduc
 
 - Go 1.27 or higher
 - Node.js (LTS version)
-- Wails CLI: `go install github.com/wailsapp/wails/v3/cmd/wails3@v3.0.0-beta.20`
+- Wails CLI: `go install github.com/wailsapp/wails/v3/cmd/wails3@v3.0.0-beta.31`
 
-**Linux only:** Install system dependencies:
-
-```bash
-# Ubuntu/Debian
-sudo apt-get install libgtk-3-dev libwebkit2gtk-4.1-dev gcc pkg-config
-
-# For older Ubuntu versions (before 24.04), use:
-# sudo apt-get install libgtk-3-dev libwebkit2gtk-4.0-dev gcc pkg-config
-```
+Resolve Go, npm and Wails versions from `go.mod`, the package lockfile and the Taskfiles. On Linux, follow the [current platform dependencies](docs/BUILD_REQUIREMENTS.md) rather than older Wails v2 instructions.
 
 ### Setup Steps
 
@@ -49,7 +41,7 @@ sudo apt-get install libgtk-3-dev libwebkit2gtk-4.1-dev gcc pkg-config
 
    ```bash
    cd frontend
-   npm install
+   CYPRESS_INSTALL_BINARY=0 npm ci
    cd ..
    ```
 
@@ -266,8 +258,8 @@ Use the [Feature Request template](.github/ISSUE_TEMPLATE/feature_request.md) an
 
 ## Questions?
 
-- Check existing [Issues](https://github.com/DevXDojo/MrRSS/issues)
-- Start a [Discussion](https://github.com/DevXDojo/MrRSS/discussions)
+- Check existing [Issues](https://github.com/LianWeiSQ/rss-factory/issues)
+- Start a [Discussion](https://github.com/LianWeiSQ/rss-factory/issues)
 - Read the [README](README.md) and other documentation
 
 ## License
@@ -276,4 +268,4 @@ By contributing, you agree that your contributions will be licensed under the GP
 
 ---
 
-Thank you for contributing to MrRSS! 🎉
+Thank you for contributing to CSS Factory! 🎉

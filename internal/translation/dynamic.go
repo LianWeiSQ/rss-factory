@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	"MrRSS/internal/ai"
+	"github.com/LianWeiSQ/rss-factory/internal/ai"
 )
 
 // SettingsProvider is an interface for retrieving translation settings.

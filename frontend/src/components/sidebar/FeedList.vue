@@ -20,9 +20,9 @@ import {
   PhPencil,
   PhCheck,
   PhPushPin,
+  PhPushPinSlash,
   PhFloppyDisk,
   PhSortAscending,
-  PhCaretDown,
 } from '@phosphor-icons/vue';
 import type { Feed } from '@/types/models';
 import type { FilterCondition, SavedFilter } from '@/types/filter';
@@ -630,15 +630,18 @@ function handleFilterDragEnd() {
   >
     <div
       v-if="isExpanded || isPinned"
-      class="w-[280px] min-w-[280px] max-w-[80vw] md:w-[280px] md:min-w-[280px] flex flex-col h-full flex-shrink-0 relative border-r border-border feed-drawer-width z-20"
-      :class="[isPinned ? 'bg-bg-primary' : 'bg-bg-secondary shadow-2xl']"
+      class="reader-feed-drawer max-w-[80vw] flex flex-col h-full flex-shrink-0 relative feed-drawer-width z-20"
+      :class="{ 'is-floating': !isPinned }"
     >
       <!-- Drawer Header -->
-      <div
-        class="p-2 sm:p-4 border-b border-border flex items-center justify-between flex-shrink-0 bg-bg-primary"
-      >
-        <h3 class="m-0 text-base sm:text-lg font-semibold">{{ drawerTitle }}</h3>
-        <div class="flex items-center gap-1 sm:gap-2">
+      <div class="reader-library-header flex items-center justify-between flex-shrink-0">
+        <div class="reader-library-identity">
+          <h3>CSS Factory</h3>
+          <p>
+            {{ drawerTitle }} <span>{{ store.feeds?.length || 0 }}</span>
+          </p>
+        </div>
+        <div class="reader-library-actions flex items-center gap-0.5">
           <!-- Pin/Unpin Button -->
           <button
             class="text-text-secondary hover:text-text-primary hover:bg-bg-tertiary p-1 sm:p-1.5 rounded transition-colors"
@@ -649,7 +652,7 @@ function handleFilterDragEnd() {
             <PhPushPinSlash v-if="isPinned" :size="18" class="sm:w-5 sm:h-5" />
             <PhPushPin v-else :size="18" class="sm:w-5 sm:h-5" />
           </button>
-          <div ref="sortMenuRef" v-if="drawerType === 'feeds'" class="relative">
+          <div v-if="drawerType === 'feeds'" ref="sortMenuRef" class="relative">
             <button
               type="button"
               class="text-text-secondary hover:text-text-primary hover:bg-bg-tertiary p-1 sm:p-1.5 rounded transition-colors"
@@ -707,14 +710,15 @@ function handleFilterDragEnd() {
         <!-- Feeds Drawer (for all filters including imageGallery) -->
         <template v-if="drawerType === 'feeds'">
           <!-- Search Box -->
-          <div class="border-b border-border">
-            <div class="flex items-center">
-              <div class="relative flex-1">
+          <div class="reader-feed-search-row">
+            <div class="flex items-center gap-1.5">
+              <div class="reader-feed-search relative flex-1 min-w-0">
                 <input
                   v-model="searchQuery"
                   type="text"
                   :placeholder="t('common.search.searchFeeds')"
-                  class="w-full bg-bg-tertiary px-3 py-2 pl-8 text-sm focus:outline-none transition-colors"
+                  class="w-full bg-transparent pl-8 pr-7 py-2 text-xs focus:outline-none transition-colors"
+                  :aria-label="t('common.search.searchFeeds')"
                 />
                 <PhMagnifyingGlass
                   :size="14"
@@ -730,13 +734,13 @@ function handleFilterDragEnd() {
               </div>
               <!-- Edit Toggle Button -->
               <button
-                class="text-text-secondary hover:text-accent p-1 sm:p-1.5 transition-colors flex-shrink-0"
+                class="reader-feed-edit text-text-secondary hover:text-accent p-1.5 rounded-lg transition-colors flex-shrink-0"
                 :class="isEditMode ? 'text-accent' : ''"
                 :title="isEditMode ? t('common.done') : t('common.edit')"
                 @click="toggleEditMode"
               >
-                <PhPencil v-if="!isEditMode" :size="16" class="sm:w-5 sm:h-5" />
-                <PhCheck v-else :size="16" class="sm:w-5 sm:h-5" />
+                <PhPencil v-if="!isEditMode" :size="15" />
+                <PhCheck v-else :size="15" />
               </button>
             </div>
           </div>
@@ -920,54 +924,138 @@ function handleFilterDragEnd() {
 </template>
 
 <style scoped>
+.reader-feed-drawer {
+  width: 232px;
+  min-width: 232px;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+}
+
+.reader-feed-drawer.is-floating {
+  box-shadow: 14px 0 40px color-mix(in srgb, var(--text-primary) 12%, transparent);
+}
+
+.reader-library-header {
+  min-height: 80px;
+  padding: 18px 12px 10px 16px;
+}
+
+.reader-library-identity {
+  min-width: 0;
+}
+.reader-library-identity h3 {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.3;
+  font-weight: 750;
+  letter-spacing: -0.04em;
+  color: var(--text-primary);
+}
+.reader-library-identity p {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 5px 0 0;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+.reader-library-identity p span {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.7;
+}
+.reader-library-actions {
+  align-self: flex-start;
+  padding-top: 2px;
+}
+.reader-library-actions :deep(button) {
+  border-radius: 7px;
+  padding: 5px;
+}
+.reader-library-actions :deep(button > svg) {
+  width: 14px;
+  height: 14px;
+}
+.reader-library-actions :deep(button:focus-visible),
+.reader-feed-edit:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.reader-feed-search-row {
+  padding: 4px 10px 12px 12px;
+}
+.reader-feed-search {
+  border: 1px solid color-mix(in srgb, var(--border-color) 80%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--bg-primary) 72%, transparent);
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+.reader-feed-search:focus-within {
+  border-color: color-mix(in srgb, var(--accent-color) 55%, var(--border-color));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 7%, transparent);
+}
+.reader-feed-search input {
+  color: var(--text-primary);
+  font-size: 12px;
+}
+.reader-feed-search input::placeholder {
+  color: var(--text-tertiary);
+}
+.reader-feed-edit:hover {
+  background: var(--bg-tertiary);
+}
+
+.categories-list {
+  padding: 2px 8px 20px;
+}
 .sidebar-hover-scrollbar {
   scrollbar-gutter: stable;
+  scrollbar-width: thin;
 }
-
 .sidebar-hover-scrollbar::-webkit-scrollbar {
-  width: 10px;
+  width: 5px;
 }
-
 .sidebar-hover-scrollbar::-webkit-scrollbar-button {
   display: none;
   width: 0;
   height: 0;
 }
-
 .sidebar-hover-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
-
 .sidebar-hover-scrollbar::-webkit-scrollbar-thumb {
   background: transparent;
-  border-radius: 3px;
+  border-radius: 6px;
 }
-
 .sidebar-hover-scrollbar:hover::-webkit-scrollbar-thumb,
 .sidebar-hover-scrollbar:focus-within::-webkit-scrollbar-thumb {
   background: var(--border-color);
 }
-
 .sidebar-hover-scrollbar::-webkit-scrollbar-thumb:hover {
   background: var(--text-secondary);
 }
 
-/* Responsive width for feed drawer on medium screens */
 @media (max-width: 1400px) {
   .feed-drawer-width {
-    width: 240px !important;
-    min-width: 240px !important;
+    width: 216px;
+    min-width: 216px;
+  }
+  .reader-library-header {
+    padding-left: 12px;
+    padding-right: 8px;
   }
 }
-</style>
-
-<style>
-.dark-mode .sidebar-hover-scrollbar:hover::-webkit-scrollbar-thumb,
-.dark-mode .sidebar-hover-scrollbar:focus-within::-webkit-scrollbar-thumb {
-  background: #444;
-}
-
-.dark-mode .sidebar-hover-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #666;
+@media (max-width: 767px) {
+  .feed-drawer-width {
+    width: min(260px, 80vw);
+    min-width: min(260px, 80vw);
+  }
+  .reader-library-header {
+    min-height: 68px;
+    padding-top: 14px;
+  }
 }
 </style>

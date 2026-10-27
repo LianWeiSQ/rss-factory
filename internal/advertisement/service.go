@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const SourceURL = "https://raw.githubusercontent.com/DevXDojo/MrRSS/main/ads.json"
+const SourceURL = "https://raw.githubusercontent.com/LianWeiSQ/rss-factory/main/ads.json"
 
 type Service struct {
 	fallback  []byte

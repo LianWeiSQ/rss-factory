@@ -97,6 +97,7 @@ function handleDragEnd() {
     :class="['feed-item', isActive ? 'active' : '', props.compactMode ? 'compact' : '']"
     :data-feed-id="feed.id"
     :data-level="level || 0"
+    :style="{ '--feed-level': level || 0 }"
     :data-pinned="isItemPinned(`feed:${feed.id}`)"
     @click="emit('click')"
     @contextmenu="(e) => emit('contextmenu', e)"
@@ -123,8 +124,8 @@ function handleDragEnd() {
       <PhLock :size="14" />
     </div>
 
-    <FeedIcon :feed="feed" class="w-4 h-4" />
-    <span class="truncate flex-1">{{ feed.title }}</span>
+    <FeedIcon :feed="feed" class="reader-feed-icon w-4 h-4" />
+    <span class="reader-feed-title truncate flex-1" :title="feed.title">{{ feed.title }}</span>
 
     <!-- RSSHub indicator -->
     <img
@@ -193,130 +194,104 @@ function handleDragEnd() {
 </template>
 
 <style scoped>
-@reference "../../style.css";
 .feed-item {
-  @apply px-2 sm:px-3 py-1.5 sm:py-2 cursor-pointer rounded-md text-xs sm:text-sm text-text-primary flex items-center gap-1 hover:bg-bg-tertiary transition-colors;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  margin: 1px 0;
+  padding: 6px 8px 6px calc(8px + var(--feed-level, 0) * 12px);
+  border-radius: 7px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
 }
-
-/* Compact mode: reduce padding and gap */
-.feed-item.compact {
-  @apply px-1 sm:px-1.5 py-0.5 sm:py-1 gap-0 sm:gap-0.5;
-}
-
-/* Indentation for nested feeds */
-.feed-item[data-level='1'] {
-  padding-left: calc(0.5rem + 1rem);
-}
-
-.feed-item[data-level='2'] {
-  padding-left: calc(0.5rem + 2rem);
-}
-
-.feed-item[data-level='3'] {
-  padding-left: calc(0.5rem + 3rem);
-}
-
-.feed-item[data-level='4'] {
-  padding-left: calc(0.5rem + 4rem);
-}
-
-@media (min-width: 640px) {
-  .feed-item[data-level='1'] {
-    padding-left: calc(0.75rem + 1rem);
-  }
-
-  .feed-item[data-level='2'] {
-    padding-left: calc(0.75rem + 2rem);
-  }
-
-  .feed-item[data-level='3'] {
-    padding-left: calc(0.75rem + 3rem);
-  }
-
-  .feed-item[data-level='4'] {
-    padding-left: calc(0.75rem + 4rem);
-  }
-}
-
-/* Compact mode indentation */
-.feed-item.compact[data-level='1'] {
-  padding-left: calc(0.375rem + 1rem);
-}
-
-.feed-item.compact[data-level='2'] {
-  padding-left: calc(0.375rem + 2rem);
-}
-
-.feed-item.compact[data-level='3'] {
-  padding-left: calc(0.375rem + 3rem);
-}
-
-.feed-item.compact[data-level='4'] {
-  padding-left: calc(0.375rem + 4rem);
-}
-
-@media (min-width: 640px) {
-  .feed-item.compact[data-level='1'] {
-    padding-left: calc(0.5rem + 1rem);
-  }
-
-  .feed-item.compact[data-level='2'] {
-    padding-left: calc(0.5rem + 2rem);
-  }
-
-  .feed-item.compact[data-level='3'] {
-    padding-left: calc(0.5rem + 3rem);
-  }
-
-  .feed-item.compact[data-level='4'] {
-    padding-left: calc(0.5rem + 4rem);
-  }
+.feed-item:hover {
+  background: color-mix(in srgb, var(--text-secondary) 8%, transparent);
 }
 .feed-item.active {
-  @apply bg-bg-tertiary text-accent font-medium;
+  background: color-mix(in srgb, var(--accent-color) 11%, transparent);
+  color: var(--accent-color);
 }
-
-/* Dragging state styles */
+.feed-item.active::before {
+  content: '';
+  position: absolute;
+  inset: 10px auto 10px 0;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--accent-color);
+}
+.reader-feed-title {
+  font-size: 13px;
+  font-weight: 450;
+  line-height: 1.5;
+}
+.feed-item.active .reader-feed-title {
+  font-weight: 650;
+}
+.reader-feed-icon {
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+.feed-item.compact {
+  min-height: 27px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  gap: 6px;
+}
 .feed-item[draggable='true']:active {
   opacity: 0.8;
 }
-/* Drag ghost image styling - applied during drag */
 .feed-item.dragging {
   opacity: 0.5;
-  background-color: transparent;
+  background: transparent;
 }
-
-.drag-handle {
-  @apply cursor-grab text-text-secondary hover:text-accent transition-colors flex items-center justify-center;
+.drag-handle,
+.freshrss-lock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 2px;
-  margin-right: 2px;
-  border-radius: 2px;
+  margin-right: -3px;
+  border-radius: 4px;
+  color: var(--text-secondary);
+}
+.drag-handle {
+  cursor: grab;
 }
 .drag-handle:hover {
-  background-color: var(--color-bg-tertiary, rgba(0, 0, 0, 0.05));
+  color: var(--accent-color);
+  background: var(--bg-tertiary);
 }
 .drag-handle:active {
   cursor: grabbing;
 }
-
 .freshrss-lock {
-  @apply cursor-not-allowed text-text-secondary transition-colors flex items-center justify-center;
-  padding: 2px;
-  margin-right: 2px;
-  border-radius: 2px;
+  cursor: not-allowed;
 }
-
 .unread-badge {
-  @apply text-[9px] sm:text-[10px] font-medium rounded-full min-w-[14px] sm:min-w-[16px] h-[14px] sm:h-[16px] px-0.5 sm:px-1 flex items-center justify-center;
-  background-color: rgba(120, 120, 120, 0.15);
-  color: #666666;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  min-width: 18px;
+  margin-left: auto;
+  padding: 0 1px;
+  font-size: 10px;
+  font-weight: 450;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-tertiary);
+  line-height: 1.5;
 }
-</style>
-
-<style>
-@reference "../../style.css";
-.dark-mode .unread-badge {
-  background-color: rgba(100, 100, 100, 0.4) !important;
-  color: #d0d0d0 !important;
+.feed-item.active .unread-badge {
+  color: var(--accent-color);
+}
+@media (prefers-reduced-motion: reduce) {
+  .feed-item {
+    transition: none;
+  }
 }
 </style>

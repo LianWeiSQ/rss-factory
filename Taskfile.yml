@@ -5,12 +5,12 @@ includes:
   windows: ./build/windows/Taskfile.yml
   darwin: ./build/darwin/Taskfile.yml
   linux: ./build/linux/Taskfile.yml
-  # iOS and Android are optional - only include if needed
+  # Experimental mobile scaffolding only; mobile build tasks are not wired up
   # ios: ./build/ios/Taskfile.yml
   # android: ./build/android/Taskfile.yml
 
 vars:
-  APP_NAME: "MrRSS"
+  APP_NAME: "CSSFactory"
   BIN_DIR: "build/bin"
   VITE_PORT: '{{.WAILS_VITE_PORT | default 5173}}'
   # Keep this version synchronized with github.com/wailsapp/wails/v3 in go.mod.
@@ -52,9 +52,9 @@ tasks:
   docker:build:server:
     summary: Builds the server version Docker image
     cmds:
-      - docker build -f Dockerfile.server -t mrrss-server:latest .
+      - docker build -f Dockerfile.server -t css-factory-server:latest .
 
   docker:run:server:
     summary: Runs the server version in Docker
     cmds:
-      - docker run -p 1234:1234 -v {{.PWD}}/data:/app/data mrrss-server:latest
+      - docker run -p 127.0.0.1:1234:1234 -v {{.PWD}}/data:/app/data css-factory-server:latest

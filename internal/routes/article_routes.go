@@ -3,10 +3,10 @@ package routes
 import (
 	"net/http"
 
-	article "MrRSS/internal/handlers/article"
-	"MrRSS/internal/handlers/core"
-	summary "MrRSS/internal/handlers/summary"
-	translationhandlers "MrRSS/internal/handlers/translation"
+	article "github.com/LianWeiSQ/rss-factory/internal/handlers/article"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	summary "github.com/LianWeiSQ/rss-factory/internal/handlers/summary"
+	translationhandlers "github.com/LianWeiSQ/rss-factory/internal/handlers/translation"
 )
 
 // registerArticleRoutes registers all article-related routes

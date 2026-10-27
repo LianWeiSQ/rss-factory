@@ -84,10 +84,10 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/${{ needs.extract-metadata.outputs.owner_lowercase }}/mrrss:${{ needs.extract-metadata.outputs.version }}-amd64
-            ${{ needs.extract-metadata.outputs.is_prerelease == 'false' && format('ghcr.io/{0}/mrrss:latest-amd64', needs.extract-metadata.outputs.owner_lowercase) || '' }}
+            ghcr.io/${{ needs.extract-metadata.outputs.owner_lowercase }}/rss-factory:${{ needs.extract-metadata.outputs.version }}-amd64
+            ${{ needs.extract-metadata.outputs.is_prerelease == 'false' && format('ghcr.io/{0}/rss-factory:latest-amd64', needs.extract-metadata.outputs.owner_lowercase) || '' }}
           labels: |
-            org.opencontainers.image.title=MrRSS
+            org.opencontainers.image.title=CSS Factory
             org.opencontainers.image.description=A modern, privacy-focused RSS reader
             org.opencontainers.image.version=${{ needs.extract-metadata.outputs.version }}
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
@@ -131,10 +131,10 @@ jobs:
           platforms: linux/arm64
           push: true
           tags: |
-            ghcr.io/${{ needs.extract-metadata.outputs.owner_lowercase }}/mrrss:${{ needs.extract-metadata.outputs.version }}-arm64
-            ${{ needs.extract-metadata.outputs.is_prerelease == 'false' && format('ghcr.io/{0}/mrrss:latest-arm64', needs.extract-metadata.outputs.owner_lowercase) || '' }}
+            ghcr.io/${{ needs.extract-metadata.outputs.owner_lowercase }}/rss-factory:${{ needs.extract-metadata.outputs.version }}-arm64
+            ${{ needs.extract-metadata.outputs.is_prerelease == 'false' && format('ghcr.io/{0}/rss-factory:latest-arm64', needs.extract-metadata.outputs.owner_lowercase) || '' }}
           labels: |
-            org.opencontainers.image.title=MrRSS
+            org.opencontainers.image.title=CSS Factory
             org.opencontainers.image.description=A modern, privacy-focused RSS reader
             org.opencontainers.image.version=${{ needs.extract-metadata.outputs.version }}
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
@@ -162,20 +162,20 @@ jobs:
           OWNER="${{ needs.extract-metadata.outputs.owner_lowercase }}"
 
           # Create version-specific manifest
-          docker buildx imagetools create -t ghcr.io/${OWNER}/mrrss:${VERSION} \
-            ghcr.io/${OWNER}/mrrss:${VERSION}-amd64 \
-            ghcr.io/${OWNER}/mrrss:${VERSION}-arm64
+          docker buildx imagetools create -t ghcr.io/${OWNER}/rss-factory:${VERSION} \
+            ghcr.io/${OWNER}/rss-factory:${VERSION}-amd64 \
+            ghcr.io/${OWNER}/rss-factory:${VERSION}-arm64
 
           # Create latest manifest (only for stable releases)
           if [ "${{ needs.extract-metadata.outputs.is_prerelease }}" = "false" ]; then
-            docker buildx imagetools create -t ghcr.io/${OWNER}/mrrss:latest \
-              ghcr.io/${OWNER}/mrrss:latest-amd64 \
-              ghcr.io/${OWNER}/mrrss:latest-arm64
+            docker buildx imagetools create -t ghcr.io/${OWNER}/rss-factory:latest \
+              ghcr.io/${OWNER}/rss-factory:latest-amd64 \
+              ghcr.io/${OWNER}/rss-factory:latest-arm64
           fi
 
       - name: Verify anonymous registry access
         env:
-          IMAGE: ghcr.io/${{ needs.extract-metadata.outputs.owner_lowercase }}/mrrss:${{ needs.extract-metadata.outputs.version }}
+          IMAGE: ghcr.io/${{ needs.extract-metadata.outputs.owner_lowercase }}/rss-factory:${{ needs.extract-metadata.outputs.version }}
         run: |
           # Use an empty Docker config: the publishing login must not mask a private package.
           export DOCKER_CONFIG=$(mktemp -d)
@@ -186,7 +186,7 @@ jobs:
             fi
             sleep 5
           done
-          echo "::error::Published image is not anonymously accessible. Set the GHCR mrrss package visibility to Public in Package settings (repository visibility is separate). See docs/SERVER_MODE/README.md."
+          echo "::error::Published image is not anonymously accessible. Set the GHCR rss-factory package visibility to Public in Package settings (repository visibility is separate). See docs/SERVER_MODE/README.md."
           exit 1
 
       - name: Summary
@@ -201,31 +201,31 @@ jobs:
           echo "### Available Images" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Multi-architecture images:" >> $GITHUB_STEP_SUMMARY
-          echo "- \`ghcr.io/${OWNER}/mrrss:${VERSION}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- \`ghcr.io/${OWNER}/rss-factory:${VERSION}\`" >> $GITHUB_STEP_SUMMARY
 
           if [ "${{ needs.extract-metadata.outputs.is_prerelease }}" = "false" ]; then
-            echo "- \`ghcr.io/${OWNER}/mrrss:latest\`" >> $GITHUB_STEP_SUMMARY
+            echo "- \`ghcr.io/${OWNER}/rss-factory:latest\`" >> $GITHUB_STEP_SUMMARY
           fi
 
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Architecture-specific images:" >> $GITHUB_STEP_SUMMARY
-          echo "- \`ghcr.io/${OWNER}/mrrss:${VERSION}-amd64\`" >> $GITHUB_STEP_SUMMARY
-          echo "- \`ghcr.io/${OWNER}/mrrss:${VERSION}-arm64\`" >> $GITHUB_STEP_SUMMARY
+          echo "- \`ghcr.io/${OWNER}/rss-factory:${VERSION}-amd64\`" >> $GITHUB_STEP_SUMMARY
+          echo "- \`ghcr.io/${OWNER}/rss-factory:${VERSION}-arm64\`" >> $GITHUB_STEP_SUMMARY
 
           if [ "${{ needs.extract-metadata.outputs.is_prerelease }}" = "false" ]; then
-            echo "- \`ghcr.io/${OWNER}/mrrss:latest-amd64\`" >> $GITHUB_STEP_SUMMARY
-            echo "- \`ghcr.io/${OWNER}/mrrss:latest-arm64\`" >> $GITHUB_STEP_SUMMARY
+            echo "- \`ghcr.io/${OWNER}/rss-factory:latest-amd64\`" >> $GITHUB_STEP_SUMMARY
+            echo "- \`ghcr.io/${OWNER}/rss-factory:latest-arm64\`" >> $GITHUB_STEP_SUMMARY
           fi
 
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Pull Command" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
-          echo "docker pull ghcr.io/${OWNER}/mrrss:${VERSION}" >> $GITHUB_STEP_SUMMARY
+          echo "docker pull ghcr.io/${OWNER}/rss-factory:${VERSION}" >> $GITHUB_STEP_SUMMARY
 
           if [ "${{ needs.extract-metadata.outputs.is_prerelease }}" = "false" ]; then
             echo "# or" >> $GITHUB_STEP_SUMMARY
-            echo "docker pull ghcr.io/${OWNER}/mrrss:latest" >> $GITHUB_STEP_SUMMARY
+            echo "docker pull ghcr.io/${OWNER}/rss-factory:latest" >> $GITHUB_STEP_SUMMARY
           fi
 
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY

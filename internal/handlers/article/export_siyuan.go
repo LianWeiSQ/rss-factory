@@ -8,10 +8,10 @@ import (
 	"strings"
 	"time"
 
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/handlers/response"
-	"MrRSS/internal/siyuan"
-	"MrRSS/internal/utils/httputil"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/response"
+	"github.com/LianWeiSQ/rss-factory/internal/siyuan"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/httputil"
 )
 
 func HandleExportToSiYuan(h *core.Handler, w http.ResponseWriter, r *http.Request) {

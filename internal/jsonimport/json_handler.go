@@ -1,9 +1,9 @@
 package jsonimport
 
 import (
-	"MrRSS/internal/models"
 	"encoding/json"
 	"errors"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 	"io"
 	"log"
 )

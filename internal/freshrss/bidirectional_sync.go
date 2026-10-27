@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"MrRSS/internal/database"
-	"MrRSS/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 )
 
 // SyncResult represents the result of a sync operation

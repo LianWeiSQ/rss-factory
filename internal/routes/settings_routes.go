@@ -3,9 +3,9 @@ package routes
 import (
 	"net/http"
 
-	"MrRSS/internal/handlers/core"
-	settings "MrRSS/internal/handlers/settings"
-	stathandlers "MrRSS/internal/handlers/statistics"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	settings "github.com/LianWeiSQ/rss-factory/internal/handlers/settings"
+	stathandlers "github.com/LianWeiSQ/rss-factory/internal/handlers/statistics"
 )
 
 // registerSettingsRoutes registers all settings-related routes

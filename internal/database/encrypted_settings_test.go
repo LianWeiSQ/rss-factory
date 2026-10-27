@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"MrRSS/internal/crypto"
+	"github.com/LianWeiSQ/rss-factory/internal/crypto"
 )
 
 func TestEncryptedSettings(t *testing.T) {

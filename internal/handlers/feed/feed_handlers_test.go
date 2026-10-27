@@ -3,9 +3,9 @@ package feed_test
 import (
 	"testing"
 
-	"MrRSS/internal/database"
-	ff "MrRSS/internal/feed"
-	"MrRSS/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	ff "github.com/LianWeiSQ/rss-factory/internal/feed"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
 )
 
 func setupHandler(t *testing.T) *core.Handler {

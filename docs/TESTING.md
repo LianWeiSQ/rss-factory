@@ -1,6 +1,6 @@
 # Testing Guide
 
-This document covers testing strategies and patterns for MrRSS.
+This document covers testing strategies and patterns for CSS Factory.
 
 ## Backend Testing (Go)
 

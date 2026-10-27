@@ -3,7 +3,7 @@
 package settings
 
 import (
-	"MrRSS/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
 	"net/http"
 )
 

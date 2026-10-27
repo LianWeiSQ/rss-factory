@@ -5,7 +5,7 @@ import (
 	"errors"
 	"net/http"
 
-	apperrors "MrRSS/internal/errors"
+	apperrors "github.com/LianWeiSQ/rss-factory/internal/errors"
 )
 
 // APIResponse represents a standard API response structure

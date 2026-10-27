@@ -5,8 +5,8 @@ import (
 	"os"
 	"testing"
 
-	"MrRSS/internal/database"
-	"MrRSS/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 )
 
 func setupTestEngine(t *testing.T) *Engine {

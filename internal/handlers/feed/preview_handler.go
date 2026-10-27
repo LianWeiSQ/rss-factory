@@ -9,11 +9,11 @@ import (
 	"strings"
 	"time"
 
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/handlers/response"
-	"MrRSS/internal/models"
-	"MrRSS/internal/rsshub"
-	"MrRSS/internal/utils/urlutil"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/response"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/rsshub"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/urlutil"
 )
 
 func HandlePreviewFeed(h *core.Handler, w http.ResponseWriter, r *http.Request) {

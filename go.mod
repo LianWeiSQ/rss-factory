@@ -1,4 +1,4 @@
-module MrRSS
+module github.com/LianWeiSQ/rss-factory
 
 go 1.27
 

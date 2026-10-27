@@ -95,7 +95,7 @@ async function copyTitle(article: Article) {
 
 <template>
   <div
-    class="p-2 sm:p-4 border-b border-border flex justify-between items-center bg-bg-primary shrink-0"
+    class="reader-toolbar border-b border-border flex justify-between items-center bg-bg-primary shrink-0 gap-3"
   >
     <!-- Modal mode: X button always visible -->
     <button
@@ -115,7 +115,11 @@ async function copyTitle(article: Article) {
       <PhArrowLeft :size="18" class="sm:w-5 sm:h-5" />
       <span class="hidden xs:inline">{{ t('common.back') }}</span>
     </button>
-    <div class="flex flex-wrap justify-end gap-1 sm:gap-2 ml-auto">
+    <div v-if="!isModal" class="reader-toolbar-source hidden xl:flex">
+      <PhBookOpenText :size="17" />
+      <span>{{ article.feed_title || 'CSS Factory' }}</span>
+    </div>
+    <div class="reader-toolbar-actions flex justify-end gap-1 ml-auto">
       <template v-for="action in visibleActions" :key="action.id">
         <button
           v-if="action.id === 'readingMode'"
@@ -165,6 +169,7 @@ async function copyTitle(article: Article) {
           />
         </button>
         <button
+          v-if="action.id === 'read'"
           class="action-btn"
           :title="
             withShortcut(
@@ -173,7 +178,6 @@ async function copyTitle(article: Article) {
             )
           "
           @click="$emit('toggleRead')"
-          v-if="action.id === 'read'"
         >
           <PhCircle
             :size="18"
@@ -183,6 +187,7 @@ async function copyTitle(article: Article) {
           />
         </button>
         <button
+          v-if="action.id === 'favorite'"
           :class="[
             'action-btn',
             article.is_favorite ? 'text-yellow-500 hover:text-yellow-600' : 'hover:text-yellow-500',
@@ -196,7 +201,6 @@ async function copyTitle(article: Article) {
             )
           "
           @click="$emit('toggleFavorite')"
-          v-if="action.id === 'favorite'"
         >
           <PhStar
             :size="18"
@@ -205,6 +209,7 @@ async function copyTitle(article: Article) {
           />
         </button>
         <button
+          v-if="action.id === 'readLater'"
           :class="[
             'action-btn',
             article.is_read_later ? 'text-blue-500 hover:text-blue-600' : 'hover:text-blue-500',
@@ -218,7 +223,6 @@ async function copyTitle(article: Article) {
             )
           "
           @click="$emit('toggleReadLater')"
-          v-if="action.id === 'readLater'"
         >
           <PhClockCountdown
             :size="18"
@@ -227,38 +231,38 @@ async function copyTitle(article: Article) {
           />
         </button>
         <button
+          v-if="action.id === 'browser'"
           class="action-btn"
           :title="withShortcut(t('article.action.openInBrowser'), 'openInBrowser')"
           @click="$emit('openOriginal')"
-          v-if="action.id === 'browser'"
         >
           <PhArrowSquareOut :size="18" class="sm:w-5 sm:h-5" />
         </button>
         <button
+          v-if="action.id === 'copyTitle'"
           class="action-btn"
           :title="t('common.contextMenu.copyTitle')"
           :disabled="!article.title"
           :aria-label="t('common.contextMenu.copyTitle')"
           @click="copyTitle(article)"
-          v-if="action.id === 'copyTitle'"
         >
           <PhTextT :size="18" class="sm:w-5 sm:h-5" />
         </button>
         <button
+          v-if="action.id === 'copyLink'"
           class="action-btn"
           :title="t('common.contextMenu.copyLink')"
           :disabled="!article.url"
           :aria-label="t('common.contextMenu.copyLink')"
           @click="copyLink(article)"
-          v-if="action.id === 'copyLink'"
         >
           <PhLinkSimple :size="18" class="sm:w-5 sm:h-5" />
         </button>
         <button
+          v-if="action.id === 'reload'"
           class="action-btn"
           :title="t('article.action.reloadContent')"
           @click="$emit('reloadContent')"
-          v-if="action.id === 'reload'"
         >
           <PhArrowClockwise :size="18" class="sm:w-5 sm:h-5" />
         </button>
@@ -326,7 +330,44 @@ async function copyTitle(article: Article) {
 
 <style scoped>
 @reference "../../style.css";
+.reader-toolbar {
+  min-height: var(--reader-toolbar-height, 64px);
+  padding: 12px 20px;
+}
+.reader-toolbar-source {
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+.reader-toolbar-source span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.reader-toolbar-actions {
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
 .action-btn {
-  @apply text-lg sm:text-xl cursor-pointer text-text-secondary p-1 sm:p-1.5 rounded-md transition-colors hover:bg-bg-tertiary hover:text-text-primary;
+  @apply cursor-pointer text-text-secondary rounded-lg transition-colors hover:bg-bg-tertiary hover:text-text-primary;
+  width: 31px;
+  height: 31px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.action-btn :deep(svg) {
+  width: 17px;
+  height: 17px;
+}
+@media (max-width: 767px) {
+  .reader-toolbar {
+    min-height: 54px;
+    padding: 8px 12px;
+  }
 }
 </style>

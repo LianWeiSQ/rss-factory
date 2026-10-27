@@ -598,6 +598,13 @@
       "encrypted": false,
       "frontend_key": "showUnreadCounts"
     },
+    "show_tray_unread_count": {
+      "type": "bool",
+      "default": false,
+      "category": "general",
+      "encrypted": false,
+      "frontend_key": "showTrayUnreadCount"
+    },
     "obsidian_enabled": {
       "type": "bool",
       "default": false,

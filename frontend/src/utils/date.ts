@@ -1,5 +1,5 @@
 /**
- * Date formatting utilities for MrRSS
+ * Date formatting utilities for CSS Factory
  */
 
 export interface DateFormatPreferences {

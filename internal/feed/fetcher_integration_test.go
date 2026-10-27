@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"MrRSS/internal/database"
-	"MrRSS/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 )
 
 func TestFetchFeed_SavesArticlesAndAppliesRules(t *testing.T) {

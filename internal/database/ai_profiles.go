@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"MrRSS/internal/crypto"
-	"MrRSS/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/crypto"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 )
 
 // CreateAIProfile creates a new AI profile

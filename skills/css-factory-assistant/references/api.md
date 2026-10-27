@@ -1,9 +1,9 @@
-# MrRSS API Reference
+# CSS Factory API Reference
 
 Generated from `docs/SERVER_MODE/swagger.json`. Regenerate with:
 
 ```bash
-python skills/mrrss-assistant/scripts/generate_api_reference.py docs/SERVER_MODE/swagger.json skills/mrrss-assistant/references/api.md
+python skills/css-factory-assistant/scripts/generate_api_reference.py docs/SERVER_MODE/swagger.json skills/css-factory-assistant/references/api.md
 ```
 
 - API version: `1.3.41`
@@ -147,12 +147,15 @@ Parameters:
   - `filter` (query, optional): Filter: 'all', 'unread', 'favorite', 'read_later'
   - `feed_id` (query, optional): Filter by feed ID
   - `category` (query, optional): Filter by category name
+  - `only_unread` (query, optional): Filter for only unread articles
+  - `sort_order` (query, optional): Publication order: newest or oldest
+  - `group_by` (query, optional): Group articles by feed before pagination
   - `page` (query, optional): Page number (default: 1)
   - `limit` (query, optional): Items per page (default: 50, max: 500)
 
 ### `POST /articles/cleanup`
 
-Cleanup all articles
+Cleanup unimportant articles
 
 ### `POST /articles/cleanup-content`
 
@@ -235,6 +238,8 @@ Parameters:
   - `feed_id` (query, optional): Filter by feed ID
   - `category` (query, optional): Filter by category name
   - `only_unread` (query, optional): Filter for only unread articles
+  - `media_type` (query, optional): Filter by media type: all, images, or videos
+  - `sort_order` (query, optional): Publication order: newest or oldest
   - `page` (query, optional): Page number (default: 1)
   - `limit` (query, optional): Items per page (default: 50)
 
@@ -264,9 +269,25 @@ Parameters:
   - `feed_id` (query, optional): Optional: only mark articles from this feed
   - `category` (query, optional): Optional: only mark articles from this category
 
+### `POST /articles/read-batch`
+
+Mark selected articles as read or unread
+
+Parameters:
+  - `request` (body, required): Selected article IDs and target read state
+
+Request body: see the Swagger schema for full field details.
+
 ### `POST /articles/refresh`
 
 Refresh all feeds
+
+### `POST /articles/reload-content`
+
+Reload article content
+
+Parameters:
+  - `id` (query, required): Article ID
 
 ### `POST /articles/toggle-favorite-sync`
 
@@ -425,9 +446,6 @@ Feed content extraction settings
 
 Parameters:
   - `id` (query, required): Feed ID
-  - `options` (body, required):
-
-Request body: see the Swagger schema for full field details.
 
 ### `POST /feeds/delete`
 
@@ -442,6 +460,7 @@ Refresh a single feed
 
 Parameters:
   - `id` (query, required): Feed ID
+  - `reset_read` (query, optional): Reset existing visible articles to unread before refreshing
 
 ### `POST /feeds/reorder`
 
@@ -741,23 +760,6 @@ Proxy webpage content
 
 Parameters:
   - `url` (query, required): Webpage URL to proxy
-
-## Miniflux
-
-### `GET /miniflux/status`
-
-Get Miniflux sync status
-
-### `POST /miniflux/sync`
-
-Sync with Miniflux
-
-### `POST /miniflux/sync-feed`
-
-Sync single Miniflux feed
-
-Parameters:
-  - `stream_id` (query, required): Miniflux stream ID
 
 ## Network
 

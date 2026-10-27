@@ -154,6 +154,8 @@ const zh: TranslationMessages = {
       noContentAvailable: '暂无内容',
       renderContent: '渲染内容',
       selectArticle: '选择一篇文章开始阅读',
+      readingSpace: '你的阅读空间',
+      readingSpaceHint: '在信息之间，留一点专注的时间。',
     },
     imageGallery: {
       actionFavorite: '添加到收藏',
@@ -269,7 +271,7 @@ const zh: TranslationMessages = {
   aiErrors: {
     report_no_content: '这些文章暂无本地正文。请先打开文章加载内容，再重试。',
     configuration_invalid: 'AI 配置不完整或无效，请检查接口地址和模型。',
-    usage_limit_reached: '已达到 MrRSS 设置的 AI 使用上限，请调整上限后重试。',
+    usage_limit_reached: '已达到 CSS Factory 设置的 AI 使用上限，请调整上限后重试。',
     rate_limited: 'AI 服务请求过于频繁，请稍后再试。',
     authentication_failed: 'AI 服务鉴权失败，请检查 API Key 和访问权限。',
     payment_required: 'AI 服务额度不足，请检查服务商账户余额。',
@@ -787,6 +789,7 @@ const zh: TranslationMessages = {
       placeholder: '搜索设置',
     },
     about: {
+      upstreamAttribution: 'CSS Factory 基于 Ch3nyang 及贡献者开发的 MrRSS。',
       version: '版本',
       viewOnGitHub: '在 GitHub 上查看',
     },
@@ -1010,7 +1013,7 @@ const zh: TranslationMessages = {
         headers: 'HTTP 请求头',
         headersDesc: '自定义 HTTP 请求头',
         langMapping: '语言代码映射',
-        langMappingDesc: '将 MrRSS 语言代码映射到 API 特定代码',
+        langMappingDesc: '将 CSS Factory 语言代码映射到 API 特定代码',
         method: 'HTTP 方法',
         methodDesc: 'API 请求的 HTTP 方法',
         responsePath: '响应路径',
@@ -1069,14 +1072,15 @@ const zh: TranslationMessages = {
     database: {
       dataDirectory: '数据目录',
       directoryDescription:
-        '选择一个空文件夹。下次启动时，MrRSS 会在打开数据库前复制订阅、文章、设置、脚本和缓存，原目录保留作为备份。',
+        '选择一个空文件夹。下次启动时，CSS Factory 会在打开数据库前复制订阅、文章、设置、脚本和缓存，原目录保留作为备份。',
       directoryCurrent: '当前目录：',
       directoryDestination: '新的空文件夹路径',
       directoryBrowse: '浏览…',
       directoryChange: '更改目录',
       directoryConfirm:
-        '下次启动时将数据复制到 {path}。请完全退出 MrRSS（包括系统托盘），然后重新打开。确认数据完整前请保留原目录。',
-      directoryScheduled: '已保存。请完全退出 MrRSS 后重新打开以迁移数据；仅关闭到托盘不会生效。',
+        '下次启动时将数据复制到 {path}。请完全退出 CSS Factory（包括系统托盘），然后重新打开。确认数据完整前请保留原目录。',
+      directoryScheduled:
+        '已保存。请完全退出 CSS Factory 后重新打开以迁移数据；仅关闭到托盘不会生效。',
       directoryPending: '下次启动迁移至：',
       directoryCancel: '取消目录变更',
       directoryOverridden:
@@ -1143,6 +1147,8 @@ const zh: TranslationMessages = {
       auto: '自动（跟随系统）',
       closeToTray: '关闭时最小化到托盘',
       closeToTrayDesc: '点击关闭时隐藏到系统托盘并继续运行',
+      showTrayUnreadCount: '显示菜单栏未读数量',
+      showTrayUnreadCountDesc: '在 macOS 菜单栏图标旁显示未读文章数量；关闭后仅保留图标',
       dark: '暗色',
       language: '语言',
       languageDesc: '选择界面语言',
@@ -1152,7 +1158,7 @@ const zh: TranslationMessages = {
       uiFontSize: '界面字号',
       uiFontSizeDesc: '应用界面的基础字体大小',
       startupOnBoot: '开机自启动',
-      startupOnBootDesc: '在电脑启动时自动启动 MrRSS',
+      startupOnBootDesc: '在电脑启动时自动启动 CSS Factory',
       startupMinimized: '启动至系统托盘',
       startupMinimizedDesc: '随系统启动时保持窗口隐藏',
       theme: '主题',
@@ -1241,12 +1247,13 @@ const zh: TranslationMessages = {
           '保持思源和目标笔记本打开，在思源“设置 → 鉴权”中复制 API token。图片保留原始链接。',
         endpoint: '思源地址',
         endpointDesc:
-          '默认连接运行 MrRSS 的电脑上的思源。服务器模式下，请填写服务器能够访问的思源地址。',
+          '默认连接运行 CSS Factory 的电脑上的思源。服务器模式下，请填写服务器能够访问的思源地址。',
         token: 'API token',
         notebook: '笔记本 ID',
         notebookDesc: '从思源复制目标笔记本的 ID，请勿填写显示名称。',
         folder: '文档目录',
-        folderDesc: '以 / 开头，例如 /MrRSS。文章编号用于区分同名标题，重复剪藏不会覆盖已有文档。',
+        folderDesc:
+          '以 / 开头，例如 /Clippings。文章编号用于区分同名标题，重复剪藏不会覆盖已有文档。',
         exportTo: '剪藏到思源笔记',
         exporting: '正在剪藏到思源笔记…',
         exported: '文章已保存到思源笔记。',
@@ -1397,7 +1404,7 @@ const zh: TranslationMessages = {
       importConfirm:
         '将 {count} 条规则追加至现有列表？会保留启用状态，并在后续刷新时生效；此次不立即处理已有文章。',
       importSuccess: '已导入 {count} 条规则',
-      invalidBackup: 'MrRSS 规则备份格式无效或不受支持，未导入任何规则。',
+      invalidBackup: 'CSS Factory 规则备份格式无效或不受支持，未导入任何规则。',
       backupTooLarge: '规则备份超过 5 MB 限制。',
       importFailed: '无法导入规则，请重新加载设置后再试。',
       noRules: '暂无规则',
@@ -1582,7 +1589,7 @@ const zh: TranslationMessages = {
 
   // 顶级键（不带命名空间使用）
   // 只有 appName 应保留为顶级键
-  appName: 'MrRSS',
+  appName: 'CSS Factory',
 };
 
 export default zh;

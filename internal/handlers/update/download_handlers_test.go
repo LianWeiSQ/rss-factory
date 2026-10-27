@@ -15,8 +15,8 @@ import (
 	"testing"
 	"time"
 
-	"MrRSS/internal/database"
-	"MrRSS/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
 )
 
 func TestHandleDownloadUpdate_MethodNotAllowed(t *testing.T) {
@@ -43,7 +43,7 @@ func TestHandleDownloadUpdate_InvalidURLPrefix(t *testing.T) {
 }
 
 func TestHandleDownloadUpdate_InvalidAssetName(t *testing.T) {
-	body := bytes.NewReader([]byte(`{"download_url":"https://github.com/DevXDojo/MrRSS/releases/download/v1/app.zip","asset_name":"../secret"}`))
+	body := bytes.NewReader([]byte(`{"download_url":"https://github.com/LianWeiSQ/rss-factory/releases/download/v1/app.zip","asset_name":"../secret"}`))
 	req := httptest.NewRequest(http.MethodPost, "/update/download", body)
 	rr := httptest.NewRecorder()
 
@@ -51,6 +51,21 @@ func TestHandleDownloadUpdate_InvalidAssetName(t *testing.T) {
 
 	if rr.Code != http.StatusBadRequest {
 		t.Fatalf("expected 400 for invalid asset name, got %d", rr.Code)
+	}
+	if !strings.Contains(rr.Body.String(), "invalid asset name") {
+		t.Fatalf("new distribution URL was rejected before validating its asset: %s", rr.Body.String())
+	}
+}
+
+func TestHandleDownloadUpdate_RejectsUpstreamDistribution(t *testing.T) {
+	body := bytes.NewReader([]byte(`{"download_url":"https://github.com/DevXDojo/MrRSS/releases/download/v1/MrRSS.zip","asset_name":"MrRSS.zip"}`))
+	req := httptest.NewRequest(http.MethodPost, "/update/download", body)
+	rr := httptest.NewRecorder()
+
+	HandleDownloadUpdate(&core.Handler{}, rr, req)
+
+	if rr.Code != http.StatusBadRequest || !strings.Contains(rr.Body.String(), "invalid download URL") {
+		t.Fatalf("upstream distribution must not overwrite CSS Factory: %d %s", rr.Code, rr.Body.String())
 	}
 }
 func TestHandleDownloadUpdateProgress(t *testing.T) {

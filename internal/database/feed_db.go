@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"MrRSS/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 )
 
 // FeedUpdateOptions contains optional fields for updating a feed.

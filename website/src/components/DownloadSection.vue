@@ -2,7 +2,7 @@
 import IconWindows from '@/icons/IconWindows.vue';
 import IconMacos from '@/icons/IconMacos.vue';
 import IconLinux from '@/icons/IconLinux.vue';
-import { PhArrowUpRight, PhUserCircle, PhStar } from '@phosphor-icons/vue';
+import { PhArrowUpRight } from '@phosphor-icons/vue';
 
 const onBtnHover = (event) => {
   const btn = event.currentTarget;
@@ -30,13 +30,13 @@ const onBtnLeave = (event) => {
             <span class="title-line gradient-text">Reading Smarter</span>
           </h2>
           <p class="download-description">
-            Join thousands of users who have already transformed their RSS reading experience.
-            Download MrRSS and harness the power of AI.
+            Build CSS Factory from source, or check this repository for published packages.
+            Read your subscriptions locally and enable AI only when you choose.
           </p>
 
           <div class="download-buttons">
             <a
-              href="https://github.com/DevXDojo/MrRSS/releases"
+              href="https://github.com/LianWeiSQ/rss-factory/releases"
               class="download-btn windows"
               @mouseenter="onBtnHover"
               @mouseleave="onBtnLeave"
@@ -52,7 +52,7 @@ const onBtnLeave = (event) => {
             </a>
 
             <a
-              href="https://github.com/DevXDojo/MrRSS/releases"
+              href="https://github.com/LianWeiSQ/rss-factory/releases"
               class="download-btn macos"
               @mouseenter="onBtnHover"
               @mouseleave="onBtnLeave"
@@ -68,7 +68,7 @@ const onBtnLeave = (event) => {
             </a>
 
             <a
-              href="https://github.com/DevXDojo/MrRSS/releases"
+              href="https://github.com/LianWeiSQ/rss-factory/releases"
               class="download-btn linux"
               @mouseenter="onBtnHover"
               @mouseleave="onBtnLeave"
@@ -86,82 +86,7 @@ const onBtnLeave = (event) => {
         </div>
       </div>
 
-      <!-- Testimonials Section -->
-      <div class="testimonials-section">
-        <h3 class="testimonials-title">What Users Say</h3>
-        <div class="testimonials-grid">
-          <div class="testimonial-card">
-            <div class="testimonial-header">
-              <div class="testimonial-avatar">
-                <PhUserCircle weight="fill" size="64" />
-              </div>
-              <div class="testimonial-info">
-                <span class="testimonial-name">Sarah Chen</span>
-                <span class="testimonial-role">Tech Journalist</span>
-              </div>
-            </div>
-            <p class="testimonial-text">
-              "MrRSS has completely transformed how I consume news. The AI summaries are incredibly
-              accurate and save me hours every week. The local processing gives me peace of mind
-              about my data."
-            </p>
-            <div class="testimonial-rating">
-              <PhStar weight="fill" :size="16" color="#FFC107" />
-              <PhStar weight="fill" :size="16" color="#FFC107" />
-              <PhStar weight="fill" :size="16" color="#FFC107" />
-              <PhStar weight="fill" :size="16" color="#FFC107" />
-              <PhStar weight="fill" :size="16" color="#FFC107" />
-            </div>
-          </div>
 
-          <div class="testimonial-card">
-            <div class="testimonial-header">
-              <div class="testimonial-avatar">
-                <PhUserCircle weight="fill" size="64" />
-              </div>
-              <div class="testimonial-info">
-                <span class="testimonial-name">Marcus Rodriguez</span>
-                <span class="testimonial-role">Software Developer</span>
-              </div>
-            </div>
-            <p class="testimonial-text">
-              "As a developer, I appreciate the open-source nature and the fact that everything runs
-              locally. The translation feature helps me keep up with global tech news effortlessly."
-            </p>
-            <div class="testimonial-rating">
-              <PhStar weight="fill" :size="16" color="#FFC107" />
-              <PhStar weight="fill" :size="16" color="#FFC107" />
-              <PhStar weight="fill" :size="16" color="#FFC107" />
-              <PhStar weight="fill" :size="16" color="#FFC107" />
-              <PhStar weight="fill" :size="16" color="#FFC107" />
-            </div>
-          </div>
-
-          <div class="testimonial-card">
-            <div class="testimonial-header">
-              <div class="testimonial-avatar">
-                <PhUserCircle weight="fill" size="64" />
-              </div>
-              <div class="testimonial-info">
-                <span class="testimonial-name">Emily Watson</span>
-                <span class="testimonial-role">Research Analyst</span>
-              </div>
-            </div>
-            <p class="testimonial-text">
-              "The smart discovery feature is phenomenal. It's like having a personal research
-              assistant that knows exactly what I'm interested in. Highly recommended for anyone who
-              reads a lot!"
-            </p>
-            <div class="testimonial-rating">
-              <PhStar weight="fill" :size="16" color="#FFC107" />
-              <PhStar weight="fill" :size="16" color="#FFC107" />
-              <PhStar weight="fill" :size="16" color="#FFC107" />
-              <PhStar weight="fill" :size="16" color="#FFC107" />
-              <PhStar weight="fill" :size="16" color="#FFC107" />
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </section>
 </template>

@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"MrRSS/internal/ai"
-	"MrRSS/internal/database"
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/ai"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 )
 
 func TestSummaryUsesSelectedConfigurationAndDoesNotCacheFallback(t *testing.T) {

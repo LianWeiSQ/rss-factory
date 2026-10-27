@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"MrRSS/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 )
 
 // GetTags retrieves all tags ordered by position.

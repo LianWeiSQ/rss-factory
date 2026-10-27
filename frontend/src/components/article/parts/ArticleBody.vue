@@ -5,13 +5,14 @@ import { PhSpinnerGap, PhArticle, PhArrowClockwise } from '@phosphor-icons/vue';
 import { useI18n } from 'vue-i18n';
 import { useSettings } from '@/composables/core/useSettings';
 import { resolveFontFamily } from '@/utils/fontDetector';
-import { sanitizeArticleHTML } from '@/utils/articleHtml';
+import { isWeChatArticle, prepareReaderHTML } from '@/utils/readerHtml';
 
 const { t } = useI18n();
 const { settings } = useSettings();
 
 interface Props {
   articleContent: string;
+  articleUrl?: string;
   isTranslatingContent: boolean;
   hasMediaContent?: boolean; // Whether article has audio/video content
   isLoadingContent?: boolean; // Whether content is currently loading
@@ -28,12 +29,18 @@ const emit = defineEmits<{
 }>();
 
 const hasCustomCSS = computed(() => !!settings.value.custom_css_file);
-const safeContent = computed(() => sanitizeArticleHTML(props.articleContent));
+const isWeChat = computed(() => !hasCustomCSS.value && isWeChatArticle(props.articleUrl));
+const safeContent = computed(() =>
+  prepareReaderHTML(props.articleContent, {
+    articleUrl: props.articleUrl,
+    normalizeWeChat: !hasCustomCSS.value,
+  })
+);
 
 // Content styling based on settings
 const contentStyle = computed(() => {
   const fontFamily = settings.value.content_font_family;
-  const fontSize = parseInt(settings.value.content_font_size as any) || 16;
+  const fontSize = Number.parseInt(String(settings.value.content_font_size), 10) || 16;
   const lineHeight = settings.value.content_line_height || '1.6';
 
   const style = {
@@ -52,7 +59,7 @@ const contentStyle = computed(() => {
   <div v-if="articleContent">
     <div
       class="prose prose-sm sm:prose-lg w-full max-w-none text-text-primary prose-content"
-      :class="{ 'custom-css-active': hasCustomCSS }"
+      :class="{ 'custom-css-active': hasCustomCSS, 'wechat-reader': isWeChat }"
       :style="contentStyle"
       v-html="safeContent"
     ></div>

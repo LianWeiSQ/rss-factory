@@ -11,9 +11,9 @@ import (
 	"strings"
 	"time"
 
-	"MrRSS/internal/models"
-	"MrRSS/internal/rsshub"
-	"MrRSS/internal/utils"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/rsshub"
+	"github.com/LianWeiSQ/rss-factory/internal/utils"
 
 	"github.com/antchfx/htmlquery"
 	"github.com/antchfx/xmlquery"

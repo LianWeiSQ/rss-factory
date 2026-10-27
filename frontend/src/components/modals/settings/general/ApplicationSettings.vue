@@ -84,6 +84,14 @@ function updateUiFontSize(value: number) {
       @update:model-value="updateSetting('close_to_tray', $event)"
     />
 
+    <SettingWithToggle
+      :icon="PhArchiveTray"
+      :title="t('setting.general.showTrayUnreadCount')"
+      :description="t('setting.general.showTrayUnreadCountDesc')"
+      :model-value="settings.show_tray_unread_count"
+      @update:model-value="updateSetting('show_tray_unread_count', $event)"
+    />
+
     <SettingWithSelect
       :icon="PhMoon"
       :title="t('setting.general.theme')"

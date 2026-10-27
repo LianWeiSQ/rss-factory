@@ -1,118 +1,24 @@
-# Security Policy
+# Security policy
 
-## Supported Versions
+CSS Factory is a customized distribution of MrRSS. Security fixes are maintained on the current branch; this repository does not promise a separate commercial support service or fixed response SLA.
 
-We release patches for security vulnerabilities in the following versions:
+## Report a concern
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 1.3.x   | :white_check_mark: |
-| < 1.3   | :x:                |
+Use private vulnerability reporting from this repository's [Security tab](https://github.com/LianWeiSQ/rss-factory/security) if enabled. If a private channel is not available, open an [issue](https://github.com/LianWeiSQ/rss-factory/issues) requesting a reporting contact **without publishing exploit details, personal data or credentials**. Reports about this distribution should not be sent to an upstream contributor's personal email address.
 
-## Reporting a Vulnerability
+Include the commit/version, platform, affected operation, redacted reproduction steps and expected impact. Never attach a real database, API key, IMAP password, sync credentials or unredacted settings response.
 
-We take the security of MrRSS seriously. If you believe you have found a security vulnerability, please report it to us as described below.
+## Current trust boundaries
 
-### Please Do NOT
+- Desktop builds provide a loopback API while the app runs. Loopback access is a machine boundary, not a per-user account system.
+- Server mode serves the reader and API, and has **no built-in user login**. Bind to `127.0.0.1` or protect the entire page and API with an authenticated gateway. HTTPS alone does not authenticate a caller.
+- Article HTML is untrusted and must pass the application's content preparation and sanitization path. Do not bypass this path when changing presentation.
+- Custom feed scripts execute under the application user's OS permissions. Working directories and timeouts do not make them a complete sandbox.
+- Translation, AI, synchronization and article export send data to the services the user configures. Feed fetching, optional remote advertisement configuration and the website's external resources also involve network requests; local storage is not a promise of zero network traffic.
+- Saved credentials use the existing machine-bound encrypted format for compatibility. Copying a database to another machine may require re-entering credentials. A compromised running application or OS account can still access secrets it is allowed to use.
 
-- Open a public GitHub issue
-- Disclose the vulnerability publicly before it has been addressed
+## Maintenance and deployment
 
-### Please Do
+Use a low-privilege service account, restrict filesystem access, keep dependencies current, and maintain verified backups separate from the working data. Do not run two application instances or versions against the same library during migration. Keep personal data and built artifacts out of Git.
 
-1. **Email us directly** at [INSERT SECURITY EMAIL HERE]
-2. **Include the following information**:
-   - Type of vulnerability
-   - Full description of the vulnerability
-   - Steps to reproduce the issue
-   - Potential impact
-   - Suggested fix (if any)
-   - Your name/handle (for acknowledgment)
-
-### What to Expect
-
-- **Initial Response**: Within 48 hours
-- **Status Updates**: Regular updates on progress
-- **Fix Timeline**: We aim to address critical vulnerabilities within 7 days
-- **Credit**: We will acknowledge your contribution (unless you prefer to remain anonymous)
-
-## Security Best Practices
-
-When using MrRSS:
-
-### For Users
-
-1. **Download from Official Sources**: Only download releases from GitHub
-2. **Verify Signatures**: Check release signatures when available
-3. **Keep Updated**: Use the latest version
-4. **API Keys**: Store API keys securely (e.g., DeepL API key)
-5. **OPML Files**: Be cautious when importing OPML from untrusted sources
-
-### For Developers
-
-1. **Dependencies**: Regularly update dependencies
-2. **Code Review**: All code changes should be reviewed
-3. **Input Validation**: Validate all user inputs
-4. **Secrets**: Never commit secrets or API keys
-5. **Testing**: Include security tests in the test suite
-
-## Security Features
-
-MrRSS implements the following security features:
-
-### Data Storage
-
-- **Local-Only**: All data is stored locally in SQLite
-- **No Cloud Sync**: No data is sent to external servers (except feed fetching and translation)
-- **No Analytics**: No tracking or analytics
-
-### Network Security
-
-- **HTTPS**: Feed fetching uses HTTPS when available
-- **API Security**: Translation API keys are stored locally
-- **No Telemetry**: No usage data is collected
-
-### Code Security
-
-- **Input Sanitization**: All user inputs are sanitized
-- **SQL Injection Protection**: Parameterized queries prevent SQL injection
-- **XSS Prevention**: Vue.js escapes content by default
-- **Dependency Scanning**: Automated dependency vulnerability scanning
-
-## Known Limitations
-
-- **Feed Content**: Content from RSS feeds is displayed as-is
-- **External Links**: Clicking article links opens external content
-- **Translation Services**: Translation features rely on third-party services
-
-## Security Updates
-
-Security updates are released as soon as possible after a vulnerability is confirmed:
-
-1. **Critical**: Immediate patch release
-2. **High**: Within 7 days
-3. **Medium**: Within 30 days
-4. **Low**: Next regular release
-
-## Disclosure Policy
-
-- **Coordinated Disclosure**: We follow a coordinated disclosure policy
-- **Public Disclosure**: Vulnerabilities are disclosed after a patch is available
-- **Credit**: Security researchers are credited in release notes
-
-## Additional Resources
-
-- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)
-- [CWE Top 25](https://cwe.mitre.org/top25/)
-- [Go Security](https://golang.org/security/)
-- [Vue.js Security](https://vuejs.org/guide/best-practices/security.html)
-
-## Contact
-
-For security-related questions that are not vulnerabilities:
-
-- Contact us at [mail@ch3nyang.top](mailto:mail@ch3nyang.top)
-
----
-
-Thank you for helping keep MrRSS and its users safe!
+See [server mode](docs/SERVER_MODE/README.md), [data directories](docs/DATA_DIRECTORY.md) and [project conventions](AGENTS.md) for the actual deployment and development boundaries.

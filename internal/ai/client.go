@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"MrRSS/internal/utils/httputil"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/httputil"
 )
 
 // ClientConfig holds the configuration for the AI client

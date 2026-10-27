@@ -14,13 +14,14 @@ type UnreadSource interface {
 	GetTotalUnreadCountContext(context.Context) (int, error)
 }
 
-// UnreadLabel hides both zero counts and counts disabled in the reader settings.
+// UnreadLabel controls the menu bar count independently of counts in the reader.
+// The indicator is opt-in, including for databases without the new setting.
 func UnreadLabel(ctx context.Context, source UnreadSource) (string, error) {
-	showCounts, err := source.GetSettingContext(ctx, "show_unread_counts")
+	showCounts, err := source.GetSettingContext(ctx, "show_tray_unread_count")
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		return "", err
 	}
-	if showCounts == "false" {
+	if showCounts != "true" {
 		return "", nil
 	}
 	count, err := source.GetTotalUnreadCountContext(ctx)

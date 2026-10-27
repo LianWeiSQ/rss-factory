@@ -8,9 +8,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"MrRSS/internal/database"
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/utils/fileutil"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/fileutil"
 )
 
 func TestHandleMediaCacheInfoAndCleanup(t *testing.T) {

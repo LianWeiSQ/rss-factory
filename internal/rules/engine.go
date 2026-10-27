@@ -9,10 +9,10 @@ import (
 	"strings"
 	"time"
 
-	"MrRSS/internal/database"
-	"MrRSS/internal/freshrss"
-	"MrRSS/internal/models"
-	"MrRSS/internal/rsshub"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/freshrss"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/rsshub"
 )
 
 // getFeedType returns the type code of a feed

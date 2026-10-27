@@ -263,7 +263,7 @@ describe('Sidebar and subscription management', () => {
       { contents: Cypress.Buffer.from('{}'), fileName: 'invalid.json' },
       { force: true }
     );
-    cy.contains('Invalid or unsupported MrRSS rules backup').should('be.visible');
+    cy.contains('Invalid or unsupported CSS Factory rules backup').should('be.visible');
     cy.contains('Imported favorites').should('be.visible');
     cy.contains('button', 'Export rules').click();
     cy.readFile('cypress/downloads/mrrss-rules.json')

@@ -1,18 +1,18 @@
 package freshrss
 
 import (
-	"MrRSS/internal/database"
 	"context"
 	"fmt"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
 	"log"
 	"net/http"
 	"strings"
 	"sync"
 	"time"
 
-	"MrRSS/internal/freshrss"
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/handlers/response"
+	"github.com/LianWeiSQ/rss-factory/internal/freshrss"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/response"
 )
 
 var activeSyncs sync.Map

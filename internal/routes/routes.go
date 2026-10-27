@@ -5,8 +5,8 @@ package routes
 import (
 	"net/http"
 
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/middleware"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/middleware"
 )
 
 // Config contains options for route registration.

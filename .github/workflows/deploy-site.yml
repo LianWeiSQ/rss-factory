@@ -1,12 +1,8 @@
 name: Deploy Website
 
+# Publishing the fork website is an explicit operation; a source push never deploys it.
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'website/**'
-      - '.github/workflows/deploy-site.yml'
+  workflow_dispatch:
 
 permissions:
   contents: read

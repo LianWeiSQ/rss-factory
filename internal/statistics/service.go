@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"MrRSS/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
 )
 
 // Service handles statistics tracking and retrieval

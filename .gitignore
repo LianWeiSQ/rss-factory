@@ -88,3 +88,16 @@ tmpclaude-*-cwd
 i18n_usage_report.md
 __pycache__/
 .VSCodeCounter
+
+# CSS Factory build outputs and private configuration
+CSSFactory
+CSSFactory.exe
+css-factory-server
+css-factory-server.exe
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Generated Linux desktop entry
+/build/linux/CSSFactory.desktop

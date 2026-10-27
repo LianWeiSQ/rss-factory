@@ -1,9 +1,9 @@
 package database_test
 
 import (
-	dbpkg "MrRSS/internal/database"
-	"MrRSS/internal/models"
 	"context"
+	dbpkg "github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 	"strings"
 	"testing"
 )

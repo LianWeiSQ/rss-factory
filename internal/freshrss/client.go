@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"MrRSS/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 )
 
 // Client represents a FreshRSS API client

@@ -1,4 +1,4 @@
-# Dockerfile for building MrRSS server version
+# Dockerfile for building CSSFactory server version
 # This creates a minimal server binary without GUI dependencies
 
 # Build stage
@@ -23,7 +23,7 @@ COPY . .
 RUN cd frontend && npm ci && npm run build
 
 # Build the server version
-RUN CGO_ENABLED=1 GOOS=linux go build -tags server -trimpath -buildvcs=false -ldflags="-w -s" -o mrrss-server .
+RUN CGO_ENABLED=1 GOOS=linux go build -tags server -trimpath -buildvcs=false -ldflags="-w -s" -o css-factory-server .
 
 # Runtime stage - minimal alpine image
 FROM alpine:latest
@@ -32,22 +32,22 @@ FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 
 # Create a non-root user
-RUN adduser -D -s /bin/sh mrrss
+RUN adduser -D -s /bin/sh cssfactory
 
 # Create data directory with proper permissions
-RUN mkdir -p /app/data && chown -R mrrss:mrrss /app/data
+RUN mkdir -p /app/data && chown -R cssfactory:cssfactory /app/data
 
 # Set working directory
 WORKDIR /app
 
 # Copy the binary from builder stage
-COPY --from=builder /app/mrrss-server .
+COPY --from=builder /app/css-factory-server .
 
 # Change ownership
-RUN chown mrrss:mrrss mrrss-server
+RUN chown cssfactory:cssfactory css-factory-server
 
 # Switch to non-root user
-USER mrrss
+USER cssfactory
 
 # Expose port
 EXPOSE 1234
@@ -57,4 +57,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD wget --no-verbose --tries=1 --spider http://localhost:1234/api/version || exit 1
 
 # Run the server
-CMD ["./mrrss-server", "-host", "0.0.0.0", "-port", "1234"]
+CMD ["./css-factory-server", "-host", "0.0.0.0", "-port", "1234"]

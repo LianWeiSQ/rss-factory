@@ -1,11 +1,11 @@
 package opml
 
 import (
-	"MrRSS/internal/models"
-	"MrRSS/internal/utils"
 	"bytes"
 	"encoding/xml"
 	"errors"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/utils"
 	"io"
 	"log"
 	"regexp"
@@ -288,7 +288,7 @@ func Generate(feeds []models.Feed) ([]byte, error) {
 	doc := OPML{
 		Version: "1.0",
 		Head: Head{
-			Title: "MrRSS Subscriptions",
+			Title: "CSS Factory Subscriptions",
 		},
 	}
 

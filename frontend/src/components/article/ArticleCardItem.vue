@@ -230,8 +230,13 @@ function handleImageError(event: Event) {
 <style scoped>
 @reference "../../style.css";
 .article-card-item {
-  @apply bg-bg-primary border border-border rounded-lg overflow-hidden cursor-pointer;
-  transition: all 0.2s ease;
+  @apply bg-bg-primary overflow-hidden cursor-pointer;
+  border: 1px solid color-mix(in srgb, var(--border-color) 70%, transparent);
+  border-radius: 15px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -239,23 +244,22 @@ function handleImageError(event: Event) {
 
 /* All cards have the same fixed height for consistency */
 .article-card-item {
-  height: 260px;
+  height: 280px;
 }
 
 .article-card-item:hover {
-  @apply shadow-md;
-  border-color: var(--accent-color);
+  box-shadow: 0 5px 20px color-mix(in srgb, var(--text-primary) 6%, transparent);
+  border-color: color-mix(in srgb, var(--accent-color) 30%, var(--border-color));
 }
 
 .article-card-item.active {
-  @apply shadow-md;
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 2px rgba(var(--accent-rgb, 59, 130, 246), 0.2);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-color) 12%, transparent);
 }
 
 .article-card-item.selected {
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 2px rgba(var(--accent-rgb, 59, 130, 246), 0.25);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-color) 15%, transparent);
 }
 
 .article-card-item.read {
@@ -271,7 +275,7 @@ function handleImageError(event: Event) {
 }
 
 .article-card-item.read-later {
-  background-color: rgba(59, 130, 246, 0.05);
+  background-color: color-mix(in srgb, var(--accent-color) 4%, var(--bg-primary));
 }
 
 .article-card-item.hidden-article {
@@ -281,7 +285,7 @@ function handleImageError(event: Event) {
 /* Thumbnail area - fixed height */
 .card-thumbnail {
   @apply w-full bg-bg-secondary relative overflow-hidden flex-shrink-0;
-  height: 130px;
+  height: 145px;
 }
 
 .thumbnail-image {
@@ -358,7 +362,7 @@ function handleImageError(event: Event) {
 }
 
 .feed-name {
-  @apply font-medium text-accent truncate flex-1;
+  @apply font-medium text-text-secondary truncate flex-1;
 }
 
 .publish-date {

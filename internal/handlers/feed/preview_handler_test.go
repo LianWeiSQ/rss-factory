@@ -8,9 +8,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"MrRSS/internal/feed"
-	fh "MrRSS/internal/handlers/feed"
-	"MrRSS/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/feed"
+	fh "github.com/LianWeiSQ/rss-factory/internal/handlers/feed"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 )
 
 func TestPreviewDoesNotSubscribeAndUsesSelectedProxy(t *testing.T) {

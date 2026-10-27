@@ -6,7 +6,7 @@ Existing **Microsoft Translator** settings continue to select the Azure API.
 
 This option uses the consumer Edge translation protocol: it obtains a temporary
 token from `edge.microsoft.com` and sends the selected text to
-`api-edge.cognitive.microsofttranslator.com`. Both requests use MrRSS's configured
+`api-edge.cognitive.microsofttranslator.com`. Both requests use CSS Factory's configured
 application proxy. Tokens remain in memory; they are not saved in settings or logs.
 Translated results use the existing local translation cache under a separate
 provider name.
@@ -22,7 +22,7 @@ connectivity guarantee is implied. If Microsoft rejects a request, use the exist
 translation error feedback and try again later or select another configured provider.
 
 Protocol reference: the [Pot Bing translation implementation](https://github.com/pot-app/pot-desktop/blob/master/src/services/translate/bing/index.jsx)
-uses the same authentication and translation endpoints. MrRSS implements its own
+uses the same authentication and translation endpoints. CSS Factory implements its own
 request handling, proxy integration, token lifetime, cancellation, and response limits.
 
 ## 中文说明

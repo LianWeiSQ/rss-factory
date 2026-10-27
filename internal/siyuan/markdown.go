@@ -4,9 +4,9 @@ import (
 	"html"
 	"time"
 
-	"MrRSS/internal/models"
-	"MrRSS/internal/utils/textutil"
 	md "github.com/JohannesKaufmann/html-to-markdown"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/textutil"
 )
 
 func ArticleMarkdown(article *models.Article, content string) (string, error) {

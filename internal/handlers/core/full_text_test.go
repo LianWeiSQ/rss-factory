@@ -1,10 +1,10 @@
 package core
 
 import (
-	"MrRSS/internal/database"
-	"MrRSS/internal/models"
 	"context"
 	"fmt"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 	"net/http"
 	"net/http/httptest"
 	"net/url"

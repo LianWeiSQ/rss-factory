@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"time"
 
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/handlers/response"
-	"MrRSS/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/response"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 )
 
 func HandleXPathPreview(h *core.Handler, w http.ResponseWriter, r *http.Request) {

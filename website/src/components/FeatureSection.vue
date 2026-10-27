@@ -293,7 +293,7 @@ onUnmounted(() => {
                       <span></span>
                       <span></span>
                     </div>
-                    <span class="interface-title">MrRSS</span>
+                    <span class="interface-title">CSS Factory</span>
                   </div>
                   <div class="interface-body">
                     <div class="sidebar">

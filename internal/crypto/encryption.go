@@ -23,7 +23,8 @@ const (
 	keySize = 32
 	// Salt size for key derivation
 	saltSize = 16
-	// Version marker to identify encrypted values (prevents false positives in IsEncrypted)
+	// Keep the upstream marker so existing encrypted credentials remain readable.
+	// This is a storage format identifier, not the distribution's display name.
 	versionMarker = "MrRSS-v1:"
 )
 

@@ -12,9 +12,9 @@ import (
 
 	"github.com/wailsapp/wails/v3/pkg/application"
 
-	handlers "MrRSS/internal/handlers/core"
-	"MrRSS/internal/handlers/response"
-	"MrRSS/internal/utils/fileutil"
+	handlers "github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/response"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/fileutil"
 )
 
 // HandleOpenURL opens a URL in the user's default web browser using Wails v3 Browser API.

@@ -18,7 +18,7 @@
 
       <div class="hero-actions">
         <button class="btn-primary" @mouseenter="onBtnHover" @mouseleave="onBtnLeave">
-          <a class="btn-text" href="#download">Get MrRSS For Free</a>
+          <a class="btn-text" href="#download">Get CSS Factory For Free</a>
           <PhArrowUpRight class="btn-icon" :size="20" weight="bold" />
         </button>
         <a href="#features" class="btn-secondary">Learn More</a>
@@ -26,13 +26,13 @@
 
       <div class="hero-stats">
         <div class="stat-item">
-          <span class="stat-number">100%</span>
-          <span class="stat-label">Local Privacy</span>
+          <span class="stat-number">Local</span>
+          <span class="stat-label">Data storage</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
           <span class="stat-number">Free</span>
-          <span class="stat-label">Forever</span>
+          <span class="stat-label">Open source</span>
         </div>
       </div>
     </div>

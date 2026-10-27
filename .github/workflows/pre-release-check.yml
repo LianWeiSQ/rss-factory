@@ -127,13 +127,13 @@ jobs:
           wails3 build
 
           # Verify the build
-          if [ ! -f "build/bin/MrRSS" ]; then
+          if [ ! -f "build/bin/CSSFactory" ]; then
             echo "Error: Binary not found"
             exit 1
           fi
 
           # Check architecture
-          file build/bin/MrRSS
+          file build/bin/CSSFactory
           echo "Binary built successfully for ${{ matrix.arch }}"
 
       - name: Build application (Windows)
@@ -146,7 +146,7 @@ jobs:
           wails3 build
 
           # Verify the build
-          if (-not (Test-Path "build/bin/MrRSS.exe")) {
+          if (-not (Test-Path "build/bin/CSSFactory.exe")) {
             Write-Error "Binary not created"
             exit 1
           }
@@ -199,7 +199,7 @@ jobs:
           if (Test-Path $installerPath) {
             $content = Get-Content $installerPath -Raw
             $content = $content -replace '!define APP_VERSION ".*"', "!define APP_VERSION `"$version`""
-            $content = $content -replace 'OutFile ".*"', "OutFile `"..\bin\MrRSS-$version-windows-$arch-installer.exe`""
+            $content = $content -replace 'OutFile ".*"', "OutFile `"..\bin\CSSFactory-$version-windows-$arch-installer.exe`""
             Set-Content $installerPath $content
 
             # Build NSIS installer
@@ -228,7 +228,7 @@ jobs:
 
           # Debug: Verify binary architecture
           echo "Binary architecture check:"
-          file build/bin/MrRSS || true
+          file build/bin/CSSFactory || true
 
           chmod +x build/linux/create-appimage.sh
           ARCH=${{ matrix.arch }} ./build/linux/create-appimage.sh || echo "AppImage creation failed, will use tar.gz"
@@ -240,8 +240,8 @@ jobs:
           codesign --deep --force --verify --verbose \
             --sign - \
             --entitlements build/darwin/entitlements.plist \
-            build/bin/MrRSS.app
-          codesign --verify --deep --strict --verbose=2 build/bin/MrRSS.app
+            build/bin/CSSFactory.app
+          codesign --verify --deep --strict --verbose=2 build/bin/CSSFactory.app
           chmod +x build/darwin/create-dmg.sh
           ./build/darwin/create-dmg.sh
 
@@ -249,13 +249,13 @@ jobs:
         if: matrix.platform == 'linux'
         run: |
           cd build/bin
-          if [ -f "MrRSS" ]; then
+          if [ -f "CSSFactory" ]; then
             # Get version from package.json
             VERSION=$(jq -r '.version' ../../frontend/package.json)
-            tar -czf MrRSS-${VERSION}-linux-${{ matrix.arch }}.tar.gz MrRSS
+            tar -czf CSSFactory-${VERSION}-linux-${{ matrix.arch }}.tar.gz CSSFactory
             echo "Created tar.gz package"
           else
-            echo "Error: MrRSS binary not found"
+            echo "Error: CSSFactory binary not found"
             exit 1
           fi
 

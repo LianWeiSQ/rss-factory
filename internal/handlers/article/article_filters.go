@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"MrRSS/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 )
 
 // FilterCondition represents a single filter condition from the frontend

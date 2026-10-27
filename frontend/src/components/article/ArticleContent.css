@@ -220,12 +220,9 @@
 
 /* Small inline images with explicit small dimensions */
 .prose img[width][height] {
-  /* Parse the width/height, but only if both are small enough */
-  /* This rule will be overridden by the next rule for larger images */
-  display: inline-block;
-  vertical-align: middle;
-  margin: 0.25em;
-  border-radius: 0.25rem;
+  /* Width/height attributes are also present on full-size WeChat illustrations. */
+  max-width: 100%;
+  height: auto;
 }
 
 .prose img:hover {
@@ -1346,4 +1343,134 @@
   .prose .katex {
     font-size: 1em;
   }
+}
+
+/* A calm, consistent reading surface. Keep a user's custom stylesheet in control. */
+.prose-content:not(.custom-css-active) {
+  color: color-mix(in srgb, var(--text-primary) 94%, var(--text-secondary));
+  text-align: start;
+  line-break: auto;
+  letter-spacing: 0.012em;
+}
+
+.prose-content:not(.custom-css-active) :is(h1, h2, h3, h4) {
+  text-wrap: pretty;
+  scroll-margin-top: 32px;
+}
+
+.prose-content:not(.custom-css-active) h1 {
+  font-size: 1.65em;
+}
+.prose-content:not(.custom-css-active) h2 {
+  font-size: 1.4em;
+}
+.prose-content:not(.custom-css-active) h3 {
+  font-size: 1.2em;
+}
+
+.prose-content:not(.custom-css-active) strong {
+  color: var(--text-primary);
+  font-weight: 650;
+}
+
+.prose-content:not(.custom-css-active) img {
+  border-radius: 8px;
+  margin: 1.65em auto;
+  box-shadow: none;
+}
+
+.prose-content:not(.custom-css-active) img:hover {
+  box-shadow: none;
+}
+
+.prose-content:not(.custom-css-active) :is(pre, pre code) {
+  white-space: pre;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+.prose-content:not(.custom-css-active) pre {
+  box-shadow: none;
+  border-radius: 10px;
+}
+
+.prose-content:not(.custom-css-active) blockquote {
+  font-style: normal;
+  border-left-width: 3px;
+  border-left-color: color-mix(in srgb, var(--accent-color) 55%, var(--border-color));
+  padding: 0.8em 1.2em;
+}
+
+/* WeChat supplies mobile-oriented wrappers; normalized markup retains semantic content. */
+.wechat-reader:not(.custom-css-active) :is(p, li) {
+  line-height: max(1.85, var(--content-line-height, 1.85));
+}
+
+.wechat-reader:not(.custom-css-active) p {
+  margin-block: 0 1.2em;
+  text-indent: 0;
+  text-align: start;
+}
+
+.wechat-reader:not(.custom-css-active) :is(section, div) {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.wechat-reader:not(.custom-css-active) h2.reader-section-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 2.2em 0 1em;
+  font-size: 1.25em;
+  line-height: 1.6;
+  font-weight: 680;
+  letter-spacing: 0;
+}
+
+.wechat-reader .reader-section-number {
+  color: var(--accent-color);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.65em;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.wechat-reader .reader-section-title {
+  text-wrap: pretty;
+}
+
+.wechat-reader:not(.custom-css-active) :is(.reader-media-block, figure) {
+  margin-block: 1.6em;
+  text-align: center;
+}
+
+.wechat-reader:not(.custom-css-active) .reader-media-block img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+}
+
+.wechat-reader:not(.custom-css-active) :is(.reader-image-caption, figcaption) {
+  color: var(--text-secondary);
+  text-align: center;
+  font-size: 0.82em;
+  line-height: 1.7;
+  margin: -0.65em auto 1.6em;
+  max-width: 92%;
+}
+
+.wechat-reader:not(.custom-css-active) :is(.reader-image-caption, figcaption) strong {
+  color: inherit;
+  font-weight: 450;
+}
+
+.wechat-reader:not(.custom-css-active) hr {
+  margin: 2em auto;
+  width: 48px;
+  border: 0;
+  border-top: 2px solid var(--border-color);
 }

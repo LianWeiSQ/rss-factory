@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	feedhandlers "MrRSS/internal/handlers/feed"
-	"MrRSS/internal/models"
+	feedhandlers "github.com/LianWeiSQ/rss-factory/internal/handlers/feed"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 )
 
 func TestCategoryHandlerValidationAndProtection(t *testing.T) {

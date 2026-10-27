@@ -1,8 +1,8 @@
 package database
 
 import (
-	"MrRSS/internal/models"
 	"context"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 	"testing"
 	"time"
 )

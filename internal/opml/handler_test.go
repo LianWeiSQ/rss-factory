@@ -1,8 +1,8 @@
 package opml
 
 import (
-	"MrRSS/internal/models"
 	"encoding/xml"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 	"strings"
 	"testing"
 )

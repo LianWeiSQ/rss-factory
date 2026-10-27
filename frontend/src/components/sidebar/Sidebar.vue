@@ -105,8 +105,8 @@ onUnmounted(() => {
 /* Fixed-width navigation stays available while the feed drawer is closed. */
 .sidebar-toggle-container {
   position: relative;
-  width: 56px;
-  min-width: 56px;
+  width: 52px;
+  min-width: 52px;
   height: 100%;
   flex-shrink: 0;
 }
@@ -136,7 +136,7 @@ onUnmounted(() => {
 
 .feed-drawer-wrapper:not(.pinned) {
   position: absolute;
-  left: 56px;
+  left: 52px;
   top: 0;
   bottom: 0;
   z-index: 20;

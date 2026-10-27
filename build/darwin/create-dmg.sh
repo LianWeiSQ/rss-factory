@@ -1,20 +1,21 @@
 #!/bin/bash
-# Script to create a macOS DMG installer for MrRSS
+# Script to create a macOS DMG installer for CSSFactory
 #
 # Application Information:
-# Name: MrRSS
+# Name: CSSFactory
 # Description: A Modern, Cross-Platform Desktop RSS Reader
-# Publisher: Ch3nyang
-# URL: https://github.com/DevXDojo/MrRSS
+# Publisher: LianWeiSQ
+# URL: https://github.com/LianWeiSQ/rss-factory
 # Copyright: Copyright © Ch3nyang
 
 set -e
 
-APP_NAME="MrRSS"
+APP_NAME="CSSFactory"
+APP_DISPLAY_NAME="CSS Factory"
 # Get version from frontend/package.json if available, otherwise use default
 VERSION=$(grep -o '"version"[[:space:]]*:[[:space:]]*"[^"]*"' frontend/package.json 2>/dev/null | head -1 | sed 's/.*"\([^"]*\)".*/\1/' || echo "1.3.41")
-APP_PUBLISHER="Ch3nyang"
-APP_URL="https://github.com/DevXDojo/MrRSS"
+APP_PUBLISHER="LianWeiSQ"
+APP_URL="https://github.com/LianWeiSQ/rss-factory"
 APP_DESCRIPTION="A Modern, Cross-Platform Desktop RSS Reader"
 BUILD_DIR="build/bin"
 DMG_DIR="build/dmg"
@@ -50,7 +51,7 @@ echo "Creating DMG image..."
 rm -f "${BUILD_DIR}/${DMG_NAME}"
 
 # Use hdiutil to create the DMG
-if ! hdiutil create -volname "${APP_NAME}" \
+if ! hdiutil create -volname "${APP_DISPLAY_NAME}" \
     -srcfolder "${DMG_DIR}" \
     -ov -format UDZO \
     "${BUILD_DIR}/${DMG_NAME}"; then

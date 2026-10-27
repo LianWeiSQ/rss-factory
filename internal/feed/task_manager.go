@@ -1,9 +1,9 @@
 package feed
 
 import (
-	"MrRSS/internal/models"
 	"context"
 	"fmt"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 	"log"
 	"math/rand"
 	"os"

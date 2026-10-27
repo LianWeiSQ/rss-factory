@@ -22,7 +22,7 @@ func Acquire(dataDir string) (io.Closer, error) {
 	if err := syscall.Flock(int(f.Fd()), syscall.LOCK_EX|syscall.LOCK_NB); err != nil {
 		f.Close()
 		if errors.Is(err, syscall.EWOULDBLOCK) || errors.Is(err, syscall.EAGAIN) {
-			return nil, fmt.Errorf("MrRSS is already running for this data directory; open it from the system tray")
+			return nil, fmt.Errorf("CSS Factory is already running for this data directory; open it from the system tray")
 		}
 		return nil, fmt.Errorf("lock desktop instance: %w", err)
 	}

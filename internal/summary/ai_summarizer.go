@@ -7,10 +7,10 @@ import (
 	"strings"
 	"time"
 
-	"MrRSS/internal/ai"
-	"MrRSS/internal/config"
-	"MrRSS/internal/utils/httputil"
-	"MrRSS/internal/utils/textutil"
+	"github.com/LianWeiSQ/rss-factory/internal/ai"
+	"github.com/LianWeiSQ/rss-factory/internal/config"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/httputil"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/textutil"
 )
 
 // AISummarizer implements summarization using OpenAI-compatible APIs (GPT, Claude, etc.).

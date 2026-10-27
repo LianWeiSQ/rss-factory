@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"MrRSS/internal/ai"
+	"github.com/LianWeiSQ/rss-factory/internal/ai"
 )
 
 type roundTripFunc func(*http.Request) (*http.Response, error)

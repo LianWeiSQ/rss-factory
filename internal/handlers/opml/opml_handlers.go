@@ -11,11 +11,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"MrRSS/internal/handlers/core"
-	"MrRSS/internal/handlers/response"
-	"MrRSS/internal/jsonimport"
-	"MrRSS/internal/models"
-	"MrRSS/internal/opml"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/response"
+	"github.com/LianWeiSQ/rss-factory/internal/jsonimport"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/opml"
 
 	"github.com/wailsapp/wails/v3/pkg/application"
 )

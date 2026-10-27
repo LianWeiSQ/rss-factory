@@ -40,7 +40,7 @@ const hasTranslation = computed(
     :ref="(element) => emit('observeElement', element as Element | null)"
     :data-article-id="article.id"
     :class="[
-      'cursor-pointer border-b border-border hover:bg-bg-secondary',
+      'article-table-row cursor-pointer border-b border-border hover:bg-bg-secondary',
       isActive ? 'bg-accent/10' : '',
       selected ? 'bg-accent/10 outline outline-1 -outline-offset-1 outline-accent/50' : '',
       article.is_read ? 'text-text-secondary' : 'text-text-primary font-medium',
@@ -110,3 +110,17 @@ const hasTranslation = computed(
     </td>
   </tr>
 </template>
+
+<style scoped>
+.article-table-row {
+  border-bottom-color: color-mix(in srgb, var(--border-color) 65%, transparent);
+  transition: background-color 150ms ease;
+}
+.article-table-row td {
+  padding-block: 11px;
+  font-size: calc(12px * var(--ui-font-scale, 1));
+}
+.article-table-row :is(button, span, time) {
+  line-height: 1.6;
+}
+</style>

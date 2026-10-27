@@ -1,11 +1,11 @@
 package database
 
 import (
-	"MrRSS/internal/crypto"
 	"context"
 	"database/sql"
 	"errors"
 	"fmt"
+	"github.com/LianWeiSQ/rss-factory/internal/crypto"
 	"github.com/andybalholm/cascadia"
 	"net/url"
 	"strings"

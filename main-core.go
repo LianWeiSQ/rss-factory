@@ -18,36 +18,30 @@ import (
 	"syscall"
 	"time"
 
-	"MrRSS/internal/ai"
-	"MrRSS/internal/database"
-	"MrRSS/internal/feed"
-	handlers "MrRSS/internal/handlers/core"
-	"MrRSS/internal/network"
-	"MrRSS/internal/routes"
-	"MrRSS/internal/translation"
-	"MrRSS/internal/utils/fileutil"
+	"github.com/LianWeiSQ/rss-factory/internal/ai"
+	"github.com/LianWeiSQ/rss-factory/internal/database"
+	"github.com/LianWeiSQ/rss-factory/internal/feed"
+	handlers "github.com/LianWeiSQ/rss-factory/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/network"
+	"github.com/LianWeiSQ/rss-factory/internal/routes"
+	"github.com/LianWeiSQ/rss-factory/internal/translation"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/fileutil"
 
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
-// @title           MrRSS API
+// @title           CSS Factory API
 // @version         1.3.41
-// @description     MrRSS is a modern, cross-platform desktop RSS reader with auto-translation, smart feed discovery, and AI-powered summarization.
+// @description     CSS Factory is a modern, cross-platform desktop RSS reader with auto-translation, smart feed discovery, and AI-powered summarization.
 
 // @contact.name   API Support
-// @contact.url    https://github.com/DevXDojojo/MrRSS
-// @contact.email  mail@ch3nyang.top
+// @contact.url    https://github.com/LianWeiSQ/rss-factory
 
 // @license.name  GPL-3.0
 // @license.url   https://www.gnu.org/licenses/gpl-3.0.en.html
 
 // @host      localhost:1234
 // @BasePath  /api
-
-// @securityDefinitions.apikey BearerAuth
-// @in header
-// @name Authorization
-// @description Type "Bearer" followed by a space and JWT token.
 
 var debugLogging = os.Getenv("MRRSS_DEBUG") != ""
 

@@ -1,11 +1,11 @@
 [Desktop Entry]
 Version=1.0
-Name=MrRSS
+Name=CSS Factory
 Comment=A modern, standalone RSS reader
 # The Exec line includes %u to pass the URL to the application
-Exec=/usr/local/bin/MrRSS %u
+Exec=/usr/local/bin/CSSFactory %u
 Terminal=false
 Type=Application
-Icon=MrRSS
+Icon=CSSFactory
 Categories=Utility;
-StartupWMClass=MrRSS
+StartupWMClass=CSSFactory

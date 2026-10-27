@@ -1,4 +1,4 @@
-# Agent Guidelines for MrRSS
+# Agent Guidelines for CSS Factory
 
 ## Purpose and source of truth
 
@@ -11,12 +11,18 @@ This file records durable project conventions. It may remain unchanged across ma
 
 ## Project principles
 
-MrRSS is a privacy-focused RSS reader with a Go backend, a Wails desktop shell, a Vue and TypeScript frontend, and SQLite storage. It also supports a server build.
+CSS Factory is a privacy-focused RSS reader with a Go backend, a Wails desktop shell, a Vue and TypeScript frontend, and SQLite storage. It also supports a server build.
 
 - Preserve local storage and offline behavior where supported. External services must follow the user's configuration; do not introduce analytics or unnecessary data transmission.
 - Consider Windows, macOS, and Linux when changing paths, process execution, startup, window behavior, or packaging.
 - Preserve existing subscriptions, articles, reading state, favorites, settings, and credentials when changing persistence or cleanup behavior.
 - Keep business logic usable across desktop and server modes. Use the HTTP API for data operations and reserve Wails integration for desktop capabilities.
+
+## Distribution identity and compatibility
+
+The product is **CSS Factory**, built as `CSSFactory` / `CSSFactory.app`, and maintained at `LianWeiSQ/rss-factory`. It is based on MrRSS; preserve the upstream license, history and copyright notices. Historical changelogs are not rewritten to imply this fork authored upstream work.
+
+Legacy data directories, bootstrap filenames, `MRRSS_*` environment variables, single-instance identity, encrypted value markers, localStorage keys and import/export format identifiers are intentional compatibility interfaces. Do not rename them as cosmetic branding. New repository and update links must target this distribution, not silently install an upstream binary over customizations.
 
 ## Repository navigation
 

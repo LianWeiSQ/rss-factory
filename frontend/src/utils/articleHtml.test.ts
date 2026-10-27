@@ -45,4 +45,36 @@ describe('article HTML rendering boundary', () => {
       )
     ).toBe('');
   });
+
+  it('restores safe lazy image URLs before removing input-only attributes', () => {
+    const root = document.createElement('div');
+    root.innerHTML = withLazyImages(
+      '<img data-src="https://example.com/photo.jpg" width="600" height="400">' +
+        '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP" data-original="/full-photo.png">'
+    );
+    const images = root.querySelectorAll('img');
+    expect(images[0].getAttribute('src')).toBe('https://example.com/photo.jpg');
+    expect(images[1].getAttribute('src')).toBe('/full-photo.png');
+    for (const image of images) {
+      expect(image.getAttribute('loading')).toBe('lazy');
+      expect(image.getAttribute('referrerpolicy')).toBe('no-referrer');
+      expect(image.hasAttribute('data-src')).toBe(false);
+      expect(image.hasAttribute('data-original')).toBe(false);
+    }
+  });
+
+  it.each([
+    'javascript:alert(1)',
+    'data:image/svg+xml,<svg onload="bad()"/>',
+    'https://user:password@example.com/a.jpg',
+  ])('rejects unsafe lazy image URLs: %s', (source) => {
+    const root = document.createElement('div');
+    const image = document.createElement('img');
+    image.setAttribute('data-src', source);
+    root.append(image);
+    const safeRoot = document.createElement('div');
+    safeRoot.innerHTML = sanitizeArticleHTML(root.innerHTML);
+    expect(safeRoot.querySelector('img')?.hasAttribute('src')).toBe(false);
+    expect(safeRoot.querySelector('[data-src]')).toBeNull();
+  });
 });

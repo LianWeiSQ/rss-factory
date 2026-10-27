@@ -160,10 +160,10 @@ tasks:
     deps:
       - task: common:build:frontend
     cmds:
-      - docker build -f Dockerfile.server -t mrrss-server:latest .
-      - docker create --name mrrss-server-temp mrrss-server:latest
-      - docker cp mrrss-server-temp:/app/mrrss-server {{.BIN_DIR}}/{{.APP_NAME}}-server.exe
-      - docker rm mrrss-server-temp
+      - docker build -f Dockerfile.server -t css-factory-server:latest .
+      - docker create --name css-factory-server-temp css-factory-server:latest
+      - docker cp css-factory-server-temp:/app/css-factory-server {{.BIN_DIR}}/css-factory-server.exe
+      - docker rm css-factory-server-temp
     preconditions:
       - sh: docker info > /dev/null 2>&1
         msg: "Docker is required for building the server version"
@@ -173,4 +173,4 @@ tasks:
     deps:
       - task: build:server
     cmds:
-      - '{{.BIN_DIR}}/{{.APP_NAME}}-server.exe'
+      - '{{.BIN_DIR}}/css-factory-server.exe'

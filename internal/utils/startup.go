@@ -10,7 +10,7 @@ import (
 	"runtime"
 	"strings"
 
-	"MrRSS/internal/utils/fileutil"
+	"github.com/LianWeiSQ/rss-factory/internal/utils/fileutil"
 )
 
 // EnableStartup enables the application to start on system boot
@@ -124,7 +124,7 @@ func enableStartupLinux(executable string) error {
 	desktopFile := filepath.Join(autostartDir, "mrrss.desktop")
 	content := fmt.Sprintf(`[Desktop Entry]
 Type=Application
-Name=MrRSS
+Name=CSS Factory
 Exec=%s
 Hidden=false
 NoDisplay=false

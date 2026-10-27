@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"MrRSS/internal/models"
+	"github.com/LianWeiSQ/rss-factory/internal/models"
 	"github.com/antchfx/htmlquery"
 )
 

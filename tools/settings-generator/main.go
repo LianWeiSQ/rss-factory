@@ -300,7 +300,7 @@ func generateSettingsBaseGo(schema *SettingsSchema) error {
 package settings
 
 import (
-	"MrRSS/internal/handlers/core"
+	"github.com/LianWeiSQ/rss-factory/internal/handlers/core"
 )
 
 // SettingDef defines a single setting's metadata
